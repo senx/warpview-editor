@@ -1,0 +1,161 @@
+{
+  "components": [
+    {
+      "tag": "quantum-editor",
+      "dependencies": [
+        "quantum-result"
+      ],
+      "componentClass": "QuantumEditor",
+      "componentPath": "components/quantum-editor/quantum-editor.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "../node_modules/monaco-editor/min/vs/editor/editor.main.css",
+            "components/quantum-editor/quantum-editor.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "config",
+          "type": "String",
+          "attr": "config"
+        },
+        {
+          "name": "displayMessages",
+          "type": "Boolean",
+          "attr": "display-messages"
+        },
+        {
+          "name": "horizontalLayout",
+          "type": "Boolean",
+          "attr": "horizontal-layout"
+        },
+        {
+          "name": "showDataviz",
+          "type": "Boolean",
+          "attr": "show-dataviz"
+        },
+        {
+          "name": "theme",
+          "type": "String",
+          "attr": "theme",
+          "watch": [
+            "themeHandler"
+          ]
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "attr": "url"
+        },
+        {
+          "name": "warpscript",
+          "type": "String",
+          "attr": "warpscript",
+          "watch": [
+            "warpscriptHandler"
+          ]
+        }
+      ],
+      "states": [
+        {
+          "name": "error"
+        },
+        {
+          "name": "result"
+        },
+        {
+          "name": "status"
+        }
+      ],
+      "hostElement": {
+        "name": "el"
+      },
+      "events": [
+        {
+          "event": "datavizRequested"
+        },
+        {
+          "event": "errorEvent"
+        },
+        {
+          "event": "statusEvent"
+        },
+        {
+          "event": "warpscriptChanged"
+        },
+        {
+          "event": "warpscriptResult"
+        }
+      ]
+    },
+    {
+      "tag": "quantum-result",
+      "dependencies": [
+        "stc-tab-content",
+        "stc-tab-header",
+        "stc-tabs"
+      ],
+      "componentClass": "QuantumResult",
+      "componentPath": "components/quantum-result/quantum-result.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "../node_modules/monaco-editor/min/vs/editor/editor.main.css",
+            "components/quantum-result/quantum-result.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "config",
+          "type": "String",
+          "attr": "config"
+        },
+        {
+          "name": "displayMessages",
+          "type": "Boolean",
+          "attr": "display-messages"
+        },
+        {
+          "name": "result",
+          "type": "String",
+          "attr": "result",
+          "watch": [
+            "resultHandler"
+          ]
+        },
+        {
+          "name": "theme",
+          "type": "String",
+          "attr": "theme",
+          "watch": [
+            "themeHandler"
+          ]
+        }
+      ],
+      "hostElement": {
+        "name": "el"
+      }
+    }
+  ],
+  "collections": [
+    {
+      "name": "@code-dimension/stencil-components",
+      "tags": [
+        "stc-chip",
+        "stc-tab-content",
+        "stc-tab-header",
+        "stc-tabs",
+        "stc-tags"
+      ]
+    }
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "0.8.2",
+    "typescriptVersion": "2.9.2"
+  },
+  "bundles": []
+}
