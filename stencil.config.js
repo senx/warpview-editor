@@ -1,11 +1,13 @@
+const sass = require("@stencil/sass");
 exports.config = {
-  namespace: 'mycomponent',
-  outputTargets:[
+  namespace: "quantum-editor",
+  plugins: [sass()],
+  outputTargets: [
     {
-      type: 'dist'
+      type: "dist"
     },
     {
-      type: 'www',
+      type: "www",
       serviceWorker: false
     }
   ]

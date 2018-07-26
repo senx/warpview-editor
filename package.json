@@ -1,36 +1,46 @@
 {
-  "name": "my-component",
+  "name": "quantum-editor",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Quantum warpscript editor",
   "module": "dist/esm/index.js",
-  "main": "dist/index.js",
+  "main": "dist/quantum-editor.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "jest",
-    "test.watch": "jest --watch"
+    "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build\"",
+    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
+    "serve": "stencil-dev-server",
+    "start": "npm run dev ",
+    "test": "jest --no-cache",
+    "test.watch": "jest --watch --no-cache"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@code-dimension/stencil-components": "0.0.0-beta.1",
+    "@stencil/core": "^0.8.0",
+    "@timkendrick/monaco-editor": "0.0.9",
+    "monaco-editor": "0.13.1",
+    "whatwg-fetch": "2.0.4"
+  },
   "devDependencies": {
-    "@stencil/core": "^0.10.0",
+    "@stencil/dev-server": "0.0.18",
+    "@stencil/sass": "^0.0.5",
+    "@stencil/utils": "0.0.4",
     "@types/jest": "^21.1.1",
     "jest": "^21.2.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "git+ssh://git@bitbucket.org:cityzendata/quantum-editor.git"
   },
-  "author": "Ionic Team",
-  "license": "MIT",
+  "author": "Cityzen Data",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ionic-team/stencil"
+    "url": "https://bitbucket.org/cityzendata/quantum-editor/addon/trello/trello-board"
   },
-  "homepage": "https://github.com/ionic-team/stencil",
+  "homepage": "https://bitbucket.org/cityzendata/quantum-editor",
   "jest": {
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
