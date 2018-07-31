@@ -37,7 +37,6 @@ Monarch.rules = {
         "UNWRAP",
         "UNBUCKETIZE",
         "TOSELECTOR",
-        "T", "F",
         "TOKENINFO",
         "TOBITS",
         "TLTTB",
@@ -1168,6 +1167,10 @@ Monarch.rules = {
             ],
             [
                 "\\/\\/.*$",
+                "comment"
+            ],
+            [
+                "#.*$",
                 "comment"
             ]
         ],

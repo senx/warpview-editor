@@ -97,7 +97,7 @@ export class QuantumEditor {
       monaco.languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
           wordPattern: /[^\s\t]+/,
           comments: {
-            lineComment: "//",
+            lineComment: "//|#",
             blockComment: ["/**", "*/"]
           },
           brackets: [
