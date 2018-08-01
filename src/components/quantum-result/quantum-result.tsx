@@ -1,4 +1,4 @@
-import { Component, Element, Prop, Watch } from "@stencil/core";
+import { Component, Element, Prop, Watch, State } from "@stencil/core";
 import monaco from "@timkendrick/monaco-editor";
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { GTSLib } from "../../gts.lib";
@@ -20,13 +20,13 @@ export class QuantumResult {
   @Prop() theme: string = "light";
   @Prop() config: string = "{}";
   @Prop() displayMessages = true;
-  private _result = { json: [], error: "", message: "" };
+  @State() loading = false;
 
+  private _result = { json: [], error: "", message: "" };
   private _config = {
     messageClass: "",
     errorClass: ""
   };
-
   private resEd: IStandaloneCodeEditor;
   private monacoTheme = "vs";
   private resUid: string;
@@ -66,7 +66,6 @@ export class QuantumResult {
    */
   componentWillLoad() {
     this._config = GTSLib.mergeDeep(this._config, JSON.parse(this.config));
-    this._result = JSON.parse(this.result);
     this.resUid = GTSLib.guid();
     if ("dark" === this.theme) {
       this.monacoTheme = "vs-dark";
@@ -75,6 +74,7 @@ export class QuantumResult {
   }
 
   buildEditor(json: string) {
+    this.loading = true;
     console.debug("[QuantumResult] - buildEditor", json, this._result.json);
     if (!this.resEd) {
       this.resEd = monaco.editor.create(
@@ -91,17 +91,31 @@ export class QuantumResult {
     } else {
       this.resEd.setValue(json);
     }
+    this.loading = false;
+    console.log("[QuantumResult] - buildEditor end");
   }
 
   componentDidLoad() {
     console.debug("[QuantumResult] - componentDidLoad", this._result.json);
+    this._result = JSON.parse(this.result);
     this.buildEditor(JSON.stringify(this._result.json));
-    }
+  }
 
   render() {
     const message =
-  this._result.message && this.displayMessages ?
-    <div class={this._config.messageClass}>{this._result.message}</div> : "";
+      this._result.message && this.displayMessages ? (
+        <div class={this._config.messageClass}>{this._result.message}</div>
+      ) : (
+        ""
+      );
+
+    const loading = this.loading ? (
+      <div class="loader">
+        <div class="spinner" />
+      </div>
+    ) : (
+      ""
+    );
 
     const error =
       this._result.error && this.displayMessages ? (
@@ -110,21 +124,26 @@ export class QuantumResult {
         ""
       );
 
-    const stack = this._result.json && GTSLib.isArray(this._result.json) ? <div class={this.theme + " raw"}>
-      {this._result.json.map((line, index) => (
-        <span class="line">
-            <span class="line-num">{index === 0 ? "[TOP]" : index}</span>
-            <span class="line-content">{JSON.stringify(line)}</span>
-          </span>
-      ))}
-    </div> : "";
+    const stack =
+      this._result.json && GTSLib.isArray(this._result.json) ? (
+        <div class={this.theme + " raw"}>
+          {this._result.json.map((line, index) => (
+            <span class="line">
+              <span class="line-num">{index === 0 ? "[TOP]" : index}</span>
+              <span class="line-content">{JSON.stringify(line)}</span>
+            </span>
+          ))}
+        </div>
+      ) : (
+        "Parsing JSON"
+      );
 
     return (
       <div>
         {message}
         {error}
         <div class={"wrapper " + this.theme}>
-          {this._result.json ? (
+          {this._result.json? (
             <stc-tabs>
               <stc-tab-header slot="header" name="tab1">
                 Stack
@@ -133,7 +152,7 @@ export class QuantumResult {
                 Raw JSON
               </stc-tab-header>
 
-              <stc-tab-content slot="content" name="tab1">
+              <stc-tab-content slot="content" name="tab1">{loading}
                 {stack}
               </stc-tab-content>
 
@@ -142,7 +161,7 @@ export class QuantumResult {
               </stc-tab-content>
             </stc-tabs>
           ) : (
-            ""
+            "Parsing JSON"
           )}
         </div>
       </div>

@@ -37,13 +37,13 @@ export class QuantumEditor {
   @State() result: string;
   @State() status: string;
   @State() error: string;
+  @State() loading = false;
 
 
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
   private edUid: string;
   private monacoTheme = 'vs';
-  private loading = false;
   private _config = {
     execButton: {
       class: '',
@@ -272,11 +272,11 @@ export class QuantumEditor {
         console.debug('[QuantumEditor] - execute - response', response);
         response.text().then(res => {
           this.warpscriptResult.emit(res);
-          this.result = JSON.parse(res);
           this.status = `Your script execution took ${QuantumEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed')))} serverside,
           fetched ${response.headers.get('x-warp10-fetched')} datapoints and performed ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
           this.statusEvent.emit(this.status);
           this.loading = false;
+          this.result = JSON.parse(res);
         }, err => {
           console.error(err);
           this.error = err;
@@ -328,7 +328,7 @@ export class QuantumEditor {
   }
 
   render() {
-    const loading = this.loading ? (
+    const loading = !!this.loading ? (
       <div class="loader">
         <div class="spinner"/>
       </div>

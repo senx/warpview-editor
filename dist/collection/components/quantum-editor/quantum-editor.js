@@ -11,9 +11,9 @@ export class QuantumEditor {
         this.horizontalLayout = false;
         this.config = '{}';
         this.displayMessages = true;
+        this.loading = false;
         this.WARPSCRIPT_LANGUAGE = 'warpscript';
         this.monacoTheme = 'vs';
-        this.loading = false;
         this._config = {
             execButton: {
                 class: '',
@@ -237,11 +237,11 @@ export class QuantumEditor {
                 console.debug('[QuantumEditor] - execute - response', response);
                 response.text().then(res => {
                     this.warpscriptResult.emit(res);
-                    this.result = JSON.parse(res);
                     this.status = `Your script execution took ${QuantumEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed')))} serverside,
           fetched ${response.headers.get('x-warp10-fetched')} datapoints and performed ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
                     this.statusEvent.emit(this.status);
                     this.loading = false;
+                    this.result = JSON.parse(res);
                 }, err => {
                     console.error(err);
                     this.error = err;
@@ -291,7 +291,7 @@ export class QuantumEditor {
         return (elapsed / 60000000000).toFixed(3) + ' m ';
     }
     render() {
-        const loading = this.loading ? (h("div", { class: "loader" },
+        const loading = !!this.loading ? (h("div", { class: "loader" },
             h("div", { class: "spinner" }))) : ('');
         const result = this.result || this.error ? (h("quantum-result", { displayMessages: this.displayMessages, theme: this.theme, result: JSON.stringify({ json: this.result, error: this.error, message: this.status }), config: JSON.stringify(this._config) })) : ('');
         const datavizBtn = this.showDataviz && this.result ? (h("button", { type: "button", class: this._config.datavizButton.class, onClick: (event) => this.requestDataviz(event), innerHTML: this._config.datavizButton.label })) : ('');
@@ -325,6 +325,9 @@ export class QuantumEditor {
         "horizontalLayout": {
             "type": Boolean,
             "attr": "horizontal-layout"
+        },
+        "loading": {
+            "state": true
         },
         "result": {
             "state": true

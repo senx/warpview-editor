@@ -17,11 +17,11 @@ export declare class QuantumEditor {
     result: string;
     status: string;
     error: string;
+    loading: boolean;
     private WARPSCRIPT_LANGUAGE;
     private ed;
     private edUid;
     private monacoTheme;
-    private loading;
     private _config;
     /**
      *
