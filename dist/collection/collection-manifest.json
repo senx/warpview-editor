@@ -63,6 +63,9 @@
           "name": "error"
         },
         {
+          "name": "loading"
+        },
+        {
           "name": "result"
         },
         {
@@ -133,6 +136,11 @@
           "watch": [
             "themeHandler"
           ]
+        }
+      ],
+      "states": [
+        {
+          "name": "loading"
         }
       ],
       "hostElement": {

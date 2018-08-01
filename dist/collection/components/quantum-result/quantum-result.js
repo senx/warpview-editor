@@ -6,6 +6,7 @@ export class QuantumResult {
         this.theme = "light";
         this.config = "{}";
         this.displayMessages = true;
+        this.loading = false;
         this._result = { json: [], error: "", message: "" };
         this._config = {
             messageClass: "",
@@ -34,7 +35,6 @@ export class QuantumResult {
      */
     componentWillLoad() {
         this._config = GTSLib.mergeDeep(this._config, JSON.parse(this.config));
-        this._result = JSON.parse(this.result);
         this.resUid = GTSLib.guid();
         if ("dark" === this.theme) {
             this.monacoTheme = "vs-dark";
@@ -42,6 +42,7 @@ export class QuantumResult {
         console.debug("[QuantumResult] - componentWillLoad", this._result.json);
     }
     buildEditor(json) {
+        this.loading = true;
         console.debug("[QuantumResult] - buildEditor", json, this._result.json);
         if (!this.resEd) {
             this.resEd = monaco.editor.create(this.el.querySelector("#result-" + this.resUid), {
@@ -56,27 +57,33 @@ export class QuantumResult {
         else {
             this.resEd.setValue(json);
         }
+        this.loading = false;
+        console.log("[QuantumResult] - buildEditor end");
     }
     componentDidLoad() {
         console.debug("[QuantumResult] - componentDidLoad", this._result.json);
+        this._result = JSON.parse(this.result);
         this.buildEditor(JSON.stringify(this._result.json));
     }
     render() {
-        const message = this._result.message && this.displayMessages ?
-            h("div", { class: this._config.messageClass }, this._result.message) : "";
+        const message = this._result.message && this.displayMessages ? (h("div", { class: this._config.messageClass }, this._result.message)) : ("");
+        const loading = this.loading ? (h("div", { class: "loader" },
+            h("div", { class: "spinner" }))) : ("");
         const error = this._result.error && this.displayMessages ? (h("div", { class: this._config.errorClass }, this._result.error)) : ("");
-        const stack = this._result.json && GTSLib.isArray(this._result.json) ? h("div", { class: this.theme + " raw" }, this._result.json.map((line, index) => (h("span", { class: "line" },
+        const stack = this._result.json && GTSLib.isArray(this._result.json) ? (h("div", { class: this.theme + " raw" }, this._result.json.map((line, index) => (h("span", { class: "line" },
             h("span", { class: "line-num" }, index === 0 ? "[TOP]" : index),
-            h("span", { class: "line-content" }, JSON.stringify(line)))))) : "";
+            h("span", { class: "line-content" }, JSON.stringify(line))))))) : ("Parsing JSON");
         return (h("div", null,
             message,
             error,
             h("div", { class: "wrapper " + this.theme }, this._result.json ? (h("stc-tabs", null,
                 h("stc-tab-header", { slot: "header", name: "tab1" }, "Stack"),
                 h("stc-tab-header", { slot: "header", name: "tab2" }, "Raw JSON"),
-                h("stc-tab-content", { slot: "content", name: "tab1" }, stack),
+                h("stc-tab-content", { slot: "content", name: "tab1" },
+                    loading,
+                    stack),
                 h("stc-tab-content", { slot: "content", name: "tab2" },
-                    h("div", { id: "result-" + this.resUid, class: "editor-res" })))) : (""))));
+                    h("div", { id: "result-" + this.resUid, class: "editor-res" })))) : ("Parsing JSON"))));
     }
     static get is() { return "quantum-result"; }
     static get properties() { return {
@@ -90,6 +97,9 @@ export class QuantumResult {
         },
         "el": {
             "elementRef": true
+        },
+        "loading": {
+            "state": true
         },
         "result": {
             "type": String,

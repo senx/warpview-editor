@@ -6,6 +6,7 @@ export declare class QuantumResult {
     theme: string;
     config: string;
     displayMessages: boolean;
+    loading: boolean;
     private _result;
     private _config;
     private resEd;

@@ -24,8 +24,7 @@
   <div class="container-fluid">
     <script language="JavaScript">
       $(function() {
-        var warpscript = "->BYTES MAP bucketizer.mean\n" +
-          "BYTES->\n@toto/ff\n$toto";
+        var warpscript = "@training/dataset0\n[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 24 d ] FETCH";
        $('#editor').attr('warpscript', warpscript);
       });
     </script>
