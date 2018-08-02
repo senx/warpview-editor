@@ -72,7 +72,7 @@ export class QuantumResult {
         const error = this._result.error && this.displayMessages ? (h("div", { class: this._config.errorClass }, this._result.error)) : ("");
         const stack = this._result.json && GTSLib.isArray(this._result.json) ? (h("div", { class: this.theme + " raw" }, this._result.json.map((line, index) => (h("span", { class: "line" },
             h("span", { class: "line-num" }, index === 0 ? "[TOP]" : index),
-            h("span", { class: "line-content" }, JSON.stringify(line))))))) : ("Parsing JSON");
+            h("span", { class: "line-content" }, JSON.stringify(line).replace(/,/gi, ', '))))))) : ("Parsing JSON");
         return (h("div", null,
             message,
             error,

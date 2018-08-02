@@ -119,6 +119,7 @@ quantum-result {
       display: block;
       border-left: #5a5a5a solid 1px;
       padding: 0.3em 0.3em 0.3em 1em;
+      max-width: calc(100% - 4em);
     }
   }
 }
