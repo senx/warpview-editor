@@ -1,7 +1,7 @@
-import { Component, Element, Prop, Watch, State } from "@stencil/core";
+import {Component, Element, Prop, Watch, State} from "@stencil/core";
 import monaco from "@timkendrick/monaco-editor";
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
-import { GTSLib } from "../../gts.lib";
+import {GTSLib} from "../../gts.lib";
 
 import "@code-dimension/stencil-components";
 
@@ -22,7 +22,7 @@ export class QuantumResult {
   @Prop() displayMessages = true;
   @State() loading = false;
 
-  private _result = { json: [], error: "", message: "" };
+  private _result = {json: [], error: "", message: ""};
   private _config = {
     messageClass: "",
     errorClass: ""
@@ -111,7 +111,7 @@ export class QuantumResult {
 
     const loading = this.loading ? (
       <div class="loader">
-        <div class="spinner" />
+        <div class="spinner"/>
       </div>
     ) : (
       ""
@@ -130,7 +130,7 @@ export class QuantumResult {
           {this._result.json.map((line, index) => (
             <span class="line">
               <span class="line-num">{index === 0 ? "[TOP]" : index}</span>
-              <span class="line-content">{JSON.stringify(line)}</span>
+              <span class="line-content">{JSON.stringify(line).replace(/,/gi, ', ')}</span>
             </span>
           ))}
         </div>
@@ -143,7 +143,7 @@ export class QuantumResult {
         {message}
         {error}
         <div class={"wrapper " + this.theme}>
-          {this._result.json? (
+          {this._result.json ? (
             <stc-tabs>
               <stc-tab-header slot="header" name="tab1">
                 Stack
@@ -157,7 +157,7 @@ export class QuantumResult {
               </stc-tab-content>
 
               <stc-tab-content slot="content" name="tab2">
-                <div id={"result-" + this.resUid} class="editor-res" />
+                <div id={"result-" + this.resUid} class="editor-res"/>
               </stc-tab-content>
             </stc-tabs>
           ) : (
