@@ -25,7 +25,7 @@
     <script language="JavaScript">
       $(function() {
         var warpscript = "@training/dataset0\n[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 24 d ] FETCH";
-       $('#editor').attr('warpscript', warpscript);
+       $('#editor').html(warpscript);
       });
     </script>
     <quantum-editor url="https://warp.cityzendata.net/api/v0/exec" theme="dark" id="editor" show-dataviz="false" horizontal-layout="false"
@@ -38,7 +38,8 @@
                      },
                      "messageClass": "alert alert-primary",
                      "errorClass": "alert alert-danger"
-                    }' warpscript="">
+                    }' >
+      2 2 +
     </quantum-editor>
   </div>
 </body>
