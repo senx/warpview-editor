@@ -44,6 +44,7 @@ export class QuantumEditor {
   private ed: IStandaloneCodeEditor;
   private edUid: string;
   private monacoTheme = 'vs';
+  private _innerCode: string;
   private _config = {
     execButton: {
       class: '',
@@ -85,6 +86,7 @@ export class QuantumEditor {
   componentWillLoad() {
     this._config = GTSLib.mergeDeep(this._config, JSON.parse(this.config));
     console.log('[QuantumEditor] - _config: ', this._config);
+    this._innerCode = this.el.innerHTML;
     this.edUid = GTSLib.guid();
     if ('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
@@ -207,8 +209,10 @@ export class QuantumEditor {
    */
   componentDidLoad() {
     console.log('[QuantumEditor] - componentDidLoad - warpscript', this.warpscript);
+
+    console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode );
     this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
-      value: this.warpscript,
+      value: this.warpscript || this._innerCode,
       language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
       theme: this.monacoTheme, hover: true
     });
@@ -349,7 +353,7 @@ export class QuantumEditor {
 
 
     return (
-      <div>
+      <div><div class="warpscript"><slot /></div>
         <div class="clearfix"/>
         <div class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
           <div class="panel1">
