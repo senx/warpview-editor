@@ -1,5 +1,7 @@
 quantum-editor {
   /* Safari */ }
+  quantum-editor .warpscript {
+    display: none; }
   quantum-editor .layout {
     display: grid;
     grid-gap: 10px; }

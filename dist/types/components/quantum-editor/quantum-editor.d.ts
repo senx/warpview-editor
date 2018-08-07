@@ -22,6 +22,7 @@ export declare class QuantumEditor {
     private ed;
     private edUid;
     private monacoTheme;
+    private _innerCode;
     private _config;
     /**
      *
