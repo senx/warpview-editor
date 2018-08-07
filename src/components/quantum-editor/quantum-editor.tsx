@@ -27,6 +27,9 @@ export class QuantumEditor {
   @Prop() horizontalLayout = false;
   @Prop() config: string = '{}';
   @Prop() displayMessages = true;
+  @Prop() widthPx: number = null;
+  @Prop() heightLine: number = null;
+  @Prop() heightPx
 
   @Event() statusEvent: EventEmitter;
   @Event() errorEvent: EventEmitter;
@@ -193,7 +196,6 @@ export class QuantumEditor {
     }
   }
 
-
   /**
    *
    */
@@ -221,6 +223,13 @@ export class QuantumEditor {
       console.debug('ws changed', event);
       this.warpscriptChanged.emit(this.ed.getValue());
     });
+    
+    if(!!this.heightLine || !!this.heightPx || !!this.widthPx){
+      let layout = this.el.querySelector("#layout")  as HTMLStencilElement;
+      let editor = this.el.querySelector('#editor-' + this.edUid) as HTMLStencilElement;
+      layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+      editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+    }
   }
 
   /**
@@ -354,10 +363,12 @@ export class QuantumEditor {
 
     return (
       <div><div class="warpscript"><slot /></div>
+      <style>
+      </style>
         <div class="clearfix"/>
-        <div class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
+        <div id="layout" class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
           <div class="panel1">
-            <div id={'editor-' + this.edUid} class="editor"/>
+            <div id={'editor-' + this.edUid}/>
             <div class="clearfix"/>
             {loading}
             {datavizBtn}

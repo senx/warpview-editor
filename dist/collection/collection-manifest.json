@@ -27,6 +27,16 @@
           "attr": "display-messages"
         },
         {
+          "name": "heightLine",
+          "type": "Number",
+          "attr": "height-line"
+        },
+        {
+          "name": "heightPx",
+          "type": "Any",
+          "attr": "height-px"
+        },
+        {
           "name": "horizontalLayout",
           "type": "Boolean",
           "attr": "horizontal-layout"
@@ -56,6 +66,11 @@
           "watch": [
             "warpscriptHandler"
           ]
+        },
+        {
+          "name": "widthPx",
+          "type": "Number",
+          "attr": "width-px"
         }
       ],
       "states": [

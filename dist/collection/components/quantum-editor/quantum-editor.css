@@ -4,19 +4,22 @@ quantum-editor {
     display: none; }
   quantum-editor .layout {
     display: grid;
-    grid-gap: 10px; }
-    quantum-editor .layout .editor {
+    grid-gap: 10px;
+    /*
+    .editor {
       width: 100%;
-      height: 500px; }
+      height: 100%;
+    }
+*/ }
     quantum-editor .layout.vertical-layout {
       flex-direction: column;
       align-items: stretch;
-      grid-template-columns: auto;
+      grid-template-columns: 100%;
       grid-template-rows: 50% 50%; }
     quantum-editor .layout.horizontal-layout {
       flex-direction: row;
       align-items: stretch;
-      grid-template-rows: auto;
+      grid-template-rows: 100%;
       grid-template-columns: 50% 50%; }
       quantum-editor .layout.horizontal-layout .panel1 {
         grid-column: 1;

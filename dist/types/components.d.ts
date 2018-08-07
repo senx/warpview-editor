@@ -33,11 +33,14 @@ declare global {
     interface QuantumEditor {
       'config': string;
       'displayMessages': boolean;
+      'heightLine': number;
+      'heightPx': any;
       'horizontalLayout': boolean;
       'showDataviz': boolean;
       'theme': string;
       'url': string;
       'warpscript': string;
+      'widthPx': number;
     }
   }
 
@@ -62,6 +65,8 @@ declare global {
     export interface QuantumEditorAttributes extends HTMLAttributes {
       'config'?: string;
       'displayMessages'?: boolean;
+      'heightLine'?: number;
+      'heightPx'?: any;
       'horizontalLayout'?: boolean;
       'onDatavizRequested'?: (event: CustomEvent) => void;
       'onErrorEvent'?: (event: CustomEvent) => void;
@@ -72,6 +77,7 @@ declare global {
       'theme'?: string;
       'url'?: string;
       'warpscript'?: string;
+      'widthPx'?: number;
     }
   }
 }

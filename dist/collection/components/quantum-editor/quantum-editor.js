@@ -11,6 +11,8 @@ export class QuantumEditor {
         this.horizontalLayout = false;
         this.config = '{}';
         this.displayMessages = true;
+        this.widthPx = null;
+        this.heightLine = null;
         this.loading = false;
         this.WARPSCRIPT_LANGUAGE = 'warpscript';
         this.monacoTheme = 'vs';
@@ -179,6 +181,13 @@ export class QuantumEditor {
             console.debug('ws changed', event);
             this.warpscriptChanged.emit(this.ed.getValue());
         });
+        if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
+            let layout = this.el.querySelector("#layout");
+            let editor = this.el.querySelector('#editor-' + this.edUid);
+            layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+            //layout.style.display = !!this.widthPx ? "block" : "grid";
+            editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+        }
     }
     /**
      *
@@ -300,10 +309,11 @@ export class QuantumEditor {
         return (h("div", null,
             h("div", { class: "warpscript" },
                 h("slot", null)),
+            h("style", null),
             h("div", { class: "clearfix" }),
-            h("div", { class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
+            h("div", { id: "layout", class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
                 h("div", { class: "panel1" },
-                    h("div", { id: 'editor-' + this.edUid, class: "editor" }),
+                    h("div", { id: 'editor-' + this.edUid }),
                     h("div", { class: "clearfix" }),
                     loading,
                     datavizBtn,
@@ -325,6 +335,14 @@ export class QuantumEditor {
         },
         "error": {
             "state": true
+        },
+        "heightLine": {
+            "type": Number,
+            "attr": "height-line"
+        },
+        "heightPx": {
+            "type": "Any",
+            "attr": "height-px"
         },
         "horizontalLayout": {
             "type": Boolean,
@@ -356,6 +374,10 @@ export class QuantumEditor {
             "type": String,
             "attr": "warpscript",
             "watchCallbacks": ["warpscriptHandler"]
+        },
+        "widthPx": {
+            "type": Number,
+            "attr": "width-px"
         }
     }; }
     static get events() { return [{

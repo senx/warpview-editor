@@ -10,6 +10,9 @@ export declare class QuantumEditor {
     horizontalLayout: boolean;
     config: string;
     displayMessages: boolean;
+    widthPx: number;
+    heightLine: number;
+    heightPx: any;
     statusEvent: EventEmitter;
     errorEvent: EventEmitter;
     warpscriptChanged: EventEmitter;
