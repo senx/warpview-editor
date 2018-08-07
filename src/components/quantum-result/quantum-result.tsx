@@ -161,7 +161,7 @@ export class QuantumResult {
               </stc-tab-content>
             </stc-tabs>
           ) : (
-            "Parsing JSON"
+            ""
           )}
         </div>
       </div>

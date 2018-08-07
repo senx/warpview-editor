@@ -1,4 +1,5 @@
 import '../../stencil.core';
+import '../../stencil.core';
 import "@code-dimension/stencil-components";
 export declare class QuantumResult {
     el: HTMLStencilElement;

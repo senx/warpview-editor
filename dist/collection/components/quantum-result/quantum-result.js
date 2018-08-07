@@ -83,7 +83,7 @@ export class QuantumResult {
                     loading,
                     stack),
                 h("stc-tab-content", { slot: "content", name: "tab2" },
-                    h("div", { id: "result-" + this.resUid, class: "editor-res" })))) : ("Parsing JSON"))));
+                    h("div", { id: "result-" + this.resUid, class: "editor-res" })))) : (""))));
     }
     static get is() { return "quantum-result"; }
     static get properties() { return {
