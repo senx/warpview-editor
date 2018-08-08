@@ -185,7 +185,6 @@ export class QuantumEditor {
             let layout = this.el.querySelector("#layout");
             let editor = this.el.querySelector('#editor-' + this.edUid);
             layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-            //layout.style.display = !!this.widthPx ? "block" : "grid";
             editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
         }
     }
