@@ -33,7 +33,7 @@
         },
         {
           "name": "heightPx",
-          "type": "Any",
+          "type": "Number",
           "attr": "height-px"
         },
         {

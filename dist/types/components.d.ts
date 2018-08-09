@@ -34,7 +34,7 @@ declare global {
       'config': string;
       'displayMessages': boolean;
       'heightLine': number;
-      'heightPx': any;
+      'heightPx': number;
       'horizontalLayout': boolean;
       'showDataviz': boolean;
       'theme': string;
@@ -66,7 +66,7 @@ declare global {
       'config'?: string;
       'displayMessages'?: boolean;
       'heightLine'?: number;
-      'heightPx'?: any;
+      'heightPx'?: number;
       'horizontalLayout'?: boolean;
       'onDatavizRequested'?: (event: CustomEvent) => void;
       'onErrorEvent'?: (event: CustomEvent) => void;

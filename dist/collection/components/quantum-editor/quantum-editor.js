@@ -11,8 +11,6 @@ export class QuantumEditor {
         this.horizontalLayout = false;
         this.config = '{}';
         this.displayMessages = true;
-        this.widthPx = null;
-        this.heightLine = null;
         this.loading = false;
         this.WARPSCRIPT_LANGUAGE = 'warpscript';
         this.monacoTheme = 'vs';
@@ -340,7 +338,7 @@ export class QuantumEditor {
             "attr": "height-line"
         },
         "heightPx": {
-            "type": "Any",
+            "type": Number,
             "attr": "height-px"
         },
         "horizontalLayout": {

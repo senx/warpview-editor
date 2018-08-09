@@ -11,7 +11,7 @@ export declare class QuantumEditor {
     displayMessages: boolean;
     widthPx: number;
     heightLine: number;
-    heightPx: any;
+    heightPx: number;
     statusEvent: EventEmitter;
     errorEvent: EventEmitter;
     warpscriptChanged: EventEmitter;

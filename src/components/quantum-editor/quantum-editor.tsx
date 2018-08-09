@@ -27,9 +27,9 @@ export class QuantumEditor {
   @Prop() horizontalLayout = false;
   @Prop() config: string = '{}';
   @Prop() displayMessages = true;
-  @Prop() widthPx: number = null;
-  @Prop() heightLine: number = null;
-  @Prop() heightPx
+  @Prop() widthPx: number;
+  @Prop() heightLine: number;
+  @Prop() heightPx: number;
 
   @Event() statusEvent: EventEmitter;
   @Event() errorEvent: EventEmitter;
