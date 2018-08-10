@@ -5,7 +5,7 @@ var QuantumEditorComponent = /** @class **/ (function() {
   QuantumEditor.is = 'quantum-editor';
   QuantumEditor.getModule = function(opts) {
     
-    return import('./quantum-editor.js').then(function(m) {
+    return import('./ymbysjh6.js').then(function(m) {
         return m.QuantumEditor;
       });
 
@@ -18,7 +18,7 @@ var QuantumResultComponent = /** @class **/ (function() {
   QuantumResult.is = 'quantum-result';
   QuantumResult.getModule = function(opts) {
     
-    return import('./quantum-editor.js').then(function(m) {
+    return import('./ymbysjh6.js').then(function(m) {
         return m.QuantumResult;
       });
 
@@ -31,7 +31,7 @@ var StcTabContentComponent = /** @class **/ (function() {
   StcTabContent.is = 'stc-tab-content';
   StcTabContent.getModule = function(opts) {
     
-    return import('./quantum-editor.js').then(function(m) {
+    return import('./ymbysjh6.js').then(function(m) {
         return m.StcTabContent;
       });
 
@@ -44,7 +44,7 @@ var StcTabHeaderComponent = /** @class **/ (function() {
   StcTabHeader.is = 'stc-tab-header';
   StcTabHeader.getModule = function(opts) {
     
-    return import('./quantum-editor.js').then(function(m) {
+    return import('./ymbysjh6.js').then(function(m) {
         return m.StcTabHeader;
       });
 
@@ -57,7 +57,7 @@ var StcTabsComponent = /** @class **/ (function() {
   StcTabs.is = 'stc-tabs';
   StcTabs.getModule = function(opts) {
     
-    return import('./quantum-editor.js').then(function(m) {
+    return import('./ymbysjh6.js').then(function(m) {
         return m.StcTabs;
       });
 

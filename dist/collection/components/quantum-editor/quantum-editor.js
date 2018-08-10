@@ -23,8 +23,10 @@ export class QuantumEditor {
                 class: '',
                 label: 'Visualize'
             },
-            quickSuggestionsDelay: 10,
-            suggestOnTriggerCharacters: true
+            editor: {
+                quickSuggestionsDelay: 10,
+                quickSuggestions: true
+            }
         };
     }
     /**
@@ -173,8 +175,8 @@ export class QuantumEditor {
         console.log('[QuantumEditor] - componentDidLoad - warpscript', this.warpscript);
         console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode);
         this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
-            quickSuggestionsDelay: this._config.quickSuggestionsDelay,
-            quickSuggestions: this._config.suggestOnTriggerCharacters,
+            quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
+            quickSuggestions: this._config.editor.quickSuggestions,
             value: this.warpscript || this._innerCode,
             language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
             theme: this.monacoTheme, hover: true
