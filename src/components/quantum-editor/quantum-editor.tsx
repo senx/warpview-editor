@@ -59,7 +59,7 @@ export class QuantumEditor {
     },
     editor : {
       quickSuggestionsDelay: 10,
-      suggestOnTriggerCharacters: true
+      quickSuggestions: true
     }
   };
 
@@ -219,7 +219,7 @@ export class QuantumEditor {
     console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode);
     this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
       quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
-      quickSuggestions:  this._config.editor.suggestOnTriggerCharacters,
+      quickSuggestions:  this._config.editor.quickSuggestions,
       value: this.warpscript || this._innerCode,
       language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
       theme: this.monacoTheme, hover: true
