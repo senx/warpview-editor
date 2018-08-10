@@ -129,8 +129,8 @@ export class QuantumResult {
         <div class={this.theme + " raw"}>
           {this._result.json.map((line, index) => (
             <span class="line">
-              <span class="line-num">{index === 0 ? "[TOP]" : index}</span>
-              <span class="line-content">{JSON.stringify(line).replace(/,/gi, ', ')}</span>
+              <span class="line-num">{index === 0 ? "[TOP]" : index + 1}</span>
+              <span class="line-content">{JSON.stringify(line ).replace(/,/gi, ', ')}</span>
             </span>
           ))}
         </div>
