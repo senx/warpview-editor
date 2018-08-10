@@ -56,6 +56,10 @@ export class QuantumEditor {
     datavizButton: {
       class: '',
       label: 'Visualize'
+    },
+    editor : {
+      quickSuggestionsDelay: 10,
+      suggestOnTriggerCharacters: true
     }
   };
 
@@ -89,20 +93,20 @@ export class QuantumEditor {
   componentWillLoad() {
     this._config = GTSLib.mergeDeep(this._config, JSON.parse(this.config));
     console.log('[QuantumEditor] - _config: ', this._config);
-    this._innerCode = this.el.innerHTML;
+    this._innerCode = this.el.textContent;
     this.edUid = GTSLib.guid();
     if ('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
     console.log('[QuantumEditor] - componentWillLoad theme is: ', this.theme);
-    if(!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
-      monaco.languages.register({ id: this.WARPSCRIPT_LANGUAGE });
+    if (!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
+      monaco.languages.register({id: this.WARPSCRIPT_LANGUAGE});
       console.log('[QuantumEditor] - componentWillLoad register: ', this.WARPSCRIPT_LANGUAGE);
       monaco.languages.setMonarchTokensProvider(this.WARPSCRIPT_LANGUAGE, Monarch.rules);
       monaco.languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
           wordPattern: /[^\s\t]+/,
           comments: {
-            lineComment: "//|#",
+            lineComment: "//",
             blockComment: ["/**", "*/"]
           },
           brackets: [
@@ -212,8 +216,10 @@ export class QuantumEditor {
   componentDidLoad() {
     console.log('[QuantumEditor] - componentDidLoad - warpscript', this.warpscript);
 
-    console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode );
+    console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode);
     this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
+      quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
+      quickSuggestions:  this._config.editor.suggestOnTriggerCharacters,
       value: this.warpscript || this._innerCode,
       language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
       theme: this.monacoTheme, hover: true
@@ -223,8 +229,8 @@ export class QuantumEditor {
       console.debug('ws changed', event);
       this.warpscriptChanged.emit(this.ed.getValue());
     });
-    
-    if(!!this.heightLine || !!this.heightPx || !!this.widthPx){
+
+    if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
       let layout = this.el.querySelector("#layout")  as HTMLStencilElement;
       let editor = this.el.querySelector('#editor-' + this.edUid) as HTMLStencilElement;
       layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
@@ -362,9 +368,12 @@ export class QuantumEditor {
 
 
     return (
-      <div><div class="warpscript"><slot /></div>
-      <style>
-      </style>
+      <div>
+        <div class="warpscript">
+          <slot/>
+        </div>
+        <style>
+        </style>
         <div class="clearfix"/>
         <div id="layout" class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
           <div class="panel1">

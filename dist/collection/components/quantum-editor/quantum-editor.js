@@ -22,7 +22,9 @@ export class QuantumEditor {
             datavizButton: {
                 class: '',
                 label: 'Visualize'
-            }
+            },
+            quickSuggestionsDelay: 10,
+            suggestOnTriggerCharacters: true
         };
     }
     /**
@@ -52,7 +54,7 @@ export class QuantumEditor {
     componentWillLoad() {
         this._config = GTSLib.mergeDeep(this._config, JSON.parse(this.config));
         console.log('[QuantumEditor] - _config: ', this._config);
-        this._innerCode = this.el.innerHTML;
+        this._innerCode = this.el.textContent;
         this.edUid = GTSLib.guid();
         if ('dark' === this.theme) {
             this.monacoTheme = 'vs-dark';
@@ -65,7 +67,7 @@ export class QuantumEditor {
             monaco.languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
                 wordPattern: /[^\s\t]+/,
                 comments: {
-                    lineComment: "//|#",
+                    lineComment: "//",
                     blockComment: ["/**", "*/"]
                 },
                 brackets: [
@@ -171,6 +173,8 @@ export class QuantumEditor {
         console.log('[QuantumEditor] - componentDidLoad - warpscript', this.warpscript);
         console.log('[QuantumEditor] - componentDidLoad - inner: ', this._innerCode);
         this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
+            quickSuggestionsDelay: this._config.quickSuggestionsDelay,
+            quickSuggestions: this._config.suggestOnTriggerCharacters,
             value: this.warpscript || this._innerCode,
             language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
             theme: this.monacoTheme, hover: true
