@@ -29,8 +29,8 @@ import '@code-dimension/stencil-components';
 declare global {
 
   namespace StencilComponents {
-    interface QuantumEditor {
-      'config': string;
+    interface WarpViewEditor {
+      'config': any;
       'displayMessages': boolean;
       'heightLine': number;
       'heightPx': number;
@@ -43,26 +43,26 @@ declare global {
     }
   }
 
-  interface HTMLQuantumEditorElement extends StencilComponents.QuantumEditor, HTMLStencilElement {}
+  interface HTMLWarpViewEditorElement extends StencilComponents.WarpViewEditor, HTMLStencilElement {}
 
-  var HTMLQuantumEditorElement: {
-    prototype: HTMLQuantumEditorElement;
-    new (): HTMLQuantumEditorElement;
+  var HTMLWarpViewEditorElement: {
+    prototype: HTMLWarpViewEditorElement;
+    new (): HTMLWarpViewEditorElement;
   };
   interface HTMLElementTagNameMap {
-    'quantum-editor': HTMLQuantumEditorElement;
+    'warp-view-editor': HTMLWarpViewEditorElement;
   }
   interface ElementTagNameMap {
-    'quantum-editor': HTMLQuantumEditorElement;
+    'warp-view-editor': HTMLWarpViewEditorElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'quantum-editor': JSXElements.QuantumEditorAttributes;
+      'warp-view-editor': JSXElements.WarpViewEditorAttributes;
     }
   }
   namespace JSXElements {
-    export interface QuantumEditorAttributes extends HTMLAttributes {
-      'config'?: string;
+    export interface WarpViewEditorAttributes extends HTMLAttributes {
+      'config'?: any;
       'displayMessages'?: boolean;
       'heightLine'?: number;
       'heightPx'?: number;
@@ -85,36 +85,44 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface QuantumResult {
-      'config': string;
+    interface WarpViewResult {
+      'config': object;
       'displayMessages': boolean;
-      'result': string;
+      'result': {
+    json: any[],
+    error: string,
+    message: string
+  };
       'theme': string;
     }
   }
 
-  interface HTMLQuantumResultElement extends StencilComponents.QuantumResult, HTMLStencilElement {}
+  interface HTMLWarpViewResultElement extends StencilComponents.WarpViewResult, HTMLStencilElement {}
 
-  var HTMLQuantumResultElement: {
-    prototype: HTMLQuantumResultElement;
-    new (): HTMLQuantumResultElement;
+  var HTMLWarpViewResultElement: {
+    prototype: HTMLWarpViewResultElement;
+    new (): HTMLWarpViewResultElement;
   };
   interface HTMLElementTagNameMap {
-    'quantum-result': HTMLQuantumResultElement;
+    'warp-view-result': HTMLWarpViewResultElement;
   }
   interface ElementTagNameMap {
-    'quantum-result': HTMLQuantumResultElement;
+    'warp-view-result': HTMLWarpViewResultElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'quantum-result': JSXElements.QuantumResultAttributes;
+      'warp-view-result': JSXElements.WarpViewResultAttributes;
     }
   }
   namespace JSXElements {
-    export interface QuantumResultAttributes extends HTMLAttributes {
-      'config'?: string;
+    export interface WarpViewResultAttributes extends HTMLAttributes {
+      'config'?: object;
       'displayMessages'?: boolean;
-      'result'?: string;
+      'result'?: {
+    json: any[],
+    error: string,
+    message: string
+  };
       'theme'?: string;
     }
   }

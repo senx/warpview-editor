@@ -1,9 +1,9 @@
 {
-  "name": "quantum-editor",
+  "name": "warp-view-editor",
   "version": "0.0.1",
-  "description": "Quantum warpscript editor",
+  "description": "WarpScript editor",
   "module": "dist/esm/index.js",
-  "main": "dist/quantum-editor.js",
+  "main": "dist/warp-view-editor.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
@@ -33,14 +33,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org:cityzendata/quantum-editor.git"
+    "url": "git+ssh://git@gitlab.com:senx/warpview-editor.git"
   },
-  "author": "Cityzen Data",
+  "author": "SenX",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://bitbucket.org/cityzendata/quantum-editor/addon/trello/trello-board"
+    "url": "https://gitlab.com/senx/warpview-editor/issues"
   },
-  "homepage": "https://bitbucket.org/cityzendata/quantum-editor",
+  "homepage": "https://gitlab.com/senx/warpview-editor/wikis/home",
   "jest": {
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"

@@ -1,24 +1,24 @@
 {
   "components": [
     {
-      "tag": "quantum-editor",
+      "tag": "warp-view-editor",
       "dependencies": [
-        "quantum-result"
+        "warp-view-result"
       ],
-      "componentClass": "QuantumEditor",
-      "componentPath": "components/quantum-editor/quantum-editor.js",
+      "componentClass": "WarpViewEditor",
+      "componentPath": "components/warp-view-editor/warp-view-editor.js",
       "styles": {
         "$": {
           "stylePaths": [
             "../node_modules/monaco-editor/min/vs/editor/editor.main.css",
-            "components/quantum-editor/quantum-editor.scss"
+            "components/warp-view-editor/warp-view-editor.scss"
           ]
         }
       },
       "props": [
         {
           "name": "config",
-          "type": "String",
+          "type": "Any",
           "attr": "config"
         },
         {
@@ -109,26 +109,25 @@
       ]
     },
     {
-      "tag": "quantum-result",
+      "tag": "warp-view-result",
       "dependencies": [
         "stc-tab-content",
         "stc-tab-header",
         "stc-tabs"
       ],
-      "componentClass": "QuantumResult",
-      "componentPath": "components/quantum-result/quantum-result.js",
+      "componentClass": "WarpViewResult",
+      "componentPath": "components/warp-view-result/warp-view-result.js",
       "styles": {
         "$": {
           "stylePaths": [
             "../node_modules/monaco-editor/min/vs/editor/editor.main.css",
-            "components/quantum-result/quantum-result.scss"
+            "components/warp-view-result/warp-view-result.scss"
           ]
         }
       },
       "props": [
         {
           "name": "config",
-          "type": "String",
           "attr": "config"
         },
         {
@@ -138,7 +137,6 @@
         },
         {
           "name": "result",
-          "type": "String",
           "attr": "result",
           "watch": [
             "resultHandler"
