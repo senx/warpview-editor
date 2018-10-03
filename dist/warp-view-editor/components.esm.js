@@ -5,7 +5,7 @@ var StcTabContentComponent = /** @class **/ (function() {
   StcTabContent.is = 'stc-tab-content';
   StcTabContent.getModule = function(opts) {
     
-    return import('./fa9tc9a8.js').then(function(m) {
+    return import('./zwzkxdb2.js').then(function(m) {
         return m.StcTabContent;
       });
 
@@ -18,7 +18,7 @@ var StcTabHeaderComponent = /** @class **/ (function() {
   StcTabHeader.is = 'stc-tab-header';
   StcTabHeader.getModule = function(opts) {
     
-    return import('./fa9tc9a8.js').then(function(m) {
+    return import('./zwzkxdb2.js').then(function(m) {
         return m.StcTabHeader;
       });
 
@@ -31,7 +31,7 @@ var StcTabsComponent = /** @class **/ (function() {
   StcTabs.is = 'stc-tabs';
   StcTabs.getModule = function(opts) {
     
-    return import('./fa9tc9a8.js').then(function(m) {
+    return import('./zwzkxdb2.js').then(function(m) {
         return m.StcTabs;
       });
 
@@ -44,7 +44,7 @@ var WarpViewEditorComponent = /** @class **/ (function() {
   WarpViewEditor.is = 'warp-view-editor';
   WarpViewEditor.getModule = function(opts) {
     
-    return import('./fa9tc9a8.js').then(function(m) {
+    return import('./zwzkxdb2.js').then(function(m) {
         return m.WarpViewEditor;
       });
 
@@ -57,7 +57,7 @@ var WarpViewResultComponent = /** @class **/ (function() {
   WarpViewResult.is = 'warp-view-result';
   WarpViewResult.getModule = function(opts) {
     
-    return import('./fa9tc9a8.js').then(function(m) {
+    return import('./zwzkxdb2.js').then(function(m) {
         return m.WarpViewResult;
       });
 

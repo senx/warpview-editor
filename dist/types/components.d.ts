@@ -68,11 +68,12 @@ declare global {
       'heightLine'?: number;
       'heightPx'?: number;
       'horizontalLayout'?: boolean;
-      'onDatavizRequested'?: (event: CustomEvent) => void;
-      'onErrorEvent'?: (event: CustomEvent) => void;
-      'onStatusEvent'?: (event: CustomEvent) => void;
-      'onWarpscriptChanged'?: (event: CustomEvent) => void;
-      'onWarpscriptResult'?: (event: CustomEvent) => void;
+      'onWarpViewEditorDatavizRequested'?: (event: CustomEvent) => void;
+      'onWarpViewEditorErrorEvent'?: (event: CustomEvent) => void;
+      'onWarpViewEditorLoaded'?: (event: CustomEvent) => void;
+      'onWarpViewEditorStatusEvent'?: (event: CustomEvent) => void;
+      'onWarpViewEditorWarpscriptChanged'?: (event: CustomEvent) => void;
+      'onWarpViewEditorWarpscriptResult'?: (event: CustomEvent) => void;
       'showDataviz'?: boolean;
       'theme'?: string;
       'url'?: string;

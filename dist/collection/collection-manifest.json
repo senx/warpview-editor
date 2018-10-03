@@ -92,19 +92,22 @@
       },
       "events": [
         {
-          "event": "datavizRequested"
+          "event": "warpViewEditorDatavizRequested"
         },
         {
-          "event": "errorEvent"
+          "event": "warpViewEditorErrorEvent"
         },
         {
-          "event": "statusEvent"
+          "event": "warpViewEditorLoaded"
         },
         {
-          "event": "warpscriptChanged"
+          "event": "warpViewEditorStatusEvent"
         },
         {
-          "event": "warpscriptResult"
+          "event": "warpViewEditorWarpscriptChanged"
+        },
+        {
+          "event": "warpViewEditorWarpscriptResult"
         }
       ]
     },

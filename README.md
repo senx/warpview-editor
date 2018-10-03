@@ -67,7 +67,7 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
 
 ## Events
 
-### statusEvent
+### warpViewEditorStatusEvent
 
 String execution status :
 
@@ -75,7 +75,7 @@ String execution status :
 Your script execution took 527.749 ms serverside, fetched 138156 datapoints and performed 21 WarpScript operations.
 ```
 
-### errorEvent
+### warpViewEditorErrorEvent
 
 String execution error :
 
@@ -83,15 +83,15 @@ String execution error :
 ERROR line #4 in section '[TOP]': Unknown symbol 'TOKEN2'
 ```
 
-### warpscriptChanged
+### warpViewEditorWarpscriptChanged
 
 String representation of the WarpScript typed in the editor.
 
-### warpscriptResult
+### warpViewEditorWarpscriptResult
 
 Json of the the WarpScript execution result triggered by a click on the execute button.
 
-### datavizRequested
+### warpViewEditorDatavizRequested
 
 Json of the the WarpScript execution result triggered by a click on the dataViz button
 

@@ -163,7 +163,7 @@ export class WarpViewEditor {
      *
      */
     componentDidUnload() {
-        console.log('Component removed from the DOM');
+        console.log('[WarpViewEditor] - Component removed from the DOM');
         if (this.ed) {
             this.ed.dispose();
         }
@@ -181,16 +181,19 @@ export class WarpViewEditor {
             language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
             theme: this.monacoTheme, hover: true
         });
-        this.ed.getModel().onDidChangeContent((event) => {
-            console.debug('ws changed', event);
-            this.warpscriptChanged.emit(this.ed.getValue());
-        });
+        if (this.ed) {
+            this.ed.getModel().onDidChangeContent((event) => {
+                console.debug('ws changed', event);
+                this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+            });
+        }
         if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
             let layout = this.el.querySelector("#layout");
             let editor = this.el.querySelector('#editor-' + this.edUid);
             layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
             editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
         }
+        this.warpViewEditorLoaded.emit();
     }
     /**
      *
@@ -244,44 +247,49 @@ export class WarpViewEditor {
         this.result = undefined;
         this.status = undefined;
         this.error = undefined;
-        console.debug('[WarpViewEditor] - execute - this.ed.getValue()', this.ed.getValue(), _event);
-        this.loading = true;
-        fetch(this.url, { method: 'POST', body: this.ed.getValue() }).then(response => {
-            if (response.ok) {
-                console.debug('[WarpViewEditor] - execute - response', response);
-                response.text().then(res => {
-                    this.warpscriptResult.emit(res);
-                    this.status = `Your script execution took ${WarpViewEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed')))} serverside,
+        if (this.ed) {
+            console.debug('[WarpViewEditor] - execute - this.ed.getValue()', this.ed.getValue(), _event);
+            this.loading = true;
+            fetch(this.url, { method: 'POST', body: this.ed.getValue() }).then(response => {
+                if (response.ok) {
+                    console.debug('[WarpViewEditor] - execute - response', response);
+                    response.text().then(res => {
+                        this.warpViewEditorWarpscriptResult.emit(res);
+                        this.status = `Your script execution took ${WarpViewEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed')))} serverside,
           fetched ${response.headers.get('x-warp10-fetched')} datapoints and performed ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
-                    this.statusEvent.emit(this.status);
+                        this.warpViewEditorStatusEvent.emit(this.status);
+                        this.loading = false;
+                        this.result = JSON.parse(res);
+                    }, err => {
+                        console.error(err);
+                        this.error = err;
+                        this.warpViewEditorErrorEvent.emit(this.error);
+                        this.loading = false;
+                    });
+                }
+                else {
+                    console.error(response.statusText);
+                    this.error = response.statusText;
+                    this.warpViewEditorErrorEvent.emit(this.error);
                     this.loading = false;
-                    this.result = JSON.parse(res);
-                }, err => {
-                    console.error(err);
-                    this.error = err;
-                    this.errorEvent.emit(this.error);
-                    this.loading = false;
-                });
-            }
-            else {
-                console.error(response.statusText);
-                this.error = response.statusText;
-                this.errorEvent.emit(this.error);
+                }
+            }, err => {
+                console.error(err);
+                this.error = err;
+                this.warpViewEditorErrorEvent.emit(this.error);
                 this.loading = false;
-            }
-        }, err => {
-            console.error(err);
-            this.error = err;
-            this.errorEvent.emit(this.error);
-            this.loading = false;
-        });
+            });
+        }
+        else {
+            console.error('[WarpViewEditor] - no active editor');
+        }
     }
     /**
      *
      * @param {UIEvent} _event
      */
     requestDataviz(_event) {
-        this.datavizRequested.emit(this.result);
+        this.warpViewEditorDatavizRequested.emit(this.result);
     }
     /**
      *
@@ -384,32 +392,38 @@ export class WarpViewEditor {
         }
     }; }
     static get events() { return [{
-            "name": "statusEvent",
-            "method": "statusEvent",
+            "name": "warpViewEditorStatusEvent",
+            "method": "warpViewEditorStatusEvent",
             "bubbles": true,
             "cancelable": true,
             "composed": true
         }, {
-            "name": "errorEvent",
-            "method": "errorEvent",
+            "name": "warpViewEditorErrorEvent",
+            "method": "warpViewEditorErrorEvent",
             "bubbles": true,
             "cancelable": true,
             "composed": true
         }, {
-            "name": "warpscriptChanged",
-            "method": "warpscriptChanged",
+            "name": "warpViewEditorWarpscriptChanged",
+            "method": "warpViewEditorWarpscriptChanged",
             "bubbles": true,
             "cancelable": true,
             "composed": true
         }, {
-            "name": "warpscriptResult",
-            "method": "warpscriptResult",
+            "name": "warpViewEditorWarpscriptResult",
+            "method": "warpViewEditorWarpscriptResult",
             "bubbles": true,
             "cancelable": true,
             "composed": true
         }, {
-            "name": "datavizRequested",
-            "method": "datavizRequested",
+            "name": "warpViewEditorDatavizRequested",
+            "method": "warpViewEditorDatavizRequested",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "warpViewEditorLoaded",
+            "method": "warpViewEditorLoaded",
             "bubbles": true,
             "cancelable": true,
             "composed": true

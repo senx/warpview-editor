@@ -12,11 +12,12 @@ export declare class WarpViewEditor {
     widthPx: number;
     heightLine: number;
     heightPx: number;
-    statusEvent: EventEmitter;
-    errorEvent: EventEmitter;
-    warpscriptChanged: EventEmitter;
-    warpscriptResult: EventEmitter;
-    datavizRequested: EventEmitter;
+    warpViewEditorStatusEvent: EventEmitter;
+    warpViewEditorErrorEvent: EventEmitter;
+    warpViewEditorWarpscriptChanged: EventEmitter;
+    warpViewEditorWarpscriptResult: EventEmitter;
+    warpViewEditorDatavizRequested: EventEmitter;
+    warpViewEditorLoaded: EventEmitter;
     result: any[];
     status: string;
     error: string;
