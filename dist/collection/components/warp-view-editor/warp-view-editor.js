@@ -174,8 +174,8 @@ export class WarpViewEditor {
     componentDidLoad() {
         console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
         console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
-        console.log('[WarpViewEditor] - componentDidLoad - ed: ', document.getElementById('editor-' + this.edUid));
-        this.ed = monaco.editor.create(document.getElementById('editor-' + this.edUid), {
+        console.log('[WarpViewEditor] - componentDidLoad - ed: ', this.el.querySelector('#editor-' + this.edUid));
+        this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
             quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
             quickSuggestions: this._config.editor.quickSuggestions,
             value: this.warpscript || this._innerCode,
@@ -189,8 +189,8 @@ export class WarpViewEditor {
             });
         }
         if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
-            let layout = document.getElementById('layout-' + this.edUid);
-            let editor = document.getElementById('editor-' + this.edUid);
+            let layout = this.el.querySelector("#layout");
+            let editor = this.el.querySelector('#editor-' + this.edUid);
             layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
             editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
         }
@@ -323,7 +323,7 @@ export class WarpViewEditor {
                 h("slot", null)),
             h("style", null),
             h("div", { class: "clearfix" }),
-            h("div", { id: 'layout-' + this.edUid, class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
+            h("div", { id: "layout", class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
                 h("div", { class: "panel1" },
                     h("div", { id: 'editor-' + this.edUid }),
                     h("div", { class: "clearfix" }),

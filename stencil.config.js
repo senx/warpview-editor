@@ -1,6 +1,6 @@
 const sass = require("@stencil/sass");
 exports.config = {
-  namespace: "warp-view-editor",
+  namespace: "warpview-editor",
   plugins: [sass()],
   outputTargets: [
     {

@@ -1,5 +1,5 @@
 {
-  "name": "warp-view-editor",
+  "name": "warpview-editor",
   "version": "0.0.1",
   "description": "WarpScript editor",
   "module": "dist/esm/index.js",
