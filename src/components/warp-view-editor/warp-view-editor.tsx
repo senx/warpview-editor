@@ -218,8 +218,8 @@ export class WarpViewEditor {
     console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
 
     console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
-    console.log('[WarpViewEditor] - componentDidLoad - ed: ', document.getElementById('#editor-' + this.edUid));
-    this.ed = monaco.editor.create(document.getElementById('#editor-' + this.edUid), {
+    console.log('[WarpViewEditor] - componentDidLoad - ed: ', document.getElementById('editor-' + this.edUid));
+    this.ed = monaco.editor.create(document.getElementById('editor-' + this.edUid), {
       quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
       quickSuggestions: this._config.editor.quickSuggestions,
       value: this.warpscript || this._innerCode,
@@ -234,8 +234,8 @@ export class WarpViewEditor {
     }
 
     if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
-      let layout = document.getElementById('#layout-' + this.edUid)  as HTMLStencilElement;
-      let editor = document.getElementById('#editor-' + this.edUid) as HTMLStencilElement;
+      let layout = document.getElementById('layout-' + this.edUid)  as HTMLStencilElement;
+      let editor = document.getElementById('editor-' + this.edUid) as HTMLStencilElement;
       layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
       editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
     }
