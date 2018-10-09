@@ -88,12 +88,5 @@ export declare class GTSLib {
      * @returns {string}
      */
     static guid(): string;
-    /**
-     *
-     * @param target
-     * @param sources
-     * @returns {any}
-     */
-    static mergeDeep(target: any, ...sources: any[]): any;
     static isObject(item: any): boolean;
 }

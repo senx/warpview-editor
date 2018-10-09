@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "WarpScript editor",
   "module": "dist/esm/index.js",
-  "main": "dist/warp-view-editor.js",
+  "browser": "dist/warpview-editor.js",
+  "main": "dist/warpview-editor.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
@@ -21,6 +22,7 @@
     "@code-dimension/stencil-components": "0.0.0-beta.1",
     "@stencil/core": "^0.8.0",
     "@timkendrick/monaco-editor": "0.0.9",
+    "deepmerge": "^2.2.1",
     "monaco-editor": "0.13.1",
     "whatwg-fetch": "2.0.4"
   },

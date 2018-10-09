@@ -5,6 +5,7 @@ import {GTSLib} from "../../gts.lib";
 
 import "@code-dimension/stencil-components";
 
+import merge from 'deepmerge'
 @Component({
   tag: "warp-view-result",
   styleUrls: [
@@ -69,7 +70,7 @@ export class WarpViewResult {
    *
    */
   componentWillLoad() {
-    this._config = GTSLib.mergeDeep(this._config, this.config);
+    this._config = merge(this._config, this.config);
     this.resUid = GTSLib.guid();
     if ("dark" === this.theme) {
       this.monacoTheme = "vs-dark";

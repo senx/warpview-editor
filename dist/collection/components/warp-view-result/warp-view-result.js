@@ -1,5 +1,6 @@
 import monaco from "@timkendrick/monaco-editor";
 import { GTSLib } from "../../gts.lib";
+import merge from 'deepmerge';
 export class WarpViewResult {
     constructor() {
         this.result = { json: [], error: '', message: '' };
@@ -34,7 +35,7 @@ export class WarpViewResult {
      *
      */
     componentWillLoad() {
-        this._config = GTSLib.mergeDeep(this._config, this.config);
+        this._config = merge(this._config, this.config);
         this.resUid = GTSLib.guid();
         if ("dark" === this.theme) {
             this.monacoTheme = "vs-dark";

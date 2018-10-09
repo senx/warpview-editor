@@ -3,6 +3,7 @@ import { Monarch } from '../../monarch';
 import { WarpScript } from '../../ref';
 import { globalfunctions as wsGlobals } from '../../wsGlobals';
 import { GTSLib } from "../../gts.lib";
+import merge from 'deepmerge';
 export class WarpViewEditor {
     constructor() {
         this.url = '';
@@ -54,8 +55,8 @@ export class WarpViewEditor {
      *
      */
     componentWillLoad() {
-        this._config = GTSLib.mergeDeep(this._config, this.config);
-        console.log('[WarpViewEditor] - _config: ', this._config);
+        this._config = merge(this._config, this.config);
+        console.log('[WarpViewEditor] - _config: ', this._config, this.config);
         this._innerCode = this.el.textContent;
         this.edUid = GTSLib.guid();
         if ('dark' === this.theme) {
@@ -172,29 +173,41 @@ export class WarpViewEditor {
      *
      */
     componentDidLoad() {
-        console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
-        console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
-        console.log('[WarpViewEditor] - componentDidLoad - ed: ', this.el.querySelector('#editor-' + this.edUid));
-        this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
-            quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
-            quickSuggestions: this._config.editor.quickSuggestions,
-            value: this.warpscript || this._innerCode,
-            language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-            theme: this.monacoTheme, hover: true
-        });
-        if (this.ed) {
-            this.ed.getModel().onDidChangeContent((event) => {
-                console.debug('ws changed', event);
-                this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+        try {
+            console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
+            console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
+            console.log('[WarpViewEditor] - componentDidLoad - div: ', this.el.querySelector('#editor-' + this.edUid));
+            this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
+                quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
+                quickSuggestions: this._config.editor.quickSuggestions,
+                value: this.warpscript || this._innerCode,
+                language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
+                theme: this.monacoTheme, hover: true
             });
+            console.log('[WarpViewEditor] - componentDidLoad - ed: ', this.ed, {
+                quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
+                quickSuggestions: this._config.editor.quickSuggestions,
+                value: this.warpscript || this._innerCode,
+                language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
+                theme: this.monacoTheme, hover: true
+            });
+            if (this.ed) {
+                this.ed.getModel().onDidChangeContent((event) => {
+                    console.debug('[WarpViewEditor] - componentDidLoad - ws changed', event);
+                    this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+                });
+            }
+            if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
+                let layout = this.el.querySelector("#layout");
+                let editor = this.el.querySelector('#editor-' + this.edUid);
+                layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+                editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+            }
+            this.warpViewEditorLoaded.emit();
         }
-        if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
-            let layout = this.el.querySelector("#layout");
-            let editor = this.el.querySelector('#editor-' + this.edUid);
-            layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-            editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+        catch (e) {
+            console.error('[WarpViewEditor] - componentDidLoad', e);
         }
-        this.warpViewEditorLoaded.emit();
     }
     /**
      *
