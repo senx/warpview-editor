@@ -1,0 +1,28 @@
+{
+  "name": "senx-warpview-editor",
+  "description": "WarpScript editor",
+  "main": "dist/warpview-editor.js",
+  "authors": [
+    "SenX <contact@senx.io>"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "web",
+    "editor",
+    "code",
+    "web components",
+    "time series",
+    "warp10",
+    "Warp 10",
+    "WarpScript",
+    "Geo Times Series"
+  ],
+  "homepage": "https://www.warp10.io",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

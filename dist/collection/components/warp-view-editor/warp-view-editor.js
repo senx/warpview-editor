@@ -177,32 +177,28 @@ export class WarpViewEditor {
             console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
             console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
             console.log('[WarpViewEditor] - componentDidLoad - div: ', this.el.querySelector('#editor-' + this.edUid));
-            this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
+            const edOpts = {
                 quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
                 quickSuggestions: this._config.editor.quickSuggestions,
                 value: this.warpscript || this._innerCode,
                 language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-                theme: this.monacoTheme, hover: true
-            });
-            console.log('[WarpViewEditor] - componentDidLoad - ed: ', this.ed, {
-                quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
-                quickSuggestions: this._config.editor.quickSuggestions,
-                value: this.warpscript || this._innerCode,
-                language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-                theme: this.monacoTheme, hover: true
-            });
+                theme: this.monacoTheme, hover: true, folding: true
+            };
+            edOpts.value = edOpts.value.trim();
+            this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
             if (this.ed) {
                 this.ed.getModel().onDidChangeContent((event) => {
                     console.debug('[WarpViewEditor] - componentDidLoad - ws changed', event);
                     this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
                 });
             }
-            if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
-                let layout = this.el.querySelector("#layout");
-                let editor = this.el.querySelector('#editor-' + this.edUid);
-                layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-                editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
-            }
+            let layout = this.el.querySelector('#layout-' + this.edUid);
+            let editor = this.el.querySelector('#editor-' + this.edUid);
+            layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+            layout.style.height = !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+            layout.style.height = Math.max(layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)).toString() + "px";
+            editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+            this.ed.layout();
             this.warpViewEditorLoaded.emit();
         }
         catch (e) {
@@ -336,7 +332,7 @@ export class WarpViewEditor {
                 h("slot", null)),
             h("style", null),
             h("div", { class: "clearfix" }),
-            h("div", { id: "layout", class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
+            h("div", { id: 'layout-' + this.edUid, class: 'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout') },
                 h("div", { class: "panel1" },
                     h("div", { id: 'editor-' + this.edUid }),
                     h("div", { class: "clearfix" }),

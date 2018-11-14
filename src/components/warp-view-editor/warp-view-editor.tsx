@@ -8,6 +8,7 @@ import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import {GTSLib} from "../../gts.lib";
 import merge from 'deepmerge'
+import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
 
 @Component({
   tag: 'warp-view-editor',
@@ -220,20 +221,15 @@ export class WarpViewEditor {
       console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
       console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
       console.log('[WarpViewEditor] - componentDidLoad - div: ', this.el.querySelector('#editor-' + this.edUid));
-      this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), {
+      const edOpts: IEditorConstructionOptions = {
         quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
         quickSuggestions: this._config.editor.quickSuggestions,
         value: this.warpscript || this._innerCode,
         language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-        theme: this.monacoTheme, hover: true
-      });
-      console.log('[WarpViewEditor] - componentDidLoad - ed: ', this.ed, {
-        quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
-        quickSuggestions: this._config.editor.quickSuggestions,
-        value: this.warpscript || this._innerCode,
-        language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-        theme: this.monacoTheme, hover: true
-      });
+        theme: this.monacoTheme, hover: true, folding: true
+      };
+      edOpts.value = edOpts.value.trim();
+      this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
       if (this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
           console.debug('[WarpViewEditor] - componentDidLoad - ws changed', event);
@@ -241,12 +237,13 @@ export class WarpViewEditor {
         });
       }
 
-      if (!!this.heightLine || !!this.heightPx || !!this.widthPx) {
-        let layout = this.el.querySelector("#layout")  as HTMLStencilElement;
-        let editor = this.el.querySelector('#editor-' + this.edUid) as HTMLStencilElement;
-        layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-        editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
-      }
+      let layout = this.el.querySelector('#layout-' + this.edUid)  as HTMLStencilElement;
+      let editor = this.el.querySelector('#editor-' + this.edUid) as HTMLStencilElement;
+      layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+      layout.style.height = !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+      layout.style.height = Math.max(layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)).toString() + "px";
+      editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+      this.ed.layout();
       this.warpViewEditorLoaded.emit();
     } catch (e) {
       console.error('[WarpViewEditor] - componentDidLoad', e);
@@ -394,7 +391,8 @@ export class WarpViewEditor {
         <style>
         </style>
         <div class="clearfix"/>
-        <div id="layout" class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
+        <div id={'layout-' + this.edUid}
+             class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
           <div class="panel1">
             <div id={'editor-' + this.edUid}/>
             <div class="clearfix"/>

@@ -14,7 +14,7 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
   <script src="warp-view-editor.js"></script>
 </head>
 <body>
-  <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'
+  <warp-view-editor url="https://warp.senx.io/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'
     >
       2 2 +
     </warp-view-editor>
@@ -33,7 +33,7 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| url | `string` | | Warp 10 url, eg: `https://warp.cityzendata.net/api/v0/exec` |
+| url | `string` | | Warp 10 url, eg: `https://warp.senx.io/api/v0/exec` |
 | theme | `string` | 'light' | Editor theme (`light` or `dark`) |
 | warpscript | `string` | '' | WarpScript to edit (optional, could be inside HTML tag) |
 | showDataviz | `boolean` | false | Display the "Show dataviz" button  |

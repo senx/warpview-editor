@@ -1,7 +1,25 @@
 {
-  "name": "warpview-editor",
-  "version": "0.0.1",
+  "name": "@senx/warpview-editor",
+  "version": "1.0.5",
   "description": "WarpScript editor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senx/warpview-editor.git"
+  },
+  "author": "SenX <contact@senx.io>",
+  "license": "Apache-2.0",
+  "keywords": [
+    "web",
+    "editor",
+    "code",
+    "web components",
+    "time series",
+    "warp10",
+    "Warp 10",
+    "WarpScript",
+    "Geo Times Series",
+    "Times Series"
+  ],
   "module": "dist/esm/index.js",
   "browser": "dist/warpview-editor.js",
   "main": "dist/warpview-editor.js",
@@ -33,12 +51,6 @@
     "@types/jest": "^21.1.1",
     "jest": "^21.2.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@gitlab.com:senx/warpview-editor.git"
-  },
-  "author": "SenX",
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://gitlab.com/senx/warpview-editor/issues"
   },
