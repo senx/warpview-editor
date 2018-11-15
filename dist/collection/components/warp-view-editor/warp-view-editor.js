@@ -3,14 +3,14 @@ import { Monarch } from '../../monarch';
 import { WarpScript } from '../../ref';
 import { globalfunctions as wsGlobals } from '../../wsGlobals';
 import { GTSLib } from "../../gts.lib";
-import merge from 'deepmerge';
+import { Utils } from "../../lib/utils";
 export class WarpViewEditor {
     constructor() {
         this.url = '';
         this.theme = 'light';
         this.showDataviz = false;
+        this.showExecute = true;
         this.horizontalLayout = false;
-        this.config = {};
         this.displayMessages = true;
         this.loading = false;
         this.WARPSCRIPT_LANGUAGE = 'warpscript';
@@ -24,6 +24,8 @@ export class WarpViewEditor {
                 class: '',
                 label: 'Visualize'
             },
+            hover: true,
+            readOnly: false,
             editor: {
                 quickSuggestionsDelay: 10,
                 quickSuggestions: true
@@ -55,7 +57,12 @@ export class WarpViewEditor {
      *
      */
     componentWillLoad() {
-        this._config = merge(this._config, this.config);
+        if (typeof this.config === 'string') {
+            this._config = Utils.mergeDeep(this._config, JSON.parse(this.config));
+        }
+        else {
+            this._config = Utils.mergeDeep(this._config, this.config);
+        }
         console.log('[WarpViewEditor] - _config: ', this._config, this.config);
         this._innerCode = this.el.textContent;
         this.edUid = GTSLib.guid();
@@ -181,10 +188,15 @@ export class WarpViewEditor {
                 quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
                 quickSuggestions: this._config.editor.quickSuggestions,
                 value: this.warpscript || this._innerCode,
-                language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-                theme: this.monacoTheme, hover: true, folding: true
+                language: this.WARPSCRIPT_LANGUAGE,
+                automaticLayout: true,
+                theme: this.monacoTheme,
+                hover: this._config.hover,
+                readOnly: this._config.readOnly,
+                folding: true
             };
             edOpts.value = edOpts.value.trim();
+            console.log('[WarpViewEditor] - componentDidLoad - edOpts: ', edOpts);
             this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
             if (this.ed) {
                 this.ed.getModel().onDidChangeContent((event) => {
@@ -327,6 +339,7 @@ export class WarpViewEditor {
             h("div", { class: "spinner" }))) : ('');
         const result = this.result || this.error ? (h("warp-view-result", { displayMessages: this.displayMessages, theme: this.theme, result: { json: this.result, error: this.error, message: this.status }, config: this._config })) : ('');
         const datavizBtn = this.showDataviz && this.result ? (h("button", { type: "button", class: this._config.datavizButton.class, onClick: (event) => this.requestDataviz(event), innerHTML: this._config.datavizButton.label })) : ('');
+        const execBtn = this.showExecute ? (h("button", { type: "button", class: this._config.execButton.class, onClick: (event) => this.execute(event), innerHTML: this._config.execButton.label })) : ('');
         return (h("div", null,
             h("div", { class: "warpscript" },
                 h("slot", null)),
@@ -338,13 +351,13 @@ export class WarpViewEditor {
                     h("div", { class: "clearfix" }),
                     loading,
                     datavizBtn,
-                    h("button", { type: "button", class: this._config.execButton.class, onClick: (event) => this.execute(event), innerHTML: this._config.execButton.label })),
+                    execBtn),
                 h("div", { class: "panel2" }, result))));
     }
     static get is() { return "warp-view-editor"; }
     static get properties() { return {
         "config": {
-            "type": "Any",
+            "type": String,
             "attr": "config"
         },
         "displayMessages": {
@@ -378,6 +391,10 @@ export class WarpViewEditor {
         "showDataviz": {
             "type": Boolean,
             "attr": "show-dataviz"
+        },
+        "showExecute": {
+            "type": Boolean,
+            "attr": "show-execute"
         },
         "status": {
             "state": true

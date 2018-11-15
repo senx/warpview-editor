@@ -7,8 +7,9 @@ import Hover = monaco.languages.Hover;
 import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import {GTSLib} from "../../gts.lib";
-import merge from 'deepmerge'
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
+import {Utils} from "../../lib/utils";
+import {Config} from "../../lib/config";
 
 @Component({
   tag: 'warp-view-editor',
@@ -26,8 +27,9 @@ export class WarpViewEditor {
   @Prop() theme: string = 'light';
   @Prop() warpscript: string;
   @Prop() showDataviz = false;
+  @Prop() showExecute = true;
   @Prop() horizontalLayout = false;
-  @Prop() config: any = {};
+  @Prop() config: Config | string;
   @Prop() displayMessages = true;
   @Prop() widthPx: number;
   @Prop() heightLine: number;
@@ -51,7 +53,7 @@ export class WarpViewEditor {
   private edUid: string;
   private monacoTheme = 'vs';
   private _innerCode: string;
-  private _config = {
+  private _config: Config = {
     execButton: {
       class: '',
       label: 'Execute'
@@ -60,6 +62,9 @@ export class WarpViewEditor {
       class: '',
       label: 'Visualize'
     },
+    hover: true,
+    readOnly: false,
+
     editor: {
       quickSuggestionsDelay: 10,
       quickSuggestions: true
@@ -94,7 +99,11 @@ export class WarpViewEditor {
    *
    */
   componentWillLoad() {
-    this._config = merge(this._config, this.config);
+    if (typeof this.config === 'string') {
+      this._config = Utils.mergeDeep(this._config, JSON.parse(this.config));
+    } else {
+      this._config = Utils.mergeDeep(this._config, this.config);
+    }
     console.log('[WarpViewEditor] - _config: ', this._config, this.config);
     this._innerCode = this.el.textContent;
     this.edUid = GTSLib.guid();
@@ -225,10 +234,15 @@ export class WarpViewEditor {
         quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
         quickSuggestions: this._config.editor.quickSuggestions,
         value: this.warpscript || this._innerCode,
-        language: this.WARPSCRIPT_LANGUAGE, automaticLayout: true,
-        theme: this.monacoTheme, hover: true, folding: true
+        language: this.WARPSCRIPT_LANGUAGE,
+        automaticLayout: true,
+        theme: this.monacoTheme,
+        hover: this._config.hover,
+        readOnly: this._config.readOnly,
+        folding: true
       };
       edOpts.value = edOpts.value.trim();
+      console.log('[WarpViewEditor] - componentDidLoad - edOpts: ', edOpts);
       this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
       if (this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
@@ -381,6 +395,11 @@ export class WarpViewEditor {
               onClick={(event: UIEvent) => this.requestDataviz(event)} innerHTML={this._config.datavizButton.label}>
       </button>
     ) : ('');
+    const execBtn = this.showExecute ? (
+      <button type="button" class={this._config.execButton.class}
+              onClick={(event: UIEvent) => this.execute(event)} innerHTML={this._config.execButton.label}>
+      </button>
+    ) : ('');
 
 
     return (
@@ -398,9 +417,7 @@ export class WarpViewEditor {
             <div class="clearfix"/>
             {loading}
             {datavizBtn}
-            <button type="button" class={this._config.execButton.class}
-                    onClick={(event: UIEvent) => this.execute(event)} innerHTML={this._config.execButton.label}>
-            </button>
+            {execBtn}
           </div>
           <div class="panel2">
             {result}

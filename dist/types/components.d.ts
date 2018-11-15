@@ -26,17 +26,21 @@ declare global {
 
 import '@code-dimension/stencil-components';
 
+import {
+  Config,
+} from './lib/config';
 
 declare global {
 
   namespace StencilComponents {
     interface WarpViewEditor {
-      'config': any;
+      'config': Config | string;
       'displayMessages': boolean;
       'heightLine': number;
       'heightPx': number;
       'horizontalLayout': boolean;
       'showDataviz': boolean;
+      'showExecute': boolean;
       'theme': string;
       'url': string;
       'warpscript': string;
@@ -63,7 +67,7 @@ declare global {
   }
   namespace JSXElements {
     export interface WarpViewEditorAttributes extends HTMLAttributes {
-      'config'?: any;
+      'config'?: Config | string;
       'displayMessages'?: boolean;
       'heightLine'?: number;
       'heightPx'?: number;
@@ -75,6 +79,7 @@ declare global {
       'onWarpViewEditorWarpscriptChanged'?: (event: CustomEvent) => void;
       'onWarpViewEditorWarpscriptResult'?: (event: CustomEvent) => void;
       'showDataviz'?: boolean;
+      'showExecute'?: boolean;
       'theme'?: string;
       'url'?: string;
       'warpscript'?: string;

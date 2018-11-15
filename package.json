@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -40,7 +40,6 @@
     "@code-dimension/stencil-components": "0.0.0-beta.1",
     "@stencil/core": "^0.8.0",
     "@timkendrick/monaco-editor": "0.0.9",
-    "deepmerge": "^2.2.1",
     "monaco-editor": "0.13.1",
     "whatwg-fetch": "2.0.4"
   },

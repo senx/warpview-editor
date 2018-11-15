@@ -18,7 +18,7 @@
       "props": [
         {
           "name": "config",
-          "type": "Any",
+          "type": "String",
           "attr": "config"
         },
         {
@@ -45,6 +45,11 @@
           "name": "showDataviz",
           "type": "Boolean",
           "attr": "show-dataviz"
+        },
+        {
+          "name": "showExecute",
+          "type": "Boolean",
+          "attr": "show-execute"
         },
         {
           "name": "theme",

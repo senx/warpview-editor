@@ -37,6 +37,7 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
 | theme | `string` | 'light' | Editor theme (`light` or `dark`) |
 | warpscript | `string` | '' | WarpScript to edit (optional, could be inside HTML tag) |
 | showDataviz | `boolean` | false | Display the "Show dataviz" button  |
+| showExecute | `boolean` | true | Display the "Execute" button  |
 | horizontalLayout | `boolean` | false | Horizontal or vertical layout  |
 | config | `object` | default config | Configuration |
 | displayMessages | `boolean` | true | Displays messages from WarpScript execution |
@@ -61,7 +62,9 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
   "editor": {
     "quickSuggestionsDelay": 10,
     "quickSuggestions": true
-  }
+  },
+  "readOnly": false,
+  "hover": true
 }
 ```
 

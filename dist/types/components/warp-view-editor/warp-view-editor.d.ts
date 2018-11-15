@@ -1,13 +1,15 @@
 import '../../stencil.core';
 import { EventEmitter } from "../../stencil.core";
+import { Config } from "../../lib/config";
 export declare class WarpViewEditor {
     el: HTMLStencilElement;
     url: string;
     theme: string;
     warpscript: string;
     showDataviz: boolean;
+    showExecute: boolean;
     horizontalLayout: boolean;
-    config: any;
+    config: Config | string;
     displayMessages: boolean;
     widthPx: number;
     heightLine: number;
