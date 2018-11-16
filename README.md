@@ -2,9 +2,20 @@
 
 This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a WarpScript editor dedicated to [Warp 10™](https://www.warp10.io).
 
+![Warp 10](https://blog.senx.io/wp-content/uploads/2018/10/warp10bySenx.png)
+
 - [licence Apache 2](./LICENSE.md)
 - [Contribute](./CONTRIBUTING.md)
 
+## Getting started
+
+    npm i @senx/warpview-editor --save
+    
+    yarn add @senx/warpview-editor
+    
+    bower install senx-warpview-editor --save
+
+```html
 ## Usage
 
 ```html

@@ -51,9 +51,9 @@
     "jest": "^21.2.1"
   },
   "bugs": {
-    "url": "https://gitlab.com/senx/warpview-editor/issues"
+    "url": "https://github.com/senx/warpview-editor/issues"
   },
-  "homepage": "https://gitlab.com/senx/warpview-editor/wikis/home",
+  "homepage": "https://www.warp10.io",
   "jest": {
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
