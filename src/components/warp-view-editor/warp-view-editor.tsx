@@ -1,3 +1,19 @@
+/*
+ *  Copyright 2018  SenX S.A.S.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 import {Component, Element, Prop, Event, Watch, State, EventEmitter} from "@stencil/core";
 import monaco, {MarkedString} from '@timkendrick/monaco-editor';
 import {Monarch} from '../../monarch'
@@ -54,6 +70,9 @@ export class WarpViewEditor {
   private monacoTheme = 'vs';
   private _innerCode: string;
   private _config: Config = {
+    buttons: {
+      class: ''
+    },
     execButton: {
       class: '',
       label: 'Execute'
@@ -414,16 +433,18 @@ export class WarpViewEditor {
              class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
           <div class="panel1">
             <div id={'editor-' + this.edUid}/>
-            <div class="clearfix"/>
             {loading}
-            {datavizBtn}
-            {execBtn}
+            <div class="clearfix"/>
+            <div class={this._config.buttons.class}>
+                 {datavizBtn}
+                 {execBtn}
+            </div>
           </div>
           <div class="panel2">
             {result}
           </div>
         </div>
       </div>
-    );
+  );
   }
-}
+  }

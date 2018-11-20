@@ -2,6 +2,7 @@ import '../../stencil.core';
 import '../../stencil.core';
 import '../../stencil.core';
 import '../../stencil.core';
+import '../../stencil.core';
 import { EventEmitter } from "../../stencil.core";
 import { Config } from "../../lib/config";
 export declare class WarpViewEditor {
