@@ -1,5 +1,7 @@
 # Warp View Editor
 
+[![npm version](https://badge.fury.io/js/%40senx%2Fwarpview-editor.svg)](https://badge.fury.io/js/%40senx%2Fwarpview-editor) [![Bower version](https://badge.fury.io/bo/senx-warpview-editor.svg)](https://badge.fury.io/bo/senx-warpview-editor)
+
 This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a WarpScript editor dedicated to [Warp 10™](https://www.warp10.io).
 
 ![Warp 10](https://blog.senx.io/wp-content/uploads/2018/10/warp10bySenx.png)
@@ -16,13 +18,14 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
     bower install senx-warpview-editor --save
 
 ```html
+
 ## Usage
 
 ```html
 <html>
 <head>
   <title>Test</title>
-  <script src="warp-view-editor.js"></script>
+  <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/dist/warpview-editor.js"></script>
 </head>
 <body>
   <warp-view-editor url="https://warp.senx.io/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'
