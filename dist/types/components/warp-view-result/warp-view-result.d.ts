@@ -22,6 +22,10 @@ export declare class WarpViewResult {
      *
      */
     componentWillLoad(): void;
+    /**
+     *
+     * @param {string} json
+     */
     buildEditor(json: string): void;
     componentDidLoad(): void;
     render(): JSX.Element;

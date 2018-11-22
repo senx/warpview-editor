@@ -94,6 +94,10 @@ export class WarpViewResult {
     console.debug("[WarpViewResult] - componentWillLoad", this._result.json);
   }
 
+  /**
+   * 
+   * @param {string} json
+   */
   buildEditor(json: string) {
     this.loading = true;
     console.debug("[WarpViewResult] - buildEditor", json, this._result.json);

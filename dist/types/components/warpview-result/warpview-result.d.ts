@@ -3,6 +3,7 @@ import '../../stencil.core';
 import '../../stencil.core';
 import '../../stencil.core';
 import '../../stencil.core';
+import '../../stencil.core';
 export declare class WarpViewResult {
     el: HTMLStencilElement;
     result: {
