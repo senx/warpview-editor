@@ -46,7 +46,8 @@ export class WarpViewEditor {
             readOnly: false,
             editor: {
                 quickSuggestionsDelay: 10,
-                quickSuggestions: true
+                quickSuggestions: true,
+                tabSize: 2
             }
         };
     }
@@ -211,11 +212,12 @@ export class WarpViewEditor {
                 theme: this.monacoTheme,
                 hover: this._config.hover,
                 readOnly: this._config.readOnly,
-                folding: true
+                folding: true,
             };
             edOpts.value = edOpts.value.trim();
             console.log('[WarpViewEditor] - componentDidLoad - edOpts: ', edOpts);
             this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
+            this.ed.getModel().updateOptions({ tabSize: this._config.editor.tabSize });
             if (this.ed) {
                 this.ed.getModel().onDidChangeContent((event) => {
                     console.debug('[WarpViewEditor] - componentDidLoad - ws changed', event);

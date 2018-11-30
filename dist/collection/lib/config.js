@@ -30,7 +30,8 @@ export class Config {
         this.readOnly = false;
         this.editor = {
             quickSuggestionsDelay: 10,
-            quickSuggestions: true
+            quickSuggestions: true,
+            tabSize: 2
         };
     }
 }
