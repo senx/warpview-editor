@@ -33,6 +33,7 @@ export class Config {
   readOnly: boolean = false;
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
-    quickSuggestions: true
+    quickSuggestions: true,
+    tabSize: 2
   };
 }
