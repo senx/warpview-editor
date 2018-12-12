@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import {ButtonConfig} from "./buttonConfig";
-import {EditorConfig} from "./editorConfig";
+import { ButtonConfig } from "./buttonConfig";
+import { EditorConfig } from "./editorConfig";
 
 export class Config {
   buttons: ButtonConfig = {
@@ -31,6 +31,8 @@ export class Config {
   };
   hover: boolean = true;
   readOnly: boolean = false;
+  messageClass: string = '';
+  errorClass: string = '';
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,

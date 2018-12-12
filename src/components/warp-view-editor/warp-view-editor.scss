@@ -15,11 +15,14 @@
  */
 
 warp-view-editor {
-
+  /deep/ warp-view-raw-result {
+    height: 100%;
+    min-height: 300px;
+  }
   .warpscript {
     display: none;
   }
-
+  #editor > div > div.layout.vertical-layout > div.panel2
   .layout {
     display: grid;
     grid-gap: 10px;
@@ -44,6 +47,8 @@ warp-view-editor {
         grid-column: 2;
         justify-self: stretch;
         align-self: start;
+        min-height: 300px;
+        background-color: #2b91af;
       }
     }
   }
@@ -99,5 +104,38 @@ warp-view-editor {
     content: "";
     clear: both;
     display: table;
+  }
+
+  .wrapper {
+
+    &.dark {
+      background-color: #1e1e1e !important;
+      color: #fff;
+      .stc-tabs-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .stc-tab-header {
+        border-bottom: 1px solid #5a5a5a;
+      }
+      .stc-tab-header-selected {
+        border-bottom: 2px solid #fff;
+        background-color: #5a5a5a;
+      }
+    }
+    &.light {
+      background-color: #fff !important;
+      color: #000;
+      .stc-tabs-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      }
+      .stc-tab-header {
+        border-bottom: 1px solid #343a40;
+      }
+      .stc-tab-header-selected {
+        font-weight: bold;
+        border-bottom: 2px solid #2b91af;
+        background-color: #ddd;
+      }
+    }
   }
 }

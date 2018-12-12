@@ -1,4 +1,4 @@
-www/
+ww@giwisoft/wc-splitw/
 
 *~
 *.sw[mnpcod]
@@ -22,3 +22,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+dist/
+www/

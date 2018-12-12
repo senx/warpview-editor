@@ -14,18 +14,18 @@
  *  limitations under the License.
  */
 
-import {Component, Element, Prop, Event, Watch, State, EventEmitter} from "@stencil/core";
-import monaco, {MarkedString} from '@timkendrick/monaco-editor';
-import {Monarch} from '../../monarch'
-import {WarpScript} from '../../ref';
-import {globalfunctions as wsGlobals} from '../../wsGlobals';
+import { Component, Element, Event, EventEmitter, Prop, State, Watch } from "@stencil/core";
+import monaco, { MarkedString } from '@timkendrick/monaco-editor';
+import { Monarch } from '../../monarch'
+import { WarpScript } from '../../ref';
+import { globalfunctions as wsGlobals } from '../../wsGlobals';
+import { Utils } from "../../lib/utils";
+import { Config } from "../../lib/config";
 import Hover = monaco.languages.Hover;
 import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
-import {GTSLib} from "../../gts.lib";
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
-import {Utils} from "../../lib/utils";
-import {Config} from "../../lib/config";
+import "@code-dimension/stencil-components";
 
 @Component({
   tag: 'warp-view-editor',
@@ -50,6 +50,7 @@ export class WarpViewEditor {
   @Prop() widthPx: number;
   @Prop() heightLine: number;
   @Prop() heightPx: number;
+  @Prop() tabbed: boolean = false;
 
   @Event() warpViewEditorStatusEvent: EventEmitter;
   @Event() warpViewEditorErrorEvent: EventEmitter;
@@ -66,7 +67,8 @@ export class WarpViewEditor {
 
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
-  private edUid: string;
+  private editor: HTMLDivElement;
+  private layout: HTMLDivElement;
   private monacoTheme = 'vs';
   private _innerCode: string;
   private _config: Config = {
@@ -83,7 +85,8 @@ export class WarpViewEditor {
     },
     hover: true,
     readOnly: false,
-
+    messageClass: '',
+    errorClass: '',
     editor: {
       quickSuggestionsDelay: 10,
       quickSuggestions: true,
@@ -99,7 +102,7 @@ export class WarpViewEditor {
   @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
     console.log('[WarpViewEditor] - The new value of theme is: ', newValue, _oldValue);
-    if ('dark' === newValue) {
+    if('dark' === newValue) {
       this.monacoTheme = 'vs-dark';
     } else {
       this.monacoTheme = 'vs';
@@ -115,84 +118,84 @@ export class WarpViewEditor {
     this.ed.setValue(newValue);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    */
   componentWillLoad() {
-    if (typeof this.config === 'string') {
+    if(typeof this.config === 'string') {
       this._config = Utils.mergeDeep(this._config, JSON.parse(this.config));
     } else {
       this._config = Utils.mergeDeep(this._config, this.config);
     }
     console.log('[WarpViewEditor] - _config: ', this._config, this.config);
     this._innerCode = this.el.textContent;
-    this.edUid = GTSLib.guid();
-    if ('dark' === this.theme) {
+    if('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
     console.log('[WarpViewEditor] - componentWillLoad theme is: ', this.theme);
-    if (!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
-      monaco.languages.register({id: this.WARPSCRIPT_LANGUAGE});
+    if(!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
+      monaco.languages.register({ id: this.WARPSCRIPT_LANGUAGE });
       console.log('[WarpViewEditor] - componentWillLoad register: ', this.WARPSCRIPT_LANGUAGE);
       monaco.languages.setMonarchTokensProvider(this.WARPSCRIPT_LANGUAGE, Monarch.rules);
       monaco.languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
           wordPattern: /[^\s\t]+/,
           comments: {
             lineComment: "//",
-            blockComment: ["/**", "*/"]
+            blockComment: [ "/**", "*/" ]
           },
           brackets: [
-            ["{", "}"],
-            ["[", "]"],
-            ["(", ")"],
-            ["<%", "%>"],
-            ["<'", "'>"],
-            ["[[", "]]"]
+            [ "{", "}" ],
+            [ "[", "]" ],
+            [ "(", ")" ],
+            [ "<%", "%>" ],
+            [ "<'", "'>" ],
+            [ "[[", "]]" ]
           ],
           autoClosingPairs: [
-            {open: "{", close: "}"},
-            {open: "[", close: "]"},
-            {open: "(", close: ")"},
-            {open: "<%", close: "%>"},
-            {open: "[[", close: "]]"},
-            {open: " '", close: "'", notIn: ["string", "comment"]},
-            {open: "<'", close: "'>"},
-            {open: "\"", close: "\"", notIn: ["string"]},
-            {open: "`", close: "`", notIn: ["string", "comment"]},
-            {open: "/**", close: " */", notIn: ["string"]}
+            { open: "{", close: "}" },
+            { open: "[", close: "]" },
+            { open: "(", close: ")" },
+            { open: "<%", close: "%>" },
+            { open: "[[", close: "]]" },
+            { open: " '", close: "'", notIn: [ "string", "comment" ] },
+            { open: "<'", close: "'>" },
+            { open: "\"", close: "\"", notIn: [ "string" ] },
+            { open: "`", close: "`", notIn: [ "string", "comment" ] },
+            { open: "/**", close: " */", notIn: [ "string" ] }
           ],
           surroundingPairs: [
-            {open: "{", close: "}"},
-            {open: "[", close: "]"},
-            {open: "(", close: ")"},
-            {open: "[[", close: "]]"},
-            {open: "<%", close: "%>"},
-            {open: "<'", close: "'>"},
-            {open: "'", close: "'"},
-            {open: "\"", close: "\""},
-            {open: "`", close: "`"}
+            { open: "{", close: "}" },
+            { open: "[", close: "]" },
+            { open: "(", close: ")" },
+            { open: "[[", close: "]]" },
+            { open: "<%", close: "%>" },
+            { open: "<'", close: "'>" },
+            { open: "'", close: "'" },
+            { open: "\"", close: "\"" },
+            { open: "`", close: "`" }
           ],
           onEnterRules: [
             {
               // e.g. /** | */
               beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
               afterText: /^\s*\*\/$/,
-              action: {indentAction: monaco.languages.IndentAction.IndentOutdent, appendText: ' * '}
+              action: { indentAction: monaco.languages.IndentAction.IndentOutdent, appendText: ' * ' }
             },
             {
               // e.g. /** ...|
               beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
-              action: {indentAction: monaco.languages.IndentAction.None, appendText: ' * '}
+              action: { indentAction: monaco.languages.IndentAction.None, appendText: ' * ' }
             },
             {
               // e.g.  * ...|
               beforeText: /^(\t|( {2}))* \*( ([^*]|\*(?!\/))*)?$/,
-              action: {indentAction: monaco.languages.IndentAction.None, appendText: '* '}
+              action: { indentAction: monaco.languages.IndentAction.None, appendText: '* ' }
             },
             {
               // e.g.  */|
               beforeText: /^(\t|( {2}))* \*\/\s*$/,
-              action: {indentAction: monaco.languages.IndentAction.None, removeText: 1}
+              action: { indentAction: monaco.languages.IndentAction.None, removeText: 1 }
             }
           ],
         }
@@ -203,13 +206,13 @@ export class WarpViewEditor {
           let range = new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
           console.log('[wsHoverProvider] - provideHover', model, position, word);
           let name = word.word;
-          let entry = wsGlobals[name];
-          if (entry && entry.description) {
+          let entry = wsGlobals[ name ];
+          if(entry && entry.description) {
             let signature = entry.signature || '';
-            let contents: MarkedString[] = ['### ' + name, {
+            let contents: MarkedString[] = [ '### ' + name, {
               language: this.WARPSCRIPT_LANGUAGE,
               value: signature
-            }, entry.description];
+            }, entry.description ];
             return {
               range: range,
               contents: contents
@@ -224,7 +227,7 @@ export class WarpViewEditor {
         provideCompletionItems: () => {
           let defs = [];
           WarpScript.reference.forEach(f => {
-            defs.push({label: f.name, kind: WarpViewEditor.getType(f.tags, f.name)});
+            defs.push({ label: f.name, kind: WarpViewEditor.getType(f.tags, f.name) });
           });
           return defs;
         }
@@ -232,16 +235,18 @@ export class WarpViewEditor {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    */
   componentDidUnload() {
     console.log('[WarpViewEditor] - Component removed from the DOM');
-    if (this.ed) {
+    if(this.ed) {
       this.ed.dispose();
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    */
@@ -249,7 +254,7 @@ export class WarpViewEditor {
     try {
       console.log('[WarpViewEditor] - componentDidLoad - warpscript', this.warpscript);
       console.log('[WarpViewEditor] - componentDidLoad - inner: ', this._innerCode);
-      console.log('[WarpViewEditor] - componentDidLoad - div: ', this.el.querySelector('#editor-' + this.edUid));
+      console.log('[WarpViewEditor] - componentDidLoad - div: ', this.editor);
       const edOpts: IEditorConstructionOptions = {
         quickSuggestionsDelay: this._config.editor.quickSuggestionsDelay,
         quickSuggestions: this._config.editor.quickSuggestions,
@@ -259,29 +264,27 @@ export class WarpViewEditor {
         theme: this.monacoTheme,
         hover: this._config.hover,
         readOnly: this._config.readOnly,
-        folding: true,
-
+        folding: true
       };
       edOpts.value = edOpts.value.trim();
       console.log('[WarpViewEditor] - componentDidLoad - edOpts: ', edOpts);
-      this.ed = monaco.editor.create(this.el.querySelector('#editor-' + this.edUid), edOpts);
-      this.ed.getModel().updateOptions({ tabSize: this._config.editor.tabSize })
-      if (this.ed) {
+      this.ed = monaco.editor.create(this.editor, edOpts);
+      this.ed.getModel().updateOptions({ tabSize: this._config.editor.tabSize });
+      if(this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
           console.debug('[WarpViewEditor] - componentDidLoad - ws changed', event);
           this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
       }
-
-      let layout = this.el.querySelector('#layout-' + this.edUid)  as HTMLStencilElement;
-      let editor = this.el.querySelector('#editor-' + this.edUid) as HTMLStencilElement;
-      layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-      layout.style.height = !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
-      layout.style.height = Math.max(layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)).toString() + "px";
-      editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+      if(this.layout) {
+        this.layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
+        this.layout.style.height = !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+        this.layout.style.height = Math.max(this.layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)).toString() + "px";
+        this.editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
+      }
       this.ed.layout();
       this.warpViewEditorLoaded.emit();
-    } catch (e) {
+    } catch(e) {
       console.error('[WarpViewEditor] - componentDidLoad', e);
     }
   }
@@ -294,34 +297,25 @@ export class WarpViewEditor {
    */
   private static getType(tags: string[], name: string): monaco.languages.CompletionItemKind {
     let t = tags.join(' ');
-    if (t.indexOf('constant') > -1) {
+    if(t.indexOf('constant') > -1) {
       return monaco.languages.CompletionItemKind.Enum;
-    } else if (t.indexOf('reducer') > -1 && name !== 'REDUCE') {
+    } else if(t.indexOf('reducer') > -1 && name !== 'REDUCE') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('mapper') > -1 && name !== 'MAP') {
+    } else if(t.indexOf('mapper') > -1 && name !== 'MAP') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('bucketize') > -1 && name !== 'BUCKETIZE') {
+    } else if(t.indexOf('bucketize') > -1 && name !== 'BUCKETIZE') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('filter') > -1 && name !== 'FILTER') {
+    } else if(t.indexOf('filter') > -1 && name !== 'FILTER') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('control') > -1) {
+    } else if(t.indexOf('control') > -1) {
       return monaco.languages.CompletionItemKind.Keyword;
-    } else if (t.indexOf('operators') > -1) {
+    } else if(t.indexOf('operators') > -1) {
       return monaco.languages.CompletionItemKind.Method;
-    } else if (t.indexOf('stack') > -1) {
+    } else if(t.indexOf('stack') > -1) {
       return monaco.languages.CompletionItemKind.Module;
     } else {
       return monaco.languages.CompletionItemKind.Function;
     }
-  }
-
-  /**
-   *
-   * @param {UIEvent} _event
-   * @param {string} theme
-   */
-  setTheme(_event: UIEvent, theme: string) {
-    this.theme = theme;
   }
 
   /**
@@ -332,11 +326,11 @@ export class WarpViewEditor {
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
-    if (this.ed) {
+    if(this.ed) {
       console.debug('[WarpViewEditor] - execute - this.ed.getValue()', this.ed.getValue(), _event);
       this.loading = true;
-      fetch(this.url, {method: 'POST', body: this.ed.getValue()}).then(response => {
-        if (response.ok) {
+      fetch(this.url, { method: 'POST', body: this.ed.getValue() }).then(response => {
+        if(response.ok) {
           console.debug('[WarpViewEditor] - execute - response', response);
           response.text().then(res => {
             this.warpViewEditorWarpscriptResult.emit(res);
@@ -382,16 +376,16 @@ export class WarpViewEditor {
    * @returns {string}
    */
   private static formatElapsedTime(elapsed: number) {
-    if (elapsed < 1000) {
+    if(elapsed < 1000) {
       return elapsed.toFixed(3) + ' ns';
     }
-    if (elapsed < 1000000) {
+    if(elapsed < 1000000) {
       return (elapsed / 1000).toFixed(3) + ' μs';
     }
-    if (elapsed < 1000000000) {
+    if(elapsed < 1000000000) {
       return (elapsed / 1000000).toFixed(3) + ' ms';
     }
-    if (elapsed < 1000000000000) {
+    if(elapsed < 1000000000000) {
       return (elapsed / 1000000000).toFixed(3) + ' s ';
     }
     // Max exec time for nice output: 999.999 minutes (should be OK, timeout should happen before that).
@@ -399,18 +393,11 @@ export class WarpViewEditor {
   }
 
   render() {
+    // noinspection JSXNamespaceValidation
     const loading = !!this.loading ? (
       <div class="loader">
         <div class="spinner"/>
       </div>
-    ) : ('');
-    const result = this.result || this.error ? (
-      <warp-view-result
-        displayMessages={this.displayMessages}
-        theme={this.theme}
-        result={{json: this.result, error: this.error, message: this.status}}
-        config={this._config}
-      />
     ) : ('');
     const datavizBtn = this.showDataviz && this.result ? (
       <button type="button" class={this._config.datavizButton.class}
@@ -423,31 +410,64 @@ export class WarpViewEditor {
       </button>
     ) : ('');
 
+    const message =
+      this.status && this.displayMessages ?
+        <div class={this._config.messageClass}>{this.status}</div>
+        : '';
 
+    const error = this.error && this.displayMessages ?
+      <div class={this._config.errorClass}>{this.error}</div> : '';
+
+
+    const tabbed = <div></div>;
+
+
+    // noinspection JSXNamespaceValidation
     return (
       <div>
         <div class="warpscript">
           <slot/>
         </div>
-        <style>
-        </style>
-        <div class="clearfix"/>
-        <div id={'layout-' + this.edUid}
-             class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
-          <div class="panel1">
-            <div id={'editor-' + this.edUid}/>
-            {loading}
-            <div class="clearfix"/>
-            <div class={this._config.buttons.class}>
-                 {datavizBtn}
-                 {execBtn}
+        {this.tabbed ? { tabbed } :
+          <div ref={(el) => this.layout = el as HTMLDivElement}
+               class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
+            <div class="panel1">
+              <div ref={(el) => this.editor = el as HTMLDivElement}/>
+              {loading}
+              <div class={this._config.buttons.class}>
+                {datavizBtn}
+                {execBtn}
+              </div>
             </div>
-          </div>
-          <div class="panel2">
-            {result}
-          </div>
-        </div>
+            <div class="panel2">
+              {this.result ?
+                <div>
+                  {message}
+                  {error}
+
+                  <div class={'wrapper ' + this.theme}>
+                    <stc-tabs>
+                      <stc-tab-header slot="header" name="tab1">
+                        Stack
+                      </stc-tab-header>
+                      <stc-tab-header slot="header" name="tab2">
+                        Raw JSON
+                      </stc-tab-header>
+
+                      <stc-tab-content slot="content" name="tab1">{loading}
+                        <warp-view-result theme={this.theme} result={this.result} config={this._config}/>
+                      </stc-tab-content>
+
+                      <stc-tab-content slot="content" name="tab2">
+                        <warp-view-raw-result theme={this.theme} result={this.result} config={this._config}/>
+                      </stc-tab-content>
+                    </stc-tabs>
+                  </div>
+                </div>
+                : ''}
+            </div>
+          </div>}
       </div>
-  );
+    );
   }
-  }
+}

@@ -336,7 +336,7 @@ export class GTSLib {
   }
 
   static isGts(item) {
-    return !(!item || item === null || item.c === null || item.l === null ||
+    return !(!item || item.c === null || item.l === null ||
       item.a === null || item.v === null || !GTSLib.isArray(item.v));
   }
 
@@ -349,6 +349,7 @@ export class GTSLib {
     for (let i = 0; i < gts.v.length; i++) {
       if (gts.v[i][gts.v[i].length - 1] !== null) {
         // console.log("[warp10-gts-tools] isGtsToPlot - First value type", gts.v[i][gts.v[i].length - 1] );
+        // noinspection JSPotentiallyInvalidConstructorUsage
         if (typeof (gts.v[i][gts.v[i].length - 1]) === 'number' ||
           // gts.v[i][gts.v[i].length - 1].constructor.name === 'Big' ||
           gts.v[i][gts.v[i].length - 1].constructor.prototype.toFixed !== undefined) {
@@ -368,6 +369,7 @@ export class GTSLib {
     // if it's a number it's a GTS to plot
     for (let i = 0; i < gts.v.length; i++) {
       if (gts.v[i][gts.v[i].length - 1] !== null) {
+        // noinspection JSPotentiallyInvalidConstructorUsage
         if (typeof (gts.v[i][gts.v[i].length - 1]) !== 'number' &&
           (!!gts.v[i][gts.v[i].length - 1].constructor &&
             gts.v[i][gts.v[i].length - 1].constructor.name !== 'Big') &&

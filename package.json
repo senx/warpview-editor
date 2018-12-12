@@ -21,50 +21,30 @@
     "Times Series"
   ],
   "module": "dist/esm/index.js",
-  "browser": "dist/warpview-editor.js",
-  "main": "dist/warpview-editor.js",
+  "main": "dist/index.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
-    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
-    "serve": "stencil-dev-server",
-    "start": "stencil build --dev --watch --serve",
-    "test": "jest --no-cache",
-    "test.watch": "jest --watch --no-cache"
+    "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@stencil/core/bin/stencil build --docs\"",
+    "dev": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "dependencies": {
-    "@code-dimension/stencil-components": "0.0.0-beta.1",
-    "@stencil/core": "^0.8.0",
+    "@code-dimension/stencil-components": "^0.0.0-beta.1",
     "@timkendrick/monaco-editor": "0.0.9",
     "monaco-editor": "0.13.1",
     "whatwg-fetch": "2.0.4"
   },
   "devDependencies": {
-    "@stencil/dev-server": "0.0.18",
-    "@stencil/sass": "^0.0.5",
-    "@stencil/utils": "0.0.4",
-    "@types/jest": "^21.1.1",
-    "jest": "^21.2.1"
+    "@stencil/core": "~0.16.1-5",
+    "@stencil/sass": "^0.1.1"
   },
   "bugs": {
     "url": "https://github.com/senx/warpview-editor/issues"
   },
-  "homepage": "https://www.warp10.io",
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "jsx"
-    ]
-  }
+  "homepage": "https://www.warp10.io"
 }
