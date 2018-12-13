@@ -18,7 +18,7 @@ warp-view-editor {
   .warpscript {
     display: none;
   }
-  #editor > div > div.layout.vertical-layout > div.panel2
+
   .layout {
     display: grid;
     grid-gap: 10px;
@@ -102,7 +102,11 @@ warp-view-editor {
     display: table;
   }
 
-  .wrapper {
+  .wrapper-tabbed {
+    min-height: 100%;
+  }
+
+  .wrapper, .wrapper-tabbed {
 
     &.dark {
       background-color: #1e1e1e !important;

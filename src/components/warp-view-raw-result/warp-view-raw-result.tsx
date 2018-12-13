@@ -109,15 +109,14 @@ export class WarpViewRawResult {
 
   render() {
     // noinspection JSXNamespaceValidation
-    const loading = this.loading ?
-      <div class="loader">
-        <div class="spinner"/>
-      </div>
-      : '';
-
     return (
       <div class={'wrapper ' + this.theme}>
-        <div class="editor-res">{loading}
+        <div class="editor-res">
+          {this.loading ?
+            <div class="loader">
+              <div class="spinner"/>
+            </div>
+            : ''}
           <div ref={(el) => this.editor = el as HTMLDivElement}/>
         </div>
       </div>
