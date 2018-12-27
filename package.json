@@ -28,7 +28,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@stencil/core/bin/stencil build --docs\"",
+    "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@stencil/core/bin/stencil build --prod\"",
     "dev": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll"
@@ -41,7 +41,8 @@
   },
   "devDependencies": {
     "@stencil/core": "~0.16.1-5",
-    "@stencil/sass": "^0.1.1"
+    "@stencil/sass": "^0.1.1",
+    "@stencil/utils": "^0.0.5"
   },
   "bugs": {
     "url": "https://github.com/senx/warpview-editor/issues"
