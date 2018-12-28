@@ -19,42 +19,57 @@
 <html dir="ltr" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-    <title>Warp-View Editor</title>
-    <script src="/build/warpview-editor.js"></script>
-    <style>
-        body {
-            padding: 0;
-            margin: 0;
-        }
-        .container {
-            height: calc(100vh - 20px);
-            padding: 10px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Warp-View Editor</title>
+  <script src="/build/warpview-editor.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    .container {
+      margin: 15px auto;
+    }
+
+    .wrapper {
+      display: block;
+      height: 100%;
+    }
+  </style>
 </head>
 
-<body>
+<body class="d-flex flex-column vh-100 align-items-stretch">
 
-<div class="container">
-    <!--suppress HtmlUnknownTag -->
-  <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" height-line=18 theme="dark" id="editor"
-                      show-dataviz="true" show-execute="true"
-                      horizontal-layout="false"
-                      tabbed="true"
-                      config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false, "readOnly": false, "hover": true}'
-    >
-@training/dataset0
-[
-$TOKEN
-'~warp.*committed'
-{ 'cell' 'prod' }
-$NOW
-1 d
-] FETCH
-    </warp-view-editor>
-</div>
+<main role="main" class="container flex-fill">
+  <!--suppress HtmlUnknownTag -->
+  <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" theme="dark" id="editor"
+                    show-dataviz="false" show-execute="true"
+                    horizontal-layout="false"
+                    tabbed="true"
+                    config='{
+                      "quickSuggestionsDelay":3000,
+                       "suggestOnTriggerCharacters": false,
+                       "messageClass": "alert alert-info",
+                       "errorClass": "alert alert-danger",
+                       "execButton" : { "class" : "btn btn-success" },
+                       "datavizButton" : { "class" : "btn btn-success" },
+                        "readOnly": false,
+                        "hover": true
+                        }'
+  >
+    @training/dataset0
+    [
+    $TOKEN
+    '~warp.*committed'
+    { 'cell' 'prod' }
+    $NOW
+    1 d
+    ] FETCH
+  </warp-view-editor>
+</main>
 </body>
 
 </html>

@@ -34,13 +34,13 @@
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "dependencies": {
-    "@code-dimension/stencil-components": "^0.0.0-beta.1",
+    "@giwisoft/wc-tabs": "^0.0.1",
     "@timkendrick/monaco-editor": "0.0.9",
-    "monaco-editor": "0.13.1",
-    "whatwg-fetch": "2.0.4"
+    "monaco-editor": "0.15.6",
+    "whatwg-fetch": "3.0.0"
   },
   "devDependencies": {
-    "@stencil/core": "~0.16.1-5",
+    "@stencil/core": "~0.16.1",
     "@stencil/sass": "^0.1.1",
     "@stencil/utils": "^0.0.5"
   },

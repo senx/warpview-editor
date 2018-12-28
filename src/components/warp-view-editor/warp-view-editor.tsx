@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import {Component, Element, Event, EventEmitter, Prop, State, Watch} from "@stencil/core";
-import monaco, {MarkedString} from '@timkendrick/monaco-editor';
+import {Component, Element, Event, EventEmitter, Prop, State, Watch} from "@stencil/core/dist";
+import monaco, {MarkedString} from '@timkendrick/monaco-editor/dist/standalone';
 import {Monarch} from '../../monarch'
 import {WarpScript} from '../../ref';
 import {globalfunctions as wsGlobals} from '../../wsGlobals';
@@ -25,7 +25,7 @@ import Hover = monaco.languages.Hover;
 import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
-import "@code-dimension/stencil-components";
+import '@giwisoft/wc-tabs';
 
 @Component({
   tag: 'warp-view-editor',
@@ -276,14 +276,21 @@ export class WarpViewEditor {
           this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
       }
-      if (this.layout) {
-        this.layout.style.width = !!this.widthPx ? this.widthPx.toString() + "px" : "100%";
-        this.layout.style.height = !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
-        this.layout.style.height = Math.max(this.layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)).toString() + "px";
-        this.editor.style.height = !!this.heightLine ? (19 * this.heightLine).toString() + "px" : !!this.heightPx ? this.heightPx.toString() + "px" : "100%";
-      }
-      this.ed.layout();
-      this.warpViewEditorLoaded.emit();
+      window.setTimeout(() => {
+        if (this.layout) {
+          this.layout.style.width = (!!this.widthPx ? this.widthPx.toString() : this.el.parentElement.clientWidth) + 'px';
+          this.layout.style.height = (!!this.heightPx ? this.heightPx.toString() : this.el.parentElement.clientHeight) + 'px';
+          this.layout.style.height = Math.max(this.layout.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount() + 3) * 19)) + 'px';
+          this.editor.style.height = !!this.heightLine
+            ? (19 * this.heightLine).toString() + 'px'
+            : !!this.heightPx
+              ? this.heightPx + 'px'
+              : Math.max(this.editor.parentElement.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)) + 'px';
+          console.log(this.editor.parentElement.clientHeight)
+        }
+        this.ed.layout();
+        this.warpViewEditorLoaded.emit();
+      }, 500);
     } catch (e) {
       console.error('[WarpViewEditor] - componentDidLoad', e);
     }
@@ -359,6 +366,7 @@ export class WarpViewEditor {
       });
     } else {
       console.error('[WarpViewEditor] - no active editor');
+      this.loading = false;
     }
   }
 
@@ -393,6 +401,7 @@ export class WarpViewEditor {
   }
 
   render() {
+    // @ts-ignore
     // noinspection JSXNamespaceValidation
     const loading = !!this.loading ?
       <div class="loader">
@@ -415,92 +424,79 @@ export class WarpViewEditor {
         <div class={this._config.messageClass}>{this.status}</div>
         : '';
 
+    // noinspection JSXNamespaceValidation
     const error = this.error && this.displayMessages ?
       <div class={this._config.errorClass}>{this.error}</div> : '';
 
+    const nonTabbedClasses = {
+      'layout': true,
+      'horizontal-layout': !!this.horizontalLayout,
+      'vertical-layout': !this.horizontalLayout
+    };
 
-    // noinspection JSXNamespaceValidation
-    return (
-      <div>
-        <div class="warpscript">
-          <slot/>
+    return <div>
+      <div class="warpscript">
+        <slot/>
+      </div>
+      {this.tabbed
+        ? <div ref={(el) => this.layout = el as HTMLDivElement}>
+          <div class={'wrapper-tabbed ' + this.theme}>
+            <wc-tabs>
+              <wc-tabs-header slot="header" name="tab1">Editor</wc-tabs-header>
+              <wc-tabs-header slot="header" name="tab2" disabled={!this.result}>Stack</wc-tabs-header>
+              <wc-tabs-header slot="header" name="tab3" disabled={!this.result}>Raw JSON</wc-tabs-header>
+
+              <wc-tabs-content slot="content" name="tab1">
+                <div class="editor-wrapper">
+                  <div ref={(el) => this.editor = el as HTMLDivElement}/>
+                </div>
+                <div class={'editor-buttons ' + this._config.buttons.class}>{datavizBtn} {execBtn}</div>
+                {this.result ? <div class="messages">{message} {error}</div> : {loading}}
+              </wc-tabs-content>
+              <wc-tabs-content slot="content" name="tab2">
+                <warp-view-result theme={this.theme} result={this.result} config={this._config}/>
+              </wc-tabs-content>
+              <wc-tabs-content slot="content" name="tab3">
+                <div class="result-wrapper">
+                  <warp-view-raw-result theme={this.theme} result={this.result} config={this._config}/>
+                </div>
+              </wc-tabs-content>
+            </wc-tabs>
+          </div>
         </div>
-        {this.tabbed ?
-          <div ref={(el) => this.layout = el as HTMLDivElement}>
-            {this.theme}
-            <div class={'wrapper-tabbed ' + this.theme}>
-              {this.result ?
-                <stc-tabs>
-                  <stc-tab-header slot="header" name="tab1">Editor</stc-tab-header>
-                  <stc-tab-header slot="header" name="tab2">Stack</stc-tab-header>
-                  <stc-tab-header slot="header" name="tab3">Raw JSON</stc-tab-header>
-                  <stc-tab-content slot="content" name="tab1">
-                    <div ref={(el) => this.editor = el as HTMLDivElement}/>
-                    {loading}
-                    <div class={this._config.buttons.class}>{datavizBtn} {execBtn}</div>
-                    {this.result ? <div>{message} {error}</div> : ''}
-                  </stc-tab-content>
-                  <stc-tab-content slot="content" name="tab2">
-                    {loading}
-                    <warp-view-result theme={this.theme} result={this.result} config={this._config}/>
-                  </stc-tab-content>
-                  <stc-tab-content slot="content" name="tab3">
-                    <warp-view-raw-result theme={this.theme} result={this.result} config={this._config}/>
-                  </stc-tab-content>
-                </stc-tabs>
-                :
-                <stc-tabs>
-                  <stc-tab-header slot="header" name="tab1">Editor</stc-tab-header>
-                  <stc-tab-content slot="content" name="tab1">
-                    <div ref={(el) => this.editor = el as HTMLDivElement}/>
-                    {loading}
-                    <div class={this._config.buttons.class}>{datavizBtn} {execBtn}</div>
-                    {this.result ? <div>{message} {error}</div> : ''}
-                  </stc-tab-content>
-                </stc-tabs>
-              }
+        : <div ref={(el) => this.layout = el as HTMLDivElement} class={nonTabbedClasses}>
+          <div class="panel1">
+            <div ref={(el) => this.editor = el as HTMLDivElement}/>
+            {loading}
+            <div class={this._config.buttons.class}>
+              {datavizBtn}
+              {execBtn}
             </div>
           </div>
-          :
-          <div ref={(el) => this.layout = el as HTMLDivElement}
-               class={'layout ' + (this.horizontalLayout ? 'horizontal-layout' : 'vertical-layout')}>
-            <div class="panel1">
-              <div ref={(el) => this.editor = el as HTMLDivElement}/>
-              {loading}
-              <div class={this._config.buttons.class}>
-                {datavizBtn}
-                {execBtn}
-              </div>
-            </div>
-            <div class="panel2">
-              {this.result ?
-                <div>
-                  {message}
-                  {error}
+          <div class="panel2">
+            {this.result
+              ? <div>
+                {message} {error}
+                <div class={'wrapper ' + this.theme}>
+                  <wc-tabs>
+                    <wc-tabs-header slot="header" name="tab1">Stack</wc-tabs-header>
+                    <wc-tabs-header slot="header" name="tab2">Raw JSON</wc-tabs-header>
 
-                  <div class={'wrapper ' + this.theme}>
-                    <stc-tabs>
-                      <stc-tab-header slot="header" name="tab1">
-                        Stack
-                      </stc-tab-header>
-                      <stc-tab-header slot="header" name="tab2">
-                        Raw JSON
-                      </stc-tab-header>
+                    <wc-tabs-content slot="content" name="tab1">{loading}
+                      <warp-view-result theme={this.theme} result={this.result} config={this._config}/>
+                    </wc-tabs-content>
 
-                      <stc-tab-content slot="content" name="tab1">{loading}
-                        <warp-view-result theme={this.theme} result={this.result} config={this._config}/>
-                      </stc-tab-content>
-
-                      <stc-tab-content slot="content" name="tab2">
-                        <warp-view-raw-result theme={this.theme} result={this.result} config={this._config}/>
-                      </stc-tab-content>
-                    </stc-tabs>
-                  </div>
+                    <wc-tabs-content slot="content" name="tab2">
+                      <warp-view-raw-result theme={this.theme} result={this.result} config={this._config}/>
+                    </wc-tabs-content>
+                  </wc-tabs>
                 </div>
-                : ''}
-            </div>
-          </div>}
-      </div>
-    );
+              </div>
+              : ''
+            }
+          </div>
+        </div>
+      }
+    </div>;
   }
 }

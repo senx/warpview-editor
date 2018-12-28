@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import { Component, Element, Prop, State, Watch } from "@stencil/core";
-import monaco from "@timkendrick/monaco-editor";
-import { Utils } from "../../lib/utils";
+import {Component, Element, Prop, State, Watch} from '@stencil/core';
+import monaco from '@timkendrick/monaco-editor';
+import {Utils} from '../../lib/utils';
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 @Component({
@@ -33,9 +33,10 @@ export class WarpViewRawResult {
   @Prop() result: any[] = [];
   @Prop() theme: string = 'light';
   @Prop() config: object = {};
-  @State() loading = false;
   @Prop() heightLine: number;
   @Prop() heightPx: number;
+
+  @State() loading = false;
 
   private _config = {
     messageClass: '',
@@ -44,11 +45,12 @@ export class WarpViewRawResult {
   private resEd: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
   private editor: HTMLDivElement;
+  private wrapper: HTMLDivElement;
 
   @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue, _oldValue);
-    if('dark' === newValue) {
+    if ('dark' === newValue) {
       this.monacoTheme = "vs-dark";
     } else {
       this.monacoTheme = "vs";
@@ -68,7 +70,7 @@ export class WarpViewRawResult {
    */
   componentWillLoad() {
     this._config = Utils.mergeDeep(this._config, this.config);
-    if('dark' === this.theme) {
+    if ('dark' === this.theme) {
       this.monacoTheme = "vs-dark";
     }
     console.debug('[WarpViewRawResult] - componentWillLoad', this.result);
@@ -81,7 +83,7 @@ export class WarpViewRawResult {
   buildEditor(json: string) {
     this.loading = true;
     console.debug('[WarpViewRawResult] - buildEditor', json);
-    if(!this.resEd) {
+    if (!this.resEd) {
       this.resEd = monaco.editor.create(
         this.editor, {
           value: json,
@@ -90,16 +92,22 @@ export class WarpViewRawResult {
           scrollBeyondLastLine: true,
           theme: this.monacoTheme,
           readOnly: true,
-          fixedOverflowWidgets: true
+          fixedOverflowWidgets: true,
+          lineNumbers: 'on',
+          wordWrap: 'on'
         }
       );
     } else {
       this.resEd.setValue(json);
+      this.editor.style.height = !!this.heightLine
+        ? (19 * this.heightLine).toString() + 'px'
+        : !!this.heightPx
+          ? this.heightPx + 'px'
+          : Math.max(this.wrapper.clientHeight, ((this.heightLine || Math.max(5, this.resEd.getModel().getLineCount())) * 19)) + 'px';
+      this.resEd.layout();
+      console.debug('[WarpViewRawResult] - buildEditor end',this.wrapper.parentElement.clientHeight);
+      this.loading = false;
     }
-    this.editor.style.height = this.resEd.getScrollHeight() + 'px';
-    this.loading = false;
-    this.resEd.layout();
-    console.debug('[WarpViewRawResult] - buildEditor end');
   }
 
   componentDidLoad() {
@@ -111,7 +119,7 @@ export class WarpViewRawResult {
     // noinspection JSXNamespaceValidation
     return (
       <div class={'wrapper ' + this.theme}>
-        <div class="editor-res">
+        <div class="editor-res" ref={(el) => this.wrapper = el as HTMLDivElement}>
           {this.loading ?
             <div class="loader">
               <div class="spinner"/>

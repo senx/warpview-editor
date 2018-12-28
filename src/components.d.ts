@@ -7,7 +7,7 @@
 
 import '@stencil/core';
 
-import '@code-dimension/stencil-components';
+import '@giwisoft/wc-tabs';
 import {
   Config,
 } from './lib/config';

@@ -6,7 +6,8 @@ export const config: Config = {
   plugins: [
     sass()
   ],
-  enableCache: true,
+  enableCache: false,
+  minifyJs: false,
   outputTargets:[
     { type: 'dist' },
     { type: 'docs' },

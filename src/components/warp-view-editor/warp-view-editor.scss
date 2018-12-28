@@ -19,9 +19,14 @@ warp-view-editor {
     display: none;
   }
 
+  .editor-wrapper {
+    height: 100%;
+  }
+
   .layout {
     display: grid;
     grid-gap: 10px;
+
     &.vertical-layout {
       flex-direction: column;
       align-items: stretch;
@@ -39,6 +44,7 @@ warp-view-editor {
         justify-self: stretch;
         align-self: start;
       }
+
       .panel2 {
         grid-column: 2;
         justify-self: stretch;
@@ -77,6 +83,7 @@ warp-view-editor {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.3);
   }
+
   /* Safari */
   @-webkit-keyframes spin {
     0% {
@@ -104,38 +111,69 @@ warp-view-editor {
 
   .wrapper-tabbed {
     min-height: 100%;
+    .editor-wrapper {
+      position: absolute;
+      height: calc(100% - 60px);
+      width: 100%;
+      display: block;
+      z-index: 1;
+    }
+    .result-wrapper {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    .editor-buttons {
+      position: absolute;
+      width: 100%;
+      display: block;
+      z-index: 1;
+      bottom: 0;
+      height: 60px;
+      padding: 10px;
+    }
+
+    wc-tabs-content {
+      height: calc(100% - 42px);
+      position: absolute;
+      margin: -10px;
+      width: 100%;
+      /* padding-bottom: 100px; */
+      background-color: aqua;
+    }
+
+    .messages {
+      position: absolute;
+      z-index: 1;
+      width: 50%;
+      bottom: 0;
+      right: 0;
+      margin-right: 10px;
+    }
   }
 
   .wrapper, .wrapper-tabbed {
+    position: relative;
 
     &.dark {
       background-color: #1e1e1e !important;
       color: #fff;
-      .stc-tabs-header {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      }
-      .stc-tab-header {
-        border-bottom: 1px solid #5a5a5a;
-      }
-      .stc-tab-header-selected {
-        border-bottom: 2px solid #fff;
-        background-color: #5a5a5a;
-      }
+      --wc-tab-header-border-color: #000000 !important;
+      --wc-tab-header-selected-border-color: #000000 !important;
+      --wc-tab-header-bg-color: #343a40 !important;
+      --wc-tab-header-color: rgba(255, 255, 255, .5) !important;
+      --wc-tab-header-selected-color: #ffffff !important;
+      --wc-tab-header-selected-bg-color: #343a40 !important;
+      --wc-tab-header-disabled-color: rgba(255, 255, 255, .5) !important;
+      --wc-tab-header-disabled-bg-color: transparent !important;
     }
+
     &.light {
       background-color: #fff !important;
       color: #000;
-      .stc-tabs-header {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-      }
-      .stc-tab-header {
-        border-bottom: 1px solid #343a40;
-      }
-      .stc-tab-header-selected {
-        font-weight: bold;
-        border-bottom: 2px solid #2b91af;
-        background-color: #ddd;
-      }
     }
   }
 }
