@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {Component, Element, Event, EventEmitter, Prop, State, Watch} from "@stencil/core/dist";
+import {Component, Element, Event, EventEmitter, Method, Prop, State, Watch} from "@stencil/core/dist";
 import monaco, {MarkedString} from '@timkendrick/monaco-editor/dist/standalone';
 import {Monarch} from '../../monarch'
 import {WarpScript} from '../../ref';
@@ -327,14 +327,14 @@ export class WarpViewEditor {
 
   /**
    *
-   * @param {UIEvent} _event
    */
-  execute(_event: UIEvent) {
+  @Method()
+  execute() {
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
     if (this.ed) {
-      console.debug('[WarpViewEditor] - execute - this.ed.getValue()', this.ed.getValue(), _event);
+      console.debug('[WarpViewEditor] - execute - this.ed.getValue()', this.ed.getValue());
       this.loading = true;
       fetch(this.url, {method: 'POST', body: this.ed.getValue()}).then(response => {
         if (response.ok) {
@@ -415,7 +415,7 @@ export class WarpViewEditor {
       : '';
     const execBtn = this.showExecute ?
       <button type="button" class={this._config.execButton.class}
-              onClick={(event: UIEvent) => this.execute(event)} innerHTML={this._config.execButton.label}>
+              onClick={() => this.execute()} innerHTML={this._config.execButton.label}>
       </button>
       : '';
 

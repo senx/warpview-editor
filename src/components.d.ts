@@ -18,6 +18,7 @@ export namespace Components {
   interface WarpViewEditor {
     'config': Config | string;
     'displayMessages': boolean;
+    'execute': () => void;
     'heightLine': number;
     'heightPx': number;
     'horizontalLayout': boolean;
