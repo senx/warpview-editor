@@ -1,17 +1,15 @@
-import { Config } from '@stencil/core';
-import { sass } from '@stencil/sass';
-
-export const config: Config = {
+const sass = require("@stencil/sass");
+exports.config = {
   namespace: "warpview-editor",
-  plugins: [
-    sass()
-  ],
+  plugins: [sass()],
   enableCache: true,
-  outputTargets:[
-    { type: 'dist' },
+  outputTargets: [
     {
-      type: 'www',
-      serviceWorker: false // disable service workers
+      type: "dist"
+    },
+    {
+      type: "www",
+      serviceWorker: false
     }
   ]
 };

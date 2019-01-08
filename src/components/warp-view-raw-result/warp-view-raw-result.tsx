@@ -99,15 +99,16 @@ export class WarpViewRawResult {
       );
     } else {
       this.resEd.setValue(json);
-      this.editor.style.height = !!this.heightLine
-        ? (19 * this.heightLine).toString() + 'px'
-        : !!this.heightPx
-          ? this.heightPx + 'px'
-          : Math.max(this.wrapper.clientHeight, ((this.heightLine || Math.max(5, this.resEd.getModel().getLineCount())) * 19)) + 'px';
-      this.resEd.layout();
-      console.debug('[WarpViewRawResult] - buildEditor end',this.wrapper.parentElement.clientHeight);
-      this.loading = false;
     }
+    this.editor.style.height =
+    !!this.heightLine
+      ? (19 * this.heightLine).toString() + 'px'
+      : !!this.heightPx
+        ? this.heightPx + 'px'
+        : Math.max(this.wrapper.clientHeight, ((this.heightLine || Math.max(5, this.resEd.getModel().getLineCount())) * 19)) + 'px';
+    this.resEd.layout();
+    console.debug('[WarpViewRawResult] - buildEditor end', this.wrapper.parentElement.clientHeight);
+    this.loading = false;
   }
 
   componentDidLoad() {
