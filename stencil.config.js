@@ -6,13 +6,12 @@ export const config: Config = {
   plugins: [
     sass()
   ],
-  enableCache: false,
-  minifyJs: false,
+  enableCache: true,
   outputTargets:[
     { type: 'dist' },
     {
       type: 'www',
-      serviceWorker: null // disable service workers
+      serviceWorker: false // disable service workers
     }
   ]
 };
