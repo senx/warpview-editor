@@ -46,6 +46,7 @@ export class WarpViewRawResult {
   private monacoTheme = 'vs';
   private editor: HTMLDivElement;
   private wrapper: HTMLDivElement;
+  private innerHeight = -1;
 
   @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
@@ -86,10 +87,10 @@ export class WarpViewRawResult {
     if (!this.resEd) {
       this.resEd = monaco.editor.create(
         this.editor, {
-          value: json,
+          value: '',
           language: 'json',
           automaticLayout: true,
-          scrollBeyondLastLine: true,
+          scrollBeyondLastLine: false,
           theme: this.monacoTheme,
           readOnly: false,
           fixedOverflowWidgets: true,
@@ -97,18 +98,22 @@ export class WarpViewRawResult {
           wordWrap: 'on'
         }
       );
-    } else {
-      this.resEd.setValue(json);
     }
-    this.editor.style.height =
-    !!this.heightLine
-      ? (19 * this.heightLine).toString() + 'px'
-      : !!this.heightPx
-        ? this.heightPx + 'px'
-        : Math.max(this.wrapper.clientHeight, ((this.heightLine || Math.max(5, this.resEd.getModel().getLineCount())) * 19)) + 'px';
-    this.resEd.layout();
-    console.debug('[WarpViewRawResult] - buildEditor end', this.wrapper.parentElement.clientHeight);
+    this.resEd.setValue(json);
+    this. adjustHeight();
     this.loading = false;
+  }
+
+  adjustHeight() {
+    if (this.el.parentElement.getBoundingClientRect().height > 0 && this.innerHeight == -1) {
+      this.editor.style.height = this.el.parentElement.getBoundingClientRect().height+ 'px';
+      this.resEd.layout();
+      console.debug('[WarpViewRawResult] - buildEditor end', this.el.getBoundingClientRect(), this.wrapper.getBoundingClientRect());
+    } else {
+      setTimeout(() => {
+        this. adjustHeight();
+      },100 );
+    }
   }
 
   componentDidLoad() {
