@@ -91,7 +91,7 @@ export class WarpViewRawResult {
           automaticLayout: true,
           scrollBeyondLastLine: true,
           theme: this.monacoTheme,
-          readOnly: true,
+          readOnly: false,
           fixedOverflowWidgets: true,
           lineNumbers: 'on',
           wordWrap: 'on'
