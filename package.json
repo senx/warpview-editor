@@ -39,17 +39,17 @@
   "dependencies": {
     "@code-dimension/stencil-components": "0.0.0-beta.1",
     "@giwisoft/wc-tabs": "^0.0.1",
-    "@stencil/core": "^0.8.0",
+    "@stencil/core": "^0.17.2",
     "monaco-editor": "0.15.6",
     "whatwg-fetch": "3.0.0"
   },
   "devDependencies": {
     "@stencil/dev-server": "0.0.18",
-    "@stencil/sass": "^0.0.6yarn add ",
-    "@stencil/utils": "0.0.4",
+    "@stencil/sass": "^0.1.1",
+    "@stencil/utils": "0.0.5",
     "@timkendrick/monaco-editor": "0.0.9",
-    "@types/jest": "^21.1.1",
-    "jest": "^21.2.1"
+    "@types/jest": "^24.0.0",
+    "jest": "^24.1.0"
   },
   "bugs": {
     "url": "https://github.com/senx/warpview-editor/issues"
