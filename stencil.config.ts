@@ -29,6 +29,7 @@ export const config: Config = {
   devServer: {
     openBrowser: false,
   },
+  minifyJs: false,
   outputTargets: [
     {type: 'dist'},
     {
