@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "tslint-stencil/default"
+  ],
+  "rules": {
+    "components-per-file": false
+  }
+}

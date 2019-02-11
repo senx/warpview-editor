@@ -14,26 +14,26 @@
  *  limitations under the License.
  */
 
-import { Config } from '@stencil/core';
-import { sass } from '@stencil/sass';
+import {Config} from '@stencil/core';
+import {sass} from '@stencil/sass';
 
 export const config: Config = {
-  namespace: "warpview-editor",
+  namespace: 'warpview-editor',
   plugins: [
-    sass()
+    sass(),
   ],
   copy: [
-    { src: 'index.html' },
+    {src: 'index.html'},
   ],
   enableCache: false,
   devServer: {
-    openBrowser: false
+    openBrowser: false,
   },
-  outputTargets:[
-    { type: 'dist' },
+  outputTargets: [
+    {type: 'dist'},
     {
       type: 'www',
-      serviceWorker: null // disable service workers
-    }
-  ]
+      serviceWorker: null, // disable service workers
+    },
+  ],
 };

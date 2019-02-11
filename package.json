@@ -34,6 +34,7 @@
     "serve": "stencil-dev-server",
     "start": "stencil build --dev --watch --serve",
     "test": "jest --no-cache",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "test.watch": "jest --watch --no-cache"
   },
   "dependencies": {
@@ -44,12 +45,15 @@
     "whatwg-fetch": "3.0.0"
   },
   "devDependencies": {
-    "@stencil/dev-server": "0.0.18",
     "@stencil/sass": "^0.1.1",
     "@stencil/utils": "0.0.5",
     "@timkendrick/monaco-editor": "0.0.9",
     "@types/jest": "^24.0.0",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-stencil": "^1.0.0",
+    "typescript": "^3.3.3"
   },
   "bugs": {
     "url": "https://github.com/senx/warpview-editor/issues"
