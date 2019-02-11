@@ -17,6 +17,7 @@ export namespace Components {
 
   interface WarpViewEditor {
     'config': Config | string;
+    'debug': boolean;
     'displayMessages': boolean;
     'execute': () => void;
     'heightLine': number;
@@ -32,6 +33,7 @@ export namespace Components {
   }
   interface WarpViewEditorAttributes extends StencilHTMLAttributes {
     'config'?: Config | string;
+    'debug'?: boolean;
     'displayMessages'?: boolean;
     'heightLine'?: number;
     'heightPx'?: number;
