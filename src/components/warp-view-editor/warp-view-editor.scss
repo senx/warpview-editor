@@ -116,6 +116,7 @@ warp-view-editor {
 
   .wrapper-tabbed {
     min-height: 100%;
+
     .editor-wrapper {
       position: absolute;
       height: calc(100% - 60px);
@@ -123,6 +124,7 @@ warp-view-editor {
       display: block;
       z-index: 1;
     }
+
     .result-wrapper {
       position: absolute;
       height: 100%;

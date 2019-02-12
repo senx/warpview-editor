@@ -294,17 +294,6 @@ export class WarpViewEditor {
   /**
    *
    */
-  componentDidUnload() {
-    this.LOG.debug(['componentDidUnload'], 'Component removed from the DOM');
-    if (this.ed) {
-      this.ed.dispose();
-    }
-  }
-
-  // noinspection JSUnusedGlobalSymbols
-  /**
-   *
-   */
   componentDidLoad() {
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
@@ -351,6 +340,17 @@ export class WarpViewEditor {
       }, 500);
     } catch (e) {
       console.error('[WarpViewEditor] - componentDidLoad', e);
+    }
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  /**
+   *
+   */
+  componentDidUnload() {
+    this.LOG.debug(['componentDidUnload'], 'Component removed from the DOM');
+    if (this.ed) {
+      this.ed.dispose();
     }
   }
 

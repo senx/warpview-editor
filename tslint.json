@@ -3,6 +3,7 @@
     "tslint-stencil/default"
   ],
   "rules": {
-    "components-per-file": false
+    "components-per-file": false,
+    "component-member-order": false
   }
 }

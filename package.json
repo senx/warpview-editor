@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
-    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch --serve\"",
+    "dev": "stencil build --dev --watch --serve",
     "serve": "stencil-dev-server",
     "start": "stencil build --dev --watch --serve",
     "test": "jest --no-cache",
@@ -37,18 +37,16 @@
     "test.watch": "jest --watch --no-cache"
   },
   "dependencies": {
-    "@code-dimension/stencil-components": "0.0.0-beta.1",
     "@giwisoft/wc-tabs": "^0.0.1",
-    "@stencil/core": "^0.17.2",
     "monaco-editor": "0.15.6",
     "whatwg-fetch": "3.0.0"
   },
   "devDependencies": {
+    "@stencil/core": "~0.16.1",
     "@stencil/sass": "^0.1.1",
-    "@stencil/utils": "0.0.5",
+    "@stencil/utils": "^0.0.5",
     "@timkendrick/monaco-editor": "0.0.9",
-    "@types/jest": "^24.0.0",
-    "jest": "^24.1.0",
+    "jest": "^21.2.1",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-stencil": "^1.0.0",

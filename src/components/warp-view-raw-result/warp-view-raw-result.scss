@@ -16,6 +16,7 @@
 
 warp-view-raw-result {
   height: 100%;
+
   .loader .spinner {
     border: 5px solid #f3f3f3;
     -webkit-animation: spin 1s linear infinite;
@@ -33,6 +34,7 @@ warp-view-raw-result {
     bottom: 0;
     right: 0;
   }
+
   .loader:after {
     content: '';
     display: block;
@@ -43,6 +45,7 @@ warp-view-raw-result {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.3);
   }
+
   /* Safari */
   @-webkit-keyframes spin {
     0% {

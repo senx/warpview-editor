@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { ButtonConfig } from "./buttonConfig";
-import { EditorConfig } from "./editorConfig";
+import {ButtonConfig} from './buttonConfig';
+import {EditorConfig} from './editorConfig';
 
 export class Config {
   buttons: ButtonConfig = {

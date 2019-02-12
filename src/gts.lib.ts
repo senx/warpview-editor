@@ -24,7 +24,7 @@ export class GTSLib {
    * @returns {string}
    */
   static getColor(i) {
-    return GTSLib.color[i % GTSLib.color.length]
+    return GTSLib.color[i % GTSLib.color.length];
   }
 
   /**
@@ -108,16 +108,16 @@ export class GTSLib {
     if (GTSLib.isPositionsArrayWithValues(item) || GTSLib.isPositionsArrayWithTwoValues(item)) {
       return true;
     }
-    for (let i in item.positions) {
-      if (item.positions[i].length < 2 || item.positions[i].length > 3) {
+    item.positions.forEach(elem => {
+      if (elem.length < 2 || elem.length > 3) {
         return false;
       }
-      for (let j in item.positions[i]) {
-        if (typeof item.positions[i][j] !== 'number') {
+      elem.forEach(subElem => {
+        if (typeof subElem !== 'number') {
           return false;
         }
-      }
-    }
+      });
+    });
     return true;
   }
 
@@ -125,33 +125,38 @@ export class GTSLib {
     if ((item === null) || (item.positions === null)) {
       return false;
     }
-    for (let i in item.positions) {
-      if (item.positions[i].length !== 3) {
+    item.positions.forEach(element => {
+      if (element.length !== 3) {
         return false;
       }
-      for (let j in item.positions[i]) {
-        if (typeof item.positions[i][j] !== 'number') {
+      element.forEach(subElement => {
+        if (typeof subElement !== 'number') {
           return false;
         }
-      }
-    }
+      });
+    });
     return true;
   }
 
+  /**
+   *
+   * @param item
+   * @returns {boolean}
+   */
   static isPositionsArrayWithTwoValues(item) {
     if ((item === null) || (item.positions === null)) {
       return false;
     }
-    for (let i in item.positions) {
-      if (item.positions[i].length !== 4) {
+    item.positions.forEach(element => {
+      if (element.length !== 4) {
         return false;
       }
-      for (let j in item.positions[i]) {
-        if (typeof item.positions[i][j] !== 'number') {
+      element.forEach(subElement => {
+        if (typeof subElement !== 'number') {
           return false;
         }
-      }
-    }
+      });
+    });
     return true;
   }
 
@@ -208,7 +213,7 @@ export class GTSLib {
     let id;
     jsonList.forEach((item, i) => {
       let gts = item;
-      if(item.gts) {
+      if (item.gts) {
         gts = item.gts;
       }
       if ((prefixId !== undefined) && (prefixId !== '')) {
@@ -287,7 +292,7 @@ export class GTSLib {
   static gtsToPath(gts) {
     let path = [];
     // Sort values
-    gts.v = gts.v.sort(function (a, b) {
+    gts.v = gts.v.sort(function(a, b) {
       return a[0] - b[0];
     });
     for (let i = 0; i < gts.v.length; i++) {
@@ -326,11 +331,17 @@ export class GTSLib {
       return false;
     }
     for (let p in a.l) {
-      if (!b.l.hasOwnProperty(p)) return false;
-      if (a.l[p] !== b.l[p]) return false;
+      if (!b.l.hasOwnProperty(p)) {
+        return false;
+      }
+      if (a.l[p] !== b.l[p]) {
+        return false;
+      }
     }
     for (let p in b.l) {
-      if (!a.l.hasOwnProperty(p)) return false;
+      if (!a.l.hasOwnProperty(p)) {
+        return false;
+      }
     }
     return true;
   }
@@ -386,7 +397,7 @@ export class GTSLib {
     if (gts.isSorted) {
       return;
     }
-    gts.v = gts.v.sort(function (a, b) {
+    gts.v = gts.v.sort(function(a, b) {
       return a[0] - b[0];
     });
     gts.isSorted = true;
@@ -409,12 +420,13 @@ export class GTSLib {
     for (i = 0; i < 32; i++) {
       random = Math.random() * 16 | 0;
       if (i == 8 || i == 12 || i == 16 || i == 20) {
-        uuid += "-"
+        uuid += '-';
       }
       uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
     }
     return uuid;
   }
+
   static isObject(item) {
     return (item && typeof item === 'object' && !Array.isArray(item));
   }
