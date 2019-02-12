@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "Times Series"
   ],
   "module": "dist/esm/index.js",
-  "main": "dist/index.js",
+  "main": "dist/warpview-editor.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
-    "dev": "stencil build --dev --watch --serve",
+    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
     "serve": "stencil-dev-server",
     "start": "stencil build --dev --watch --serve",
     "test": "jest --no-cache",
@@ -38,19 +38,20 @@
   },
   "dependencies": {
     "@giwisoft/wc-tabs": "^0.0.1",
-    "monaco-editor": "0.15.6",
-    "whatwg-fetch": "3.0.0"
+    "@stencil/core": "^0.8.0",
+    "monaco-editor": "0.13.1",
+    "whatwg-fetch": "2.0.4"
   },
   "devDependencies": {
-    "@stencil/core": "~0.16.1",
-    "@stencil/sass": "^0.1.1",
-    "@stencil/utils": "^0.0.5",
+    "@stencil/dev-server": "0.0.18",
+    "@stencil/sass": "^0.0.6",
+    "@stencil/utils": "0.0.4",
     "@timkendrick/monaco-editor": "0.0.9",
+    "@types/jest": "^21.1.1",
+    "@types/node": "^10.12.25",
     "jest": "^21.2.1",
-    "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
-    "tslint-stencil": "^1.0.0",
-    "typescript": "^3.3.3"
+    "tslint-stencil": "^1.0.0"
   },
   "bugs": {
     "url": "https://github.com/senx/warpview-editor/issues"
