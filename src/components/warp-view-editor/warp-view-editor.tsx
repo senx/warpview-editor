@@ -309,7 +309,6 @@ export class WarpViewEditor {
         readOnly: this.innerConfig.readOnly,
         folding: true,
       };
-      edOpts.value = edOpts.value.trim();
       this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
       this.ed = monaco.editor.create(this.editor, edOpts);
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
