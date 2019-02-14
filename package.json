@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "@giwisoft/wc-tabs": "^0.0.1",
     "@stencil/core": "^0.8.0",
     "monaco-editor": "0.13.1",
+    "tslint": "^5.12.1",
     "whatwg-fetch": "2.0.4"
   },
   "devDependencies": {
