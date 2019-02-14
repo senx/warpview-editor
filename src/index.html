@@ -30,6 +30,7 @@
       padding: 0;
       margin: 0;
     }
+
     .container {
       margin: 15px auto;
     }
@@ -44,11 +45,13 @@
 <body class="d-flex flex-column vh-100 align-items-stretch">
 
 <main role="main" class="container flex-fill">
-  <!--suppress HtmlUnknownTag -->
-  <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" theme="dark" id="editor"
-                    show-dataviz="false" show-execute="true"
-                    horizontal-layout="false"
-                    config='{
+  <div class="card">
+    <div class="card-body">
+      <!--suppress HtmlUnknownTag -->
+      <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" theme="dark" id="editor"
+                        show-dataviz="false" show-execute="true"
+                        horizontal-layout="false"
+                        config='{
                       "quickSuggestionsDelay":3000,
                        "suggestOnTriggerCharacters": false,
                        "messageClass": "alert alert-info",
@@ -58,16 +61,18 @@
                         "readOnly": false,
                         "hover": true
                         }'
-  >
-    @training/dataset0
-    [
-    $TOKEN
-    '~warp.*committed'
-    { 'cell' 'prod' }
-    $NOW
-    1 d
-    ] FETCH
-  </warp-view-editor>
+      >
+        @training/dataset0
+        [
+        $TOKEN
+        '~warp.*committed'
+        { 'cell' 'prod' }
+        $NOW
+        1 d
+        ] FETCH
+      </warp-view-editor>
+    </div>
+  </div>
 </main>
 </body>
 

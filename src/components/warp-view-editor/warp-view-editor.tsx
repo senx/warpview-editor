@@ -320,19 +320,12 @@ export class WarpViewEditor {
       }
       window.setTimeout(() => {
         if (this.layout) {
-          this.layout.style.width = (!!this.widthPx
-            ? this.widthPx.toString()
-            : this.el.parentElement.clientWidth) + 'px';
-          this.layout.style.height = (!!this.heightPx
-            ? this.heightPx.toString()
-            : this.el.parentElement.clientHeight) + 'px';
-          this.layout.style.height = Math.max(this.layout.clientHeight,
-            ((this.heightLine || this.ed.getModel().getLineCount() + 3) * 19)) + 'px';
           this.editor.style.height = !!this.heightLine
             ? (19 * this.heightLine).toString() + 'px'
             : !!this.heightPx
               ? this.heightPx + 'px'
               : Math.max(this.editor.parentElement.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)) + 'px';
+          this.editor.style.width = this.editor.parentElement.clientWidth + 'px';
         }
         this.ed.layout();
         this.warpViewEditorLoaded.emit();
