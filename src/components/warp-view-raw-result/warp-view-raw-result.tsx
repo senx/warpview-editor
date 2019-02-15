@@ -45,16 +45,15 @@ export class WarpViewRawResult {
   private resEd: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
   private editor: HTMLDivElement;
-  private wrapper: HTMLDivElement;
   private innerHeight = -1;
 
   @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue, _oldValue);
     if ('dark' === newValue) {
-      this.monacoTheme = "vs-dark";
+      this.monacoTheme = 'vs-dark';
     } else {
-      this.monacoTheme = "vs";
+      this.monacoTheme = 'vs';
     }
     console.debug('[WarpViewRawResult] - The new value of theme is: ', this.monacoTheme);
     monaco.editor.setTheme(this.monacoTheme);
@@ -72,7 +71,7 @@ export class WarpViewRawResult {
   componentWillLoad() {
     this._config = Utils.mergeDeep(this._config, this.config);
     if ('dark' === this.theme) {
-      this.monacoTheme = "vs-dark";
+      this.monacoTheme = 'vs-dark';
     }
     console.debug('[WarpViewRawResult] - componentWillLoad', this.result);
   }
@@ -100,20 +99,27 @@ export class WarpViewRawResult {
       );
     }
     this.resEd.setValue(json);
-    this. adjustHeight();
+    this.adjustHeight();
     this.loading = false;
   }
 
   adjustHeight() {
     if (this.el.parentElement.getBoundingClientRect().height > 0 && this.innerHeight == -1) {
-      this.editor.style.height = this.el.parentElement.getBoundingClientRect().height+ 'px';
-      this.editor.style.width = this.el.parentElement.getBoundingClientRect().width + 'px';
+      //this.editor.style.height = this.el.parentElement.getBoundingClientRect().height + 'px';
+      this.editor.style.height = !!this.heightLine
+        ? (19 * this.heightLine).toString() + 'px'
+        : !!this.heightPx
+          ? this.heightPx + 'px'
+          : Math.max(this.editor.parentElement.getBoundingClientRect().height,
+          ((this.heightLine || Math.max(this.resEd.getModel().getLineCount(), 5)) * 19)) + 'px';
+      this.innerHeight = this.editor.parentElement.clientHeight;
+      this.editor.style.width = this.editor.parentElement.clientWidth + 'px';
       this.resEd.layout();
-      console.debug('[WarpViewRawResult] - buildEditor end', this.el.getBoundingClientRect(), this.wrapper.getBoundingClientRect());
+      console.debug('[WarpViewRawResult] - buildEditor end', this.editor.getBoundingClientRect());
     } else {
       setTimeout(() => {
-        this. adjustHeight();
-      },100 );
+        this.adjustHeight();
+      }, 500);
     }
   }
 
@@ -126,14 +132,12 @@ export class WarpViewRawResult {
     // noinspection JSXNamespaceValidation
     return (
       <div class={'wrapper ' + this.theme}>
-        <div class="editor-res" ref={(el) => this.wrapper = el as HTMLDivElement}>
-          {this.loading ?
-            <div class="loader">
-              <div class="spinner"/>
-            </div>
-            : ''}
-          <div ref={(el) => this.editor = el as HTMLDivElement}/>
-        </div>
+        {this.loading ?
+          <div class="loader">
+            <div class="spinner"/>
+          </div>
+          : ''}
+        <div ref={(el) => this.editor = el as HTMLDivElement}/>
       </div>
     );
   }

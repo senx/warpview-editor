@@ -20,8 +20,8 @@ warp-view-editor {
   }
 
   wc-tabs-content {
-    background-color: blue;
     height: 100%;
+    width: 100%;
   }
 
   .editor-wrapper {
@@ -148,8 +148,6 @@ warp-view-editor {
       position: absolute;
       margin: -10px;
       width: 100%;
-      /* padding-bottom: 100px; */
-      background-color: aqua;
     }
 
     .messages {

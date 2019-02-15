@@ -31,7 +31,7 @@
     "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
     "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
     "serve": "stencil-dev-server",
-    "start": "stencil build --dev --watch --serve",
+    "start": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\" \"stencil-dev-server\"",
     "test": "jest --no-cache",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "test.watch": "jest --watch --no-cache"

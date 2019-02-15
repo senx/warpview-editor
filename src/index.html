@@ -50,7 +50,7 @@
       <!--suppress HtmlUnknownTag -->
       <warp-view-editor url="https://warp.cityzendata.net/api/v0/exec" theme="dark" id="editor"
                         show-dataviz="false" show-execute="true"
-                        horizontal-layout="false"
+                        horizontal-layout="false" debug="true"
                         config='{
                       "quickSuggestionsDelay":3000,
                        "suggestOnTriggerCharacters": false,
@@ -68,7 +68,7 @@
         '~warp.*committed'
         { 'cell' 'prod' }
         $NOW
-        1 d
+        1 h
         ] FETCH
       </warp-view-editor>
     </div>
