@@ -107,6 +107,7 @@ export class WarpViewRawResult {
   adjustHeight() {
     if (this.el.parentElement.getBoundingClientRect().height > 0 && this.innerHeight == -1) {
       this.editor.style.height = this.el.parentElement.getBoundingClientRect().height+ 'px';
+      this.editor.style.width = this.el.parentElement.getBoundingClientRect().width + 'px';
       this.resEd.layout();
       console.debug('[WarpViewRawResult] - buildEditor end', this.el.getBoundingClientRect(), this.wrapper.getBoundingClientRect());
     } else {

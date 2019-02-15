@@ -324,8 +324,8 @@ export class WarpViewEditor {
             ? (19 * this.heightLine).toString() + 'px'
             : !!this.heightPx
               ? this.heightPx + 'px'
-              : Math.max(this.editor.parentElement.clientHeight, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)) + 'px';
-          this.editor.style.width = this.editor.parentElement.clientWidth + 'px';
+              : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)) + 'px';
+          this.editor.style.width = this.editor.parentElement.getBoundingClientRect().width + 'px';
         }
         this.ed.layout();
         this.warpViewEditorLoaded.emit();
