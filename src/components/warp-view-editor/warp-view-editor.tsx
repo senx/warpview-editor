@@ -262,7 +262,6 @@ export class WarpViewEditor {
           this.LOG.debug(['componentWillLoad'], 'provideHover', model, position, word);
           const name = word.word;
           const entry = wsGlobals[name];
-          console.log(entry.description);
           if (entry && entry.description) {
             const signature = entry.signature || '';
             const contents: MarkedString[] = ['### ' + name, {
