@@ -269,7 +269,6 @@ export class WarpViewEditor {
               language: this.WARPSCRIPT_LANGUAGE,
               value: signature,
             }, entry.description.replace(/(\/doc\/\w+)/g, x => {
-              console.log(entry.description, x)
              return `https://www.warp10.io${x}`;
             })];
             return {
