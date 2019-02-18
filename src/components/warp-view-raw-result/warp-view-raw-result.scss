@@ -72,6 +72,10 @@ warp-view-raw-result {
 
   .wrapper {
     height: 100%;
+
+    > div {
+      width: 100% !important;
+    }
   }
 
 }
