@@ -262,12 +262,16 @@ export class WarpViewEditor {
           this.LOG.debug(['componentWillLoad'], 'provideHover', model, position, word);
           const name = word.word;
           const entry = wsGlobals[name];
+          console.log(entry.description);
           if (entry && entry.description) {
             const signature = entry.signature || '';
             const contents: MarkedString[] = ['### ' + name, {
               language: this.WARPSCRIPT_LANGUAGE,
               value: signature,
-            }, entry.description];
+            }, entry.description.replace(/(\/doc\/\w+)/g, x => {
+              console.log(entry.description, x)
+             return `https://www.warp10.io${x}`;
+            })];
             return {
               range: range,
               contents: contents,
