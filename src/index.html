@@ -34,11 +34,6 @@
     .container {
       margin: 15px auto;
     }
-
-    .wrapper {
-      display: block;
-      height: 100%;
-    }
   </style>
 </head>
 
@@ -62,14 +57,13 @@
                         "hover": true
                         }'
       >
-        @training/dataset0
-        [
-        $TOKEN
-        '~warp.*committed'
-        { 'cell' 'prod' }
-        $NOW
-        1 h
-        ] FETCH
+42 ABS
+-42 ABS
+3.14 ABS
+-3.14 ABS
+0 ABS
+-0 ABS
+NaN ABS
       </warp-view-editor>
     </div>
   </div>

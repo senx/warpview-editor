@@ -267,9 +267,7 @@ export class WarpViewEditor {
             const contents: MarkedString[] = ['### ' + name, {
               language: this.WARPSCRIPT_LANGUAGE,
               value: signature,
-            }, entry.description.replace(/(\/doc\/\w+)/g, x => {
-             return `https://www.warp10.io${x}`;
-            })];
+            }, entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)];
             return {
               range: range,
               contents: contents,
@@ -370,8 +368,8 @@ export class WarpViewEditor {
  ${response.headers.get('x-warp10-fetched')} datapoints and performed
  ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
             this.warpViewEditorStatusEvent.emit(this.status);
+            this.result = [... JSON.parse(res.replace(/NaN/g, '"NaN"'))];
             this.loading = false;
-            this.result = JSON.parse(res);
           }, err => {
             console.error(err);
             this.error = err;
@@ -441,7 +439,7 @@ export class WarpViewEditor {
       <div class='warpscript'>
         <slot/>
       </div>
-      {this.tabbed
+      {!!this.tabbed
         ? <div ref={(el) => this.layout = el as HTMLDivElement}>
           <div class={'wrapper-tabbed ' + this.theme}>
             <wc-tabs>
@@ -477,7 +475,7 @@ export class WarpViewEditor {
             </div>
           </div>
           <div class='panel2'>
-            {this.result
+            {!!this.result
               ? <div>
                 {message} {error}
                 <div class={'wrapper ' + this.theme}>

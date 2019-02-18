@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
-    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
+    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --es5 --watch\" \"stencil-dev-server\"",
     "serve": "stencil-dev-server",
     "start": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\" \"stencil-dev-server\"",
     "test": "jest --no-cache",
@@ -37,7 +37,7 @@
     "test.watch": "jest --watch --no-cache"
   },
   "dependencies": {
-    "@giwisoft/wc-tabs": "^0.0.1",
+    "@giwisoft/wc-tabs": "^0.0.4",
     "@stencil/core": "^0.8.0",
     "monaco-editor": "0.13.1",
     "tslint": "^5.12.1",

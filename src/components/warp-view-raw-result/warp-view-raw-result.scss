@@ -71,6 +71,7 @@ warp-view-raw-result {
   }
 
   .wrapper {
+    max-width: calc(100% - 4em);
     height: 100%;
 
     > div {
