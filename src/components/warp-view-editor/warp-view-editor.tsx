@@ -483,7 +483,7 @@ export class WarpViewEditor {
                     <wc-tabs-header slot='header' name='tab1'>Stack</wc-tabs-header>
                     <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
 
-                    <wc-tabs-content slot='content' name='tab1'>{loading}
+                    <wc-tabs-content slot='content' name='tab1'>
                       <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
                     </wc-tabs-content>
 

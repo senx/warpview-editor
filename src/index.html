@@ -57,13 +57,28 @@
                         "hover": true
                         }'
       >
-42 ABS
--42 ABS
-3.14 ABS
--3.14 ABS
-0 ABS
--0 ABS
-NaN ABS
+        200 250 '2D' PGraphics
+        0xff6060ff Pbackground
+
+        'CENTER' PellipseMode
+        0xffff7e00 Pfill
+        //255 255 0xf7 255 Pcolor Pfill
+
+        0xffff8e00 Pstroke
+        70 'rayoncouille' STORE
+        50 200 $rayoncouille $rayoncouille Pellipse
+        150 200 $rayoncouille $rayoncouille Pellipse
+
+        'CENTER' PrectMode
+        100 140 60 150 Prect
+        100 140 150 2 / - 60 60 Pellipse
+
+        "BLUR" 1 Pfilter
+        Ppixels SWAP
+        DUP TYPEOF
+        SWAP
+        Pencode
+
       </warp-view-editor>
     </div>
   </div>
