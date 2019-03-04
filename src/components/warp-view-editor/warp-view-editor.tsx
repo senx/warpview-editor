@@ -368,29 +368,29 @@ export class WarpViewEditor {
  ${response.headers.get('x-warp10-fetched')} datapoints and performed
  ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
             this.warpViewEditorStatusEvent.emit(this.status);
-            this.result = [... JSON.parse(res.replace(/NaN/g, '"NaN"'))];
+            this.result = [...JSON.parse(res.replace(/NaN/g, '"NaN"'))];
             this.loading = false;
           }, err => {
-            console.error(err);
             this.error = err;
             this.warpViewEditorErrorEvent.emit(this.error);
             this.loading = false;
+            this.LOG.error(['execute'], err);
           });
         } else {
-          console.error(response.statusText);
           this.error = response.statusText;
           this.warpViewEditorErrorEvent.emit(this.error);
           this.loading = false;
+          this.LOG.error(['execute'], response.statusText);
         }
       }, err => {
-        console.error(err);
         this.error = err;
         this.warpViewEditorErrorEvent.emit(this.error);
         this.loading = false;
+        this.LOG.error(['execute'], err);
       });
     } else {
-      console.error('[WarpViewEditor] - no active editor');
       this.loading = false;
+      this.LOG.error(['execute'], 'no active editor');
     }
   }
 
@@ -452,7 +452,7 @@ export class WarpViewEditor {
                   <div ref={(el) => this.editor = el as HTMLDivElement}/>
                 </div>
                 <div class={'editor-buttons ' + this.innerConfig.buttons.class}>{datavizBtn} {execBtn}</div>
-                {this.result ? <div class='messages'>{message} {error}</div> : {loading}}
+                {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
               </wc-tabs-content>
               <wc-tabs-content slot='content' name='tab2'>
                 <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
@@ -475,9 +475,9 @@ export class WarpViewEditor {
             </div>
           </div>
           <div class='panel2'>
+            {this.error || this.result ? <div class='messages'>{message} {error}</div> : ''}
             {!!this.result
               ? <div>
-                {message} {error}
                 <div class={'wrapper ' + this.theme}>
                   <wc-tabs>
                     <wc-tabs-header slot='header' name='tab1'>Stack</wc-tabs-header>
