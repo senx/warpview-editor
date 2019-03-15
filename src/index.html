@@ -57,28 +57,40 @@
                         "hover": true
                         }'
       >
-        200 250 '2D' PGraphics
-        0xff6060ff Pbackground
-
-        'CENTER' PellipseMode
-        0xffff7e00 Pfill
-        //255 255 0xf7 255 Pcolor Pfill
-
-        0xffff8e00 Pstroke
-        70 'rayoncouille' STORE
-        50 200 $rayoncouille $rayoncouille Pellipse
-        150 200 $rayoncouille $rayoncouille Pellipse
-
-        'CENTER' PrectMode
-        100 140 60 150 Prect
-        100 140 150 2 / - 60 60 Pellipse
-
-        "BLUR" 1 Pfilter
-        Ppixels SWAP
-        DUP TYPEOF
-        SWAP
-        Pencode
-
+        @training/dataset0
+        // warp.store.hbase.puts.committed is the number of datapoints committed to
+        // HBase since the restart of the Store daemon
+        [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
+        [ SWAP mapper.rate 1 0 0 ] MAP
+        // Keep only 1000 datapoints per GTS
+        1000 LTTB
+        DUP
+        // Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
+        5 false ESDTEST
+        // Convert the ticks identified by ESDTEST into an annotation GTS
+        <%
+        DROP // excude element index
+        NEWGTS // create a new GTS
+        SWAP // get timestamp list
+        <% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
+        %> LMAP
+        2 ->LIST // Put our GTS in a list
+        ZIP // merge into a list of GTS
+        // Now rename and relabel the anomaly GTS
+        <%
+        DROP // exclude element index
+        LIST-> // flatten list
+        DROP // exclude number of elements of our list
+        SWAP // put our fetched GTS on the top
+        DUP // duplicate the GTS
+        NAME // get the className of the GTS
+        ':anomaly' + 'name' STORE // suffix the name
+        DUP LABELS 'labels' STORE // duplicate the GTS and get labels
+        SWAP // put the anomaly GTS on the top of the stack
+        $name RENAME // rename the GTS
+        $labels RELABEL // put labels
+        2 ->LIST // put both GTS in a list
+        %> LMAP
       </warp-view-editor>
     </div>
   </div>

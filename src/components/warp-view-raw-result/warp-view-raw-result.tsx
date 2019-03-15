@@ -38,6 +38,8 @@ export class WarpViewRawResult {
 
   @State() loading = false;
 
+  private LINE_HEIGHT = 18;
+  private CONTAINER_GUTTER = 10;
   private _config = {
     messageClass: '',
     errorClass: ''
@@ -45,7 +47,6 @@ export class WarpViewRawResult {
   private resEd: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
   private editor: HTMLDivElement;
-  private innerHeight = -1;
 
   @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
@@ -98,28 +99,36 @@ export class WarpViewRawResult {
         }
       );
     }
+
+    this.resEd.getModel().onDidChangeContent(() => setTimeout(() => this.adjustHeight(), 0));
+    this.resEd.onDidChangeModelDecorations(() => setTimeout(() => this.adjustHeight(), 0));
     this.resEd.setValue(json);
     this.adjustHeight();
+    if (window) {
+      window.addEventListener("resize",() => setTimeout(() => this.adjustHeight(), 0));
+    }
     this.loading = false;
   }
 
   adjustHeight() {
-    if (this.el.parentElement.getBoundingClientRect().height > 0 && this.innerHeight == -1) {
-      //this.editor.style.height = this.el.parentElement.getBoundingClientRect().height + 'px';
-      this.editor.style.height = !!this.heightLine
-        ? (19 * this.heightLine).toString() + 'px'
-        : !!this.heightPx
-          ? this.heightPx + 'px'
-          : Math.max(this.editor.parentElement.getBoundingClientRect().height,
-          ((this.heightLine || Math.max(this.resEd.getModel().getLineCount(), 5)) * 19)) + 'px';
-      this.innerHeight = this.editor.parentElement.clientHeight;
-      this.editor.style.width = this.editor.parentElement.clientWidth + 'px';
-      this.resEd.layout();
-      console.debug('[WarpViewRawResult] - buildEditor end', this.editor.getBoundingClientRect());
+    const el = this.editor;
+    const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
+    const containerHeight = codeContainer.offsetHeight;
+    let prevLineCount = 0;
+    if (!containerHeight) {
+      // dom hasn't finished settling down. wait a bit more.
+      setTimeout(() => this.adjustHeight(), 0);
     } else {
       setTimeout(() => {
-        this.adjustHeight();
-      }, 500);
+        const height =
+          codeContainer.childElementCount > prevLineCount
+            ? codeContainer.offsetHeight // unfold
+            : codeContainer.childElementCount * this.LINE_HEIGHT + this.CONTAINER_GUTTER; // fold
+        prevLineCount = codeContainer.childElementCount;
+        el.style.height = height + 'px';
+        console.log(height);
+        this.resEd.layout();
+      }, 0);
     }
   }
 
