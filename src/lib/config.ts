@@ -36,6 +36,7 @@ export class Config {
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,
-    tabSize: 2
+    tabSize: 2,
+    minLineNumber: 10
   };
 }

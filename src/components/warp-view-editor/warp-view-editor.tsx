@@ -145,6 +145,7 @@ export class WarpViewEditor {
       quickSuggestionsDelay: 10,
       quickSuggestions: true,
       tabSize: 2,
+      minLineNumber: 10
     },
   };
 
@@ -185,6 +186,10 @@ export class WarpViewEditor {
     }
     this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
+    //add blank lines when needed
+    for(let i=this.innerCode.split('\n').length; i<this.innerConfig.editor.minLineNumber;i++) {
+      this.innerCode += '\n';
+    }
     if ('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
