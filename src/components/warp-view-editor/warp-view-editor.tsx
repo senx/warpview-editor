@@ -487,7 +487,7 @@ export class WarpViewEditor {
               ? <div>
                 <div class={'wrapper ' + this.theme}>
                   <wc-tabs>
-                    <wc-tabs-header slot='header' name='tab1'>Stack</wc-tabs-header>
+                    <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
                     <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
 
                     <wc-tabs-content slot='content' name='tab1'>
