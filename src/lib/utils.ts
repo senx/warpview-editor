@@ -20,7 +20,7 @@ export class Utils {
    * @param sources
    * @returns {any}
    */
-  static mergeDeep(...sources:any[]): any {
+  static mergeDeep(...sources: any[]): any {
     // Variables
     let extended = {};
     let deep = true;
@@ -41,7 +41,7 @@ export class Utils {
    * @param extended
    * @param {boolean} deep
    */
-  static merge(obj:any, extended:any, deep:boolean) {
+  static merge(obj: any, extended: any, deep: boolean) {
     for (const prop in obj) {
       if (obj.hasOwnProperty(prop)) {
         // If property is an object, merge properties

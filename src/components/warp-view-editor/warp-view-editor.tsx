@@ -27,6 +27,7 @@ import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
 import '@giwisoft/wc-tabs';
 import {Logger} from '../../lib/logger';
+import {JsonLib} from '../../lib/jsonLib';
 
 @Component({
   tag: 'warp-view-editor',
@@ -187,7 +188,7 @@ export class WarpViewEditor {
     this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
     //add blank lines when needed
-    for(let i=this.innerCode.split('\n').length; i<this.innerConfig.editor.minLineNumber;i++) {
+    for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
       this.innerCode += '\n';
     }
     if ('dark' === this.theme) {
@@ -364,8 +365,8 @@ export class WarpViewEditor {
       this.loading = true;
       fetch(this.url, {method: 'POST', body: this.ed.getValue()}).then(response => {
         if (response.ok) {
-          this.LOG.debug(['execute'], 'response', response);
           response.text().then(res => {
+            this.LOG.debug(['execute'], 'response', res);
             this.warpViewEditorWarpscriptResult.emit(res);
             this.status = `Your script execution took
  ${WarpViewEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed'), 10))}
@@ -373,7 +374,8 @@ export class WarpViewEditor {
  ${response.headers.get('x-warp10-fetched')} datapoints and performed
  ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
             this.warpViewEditorStatusEvent.emit(this.status);
-            this.result = [...JSON.parse(res.replace(/NaN/g, '"NaN"'))];
+            const parsed = new JsonLib().parse(res, undefined);
+            this.result = [...parsed];
             this.loading = false;
           }, err => {
             this.error = err;
