@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-import { Component, Element, Prop, State, Watch } from "@stencil/core";
-import { GTSLib } from "../../gts.lib";
+import {Component, Element, Prop, State, Watch} from '@stencil/core';
+import {GTSLib} from '../../gts.lib';
 
 @Component({
-  tag: "warp-view-result",
+  tag: 'warp-view-result',
   styleUrls: [
-    "../../../node_modules/monaco-editor/min/vs/editor/editor.main.css",
-    "warp-view-result.scss"
+    '../../../node_modules/monaco-editor/min/vs/editor/editor.main.css',
+    'warp-view-result.scss'
   ],
   shadow: false
 })
@@ -29,39 +29,39 @@ export class WarpViewResult {
   @Element() el: HTMLStencilElement;
 
   @Prop() result: any[] = [];
-  @Prop() theme: string = "light";
+  @Prop() theme: string = 'light';
   @Prop() config: object = {};
   @State() loading = false;
 
-  @Watch("theme")
+  @Watch('theme')
   themeHandler(newValue: string, _oldValue: string) {
     console.log(
-      "[WarpViewResult] - The new value of theme is: ",
+      '[WarpViewResult] - The new value of theme is: ',
       newValue,
       _oldValue
     );
   }
 
   componentDidLoad() {
-    console.debug("[WarpViewResult] - componentDidLoad", this.result);
+    console.debug('[WarpViewResult] - componentDidLoad', this.result);
   }
 
   render() {
     // noinspection JSXNamespaceValidation
     return (
-        <div class={'wrapper ' + this.theme}>
-          {this.result && GTSLib.isArray(this.result) ?
-            <div class={this.theme + " raw"}>
-              {this.result.map((line, index) => (
-                <span class="line">
-              <span class="line-num">{index === 0 ? "[TOP]" : index + 1}</span>
-              <span class="line-content">{JSON.stringify(line).replace(/,/gi, ', ')}</span>
+      <div class={'wrapper ' + this.theme}>
+        {this.result && GTSLib.isArray(this.result) ?
+          <div class={this.theme + ' raw'}>
+            {this.result.map((line, index) => (
+              <span class="line">
+              <pre class="line-num">{index === 0 ? '[TOP]' : index + 1}</pre>
+              <pre class="line-content">{JSON.stringify(line).replace(/,/gi, ', ')}</pre>
             </span>
-              ))}
-            </div>
-            : <p>Parsing JSON</p>
-          }
-        </div>
+            ))}
+          </div>
+          : <p>Parsing JSON</p>
+        }
+      </div>
     );
   }
 }

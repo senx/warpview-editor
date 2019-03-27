@@ -91,7 +91,13 @@ warp-view-result {
     &.light {
       background-color: #fff !important;
       color: #343a40;
-
+      pre {
+        color: #343a40;
+        font-family: "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 19px;
+      }
       .line-num {
         color: #2b91af;
       }
@@ -100,7 +106,13 @@ warp-view-result {
     &.dark {
       background-color: #1e1e1e !important;
       color: #fff;
-
+      pre {
+        color: #fff;
+        font-family: "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 19px;
+      }
       .line-num {
         color: #5a5a5a;
       }
