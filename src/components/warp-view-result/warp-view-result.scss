@@ -91,12 +91,20 @@ warp-view-result {
     &.light {
       background-color: #fff !important;
       color: #343a40;
+      //noinspection CssInvalidPropertyValue
       pre {
         color: #343a40;
         font-family: "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
         font-weight: normal;
         font-size: 14px;
         line-height: 19px;
+        min-height: 19px;
+        height: auto;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
       }
       .line-num {
         color: #2b91af;
@@ -106,12 +114,20 @@ warp-view-result {
     &.dark {
       background-color: #1e1e1e !important;
       color: #fff;
+      //noinspection CssInvalidPropertyValue
       pre {
         color: #fff;
         font-family: "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
         font-weight: normal;
         font-size: 14px;
         line-height: 19px;
+        min-height: 19px;
+        height: auto;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
       }
       .line-num {
         color: #5a5a5a;
