@@ -89,7 +89,7 @@ export class WarpViewRawResult {
         this.editor, {
           value: '',
           language: 'json',
-          minimap: { enabled : false },
+          minimap: { enabled : true },
           automaticLayout: true,
           scrollBeyondLastLine: false,
           theme: this.monacoTheme,

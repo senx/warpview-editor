@@ -24,6 +24,7 @@ declare global {
 }
 
 import '@giwisoft/wc-tabs';
+import '@giwisoft/wc-split';
 
 import {
   Config,

@@ -26,6 +26,7 @@ import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
 import '@giwisoft/wc-tabs';
+import '@giwisoft/wc-split';
 import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
 
@@ -123,6 +124,7 @@ export class WarpViewEditor {
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
   private editor: HTMLDivElement;
+  private buttons: HTMLDivElement;
   private layout: HTMLDivElement;
   private monacoTheme = 'vs';
   private innerCode: string;
@@ -324,18 +326,14 @@ export class WarpViewEditor {
           this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
       }
-      window.setTimeout(() => {
-        if (this.layout) {
-          this.editor.style.height = !!this.heightLine
-            ? (19 * this.heightLine).toString() + 'px'
-            : !!this.heightPx
-              ? this.heightPx + 'px'
-              : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19)) + 'px';
-          this.editor.style.width = this.editor.parentElement.getBoundingClientRect().width + 'px';
-        }
-        this.ed.layout();
-        this.warpViewEditorLoaded.emit();
-      }, 500);
+      this.resize(true);
+      const panel1 = document.querySelector('div.panel1');
+      if (panel1) {
+        Utils.detectResize(panel1).addResizeListener(() => {
+          this.resize(false);
+        });
+        console.log('addEventListener');
+      }
     } catch (e) {
       console.error('[WarpViewEditor] - componentDidLoad', e);
     }
@@ -408,6 +406,25 @@ export class WarpViewEditor {
     this.warpViewEditorDatavizRequested.emit(this.result);
   }
 
+  resize(initial) {
+    window.setTimeout(() => {
+      if (this.layout) {
+        let h: number = !!this.heightLine
+          ? 19 * this.heightLine
+          : !!this.heightPx
+            ? this.heightPx
+            : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19));
+        if (!initial) {
+          h = Math.min(h, this.editor.parentElement.getBoundingClientRect().height);
+        }
+        this.editor.style.height = (h - this.buttons.getBoundingClientRect().height) + 'px';
+        this.editor.style.width = this.editor.parentElement.getBoundingClientRect().width + 'px';
+      }
+      this.ed.layout();
+      this.warpViewEditorLoaded.emit();
+    }, initial ? 500 : 100);
+  }
+
   render() {
     // @ts-ignore
     // noinspection JSXNamespaceValidation
@@ -441,6 +458,7 @@ export class WarpViewEditor {
       'horizontal-layout': !!this.horizontalLayout,
       'vertical-layout': !this.horizontalLayout,
     };
+
 
     return <div>
       <div class='warpscript'>
@@ -476,7 +494,7 @@ export class WarpViewEditor {
           <div class='panel1'>
             <div ref={(el) => this.editor = el as HTMLDivElement}/>
             {loading}
-            <div class={this.innerConfig.buttons.class}>
+            <div class={this.innerConfig.buttons.class} ref={(el) => this.buttons = el as HTMLDivElement}>
               {datavizBtn}
               {execBtn}
             </div>
