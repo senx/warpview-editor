@@ -115,7 +115,7 @@ export class WarpViewEditor {
   @Event() warpViewEditorLoaded: EventEmitter;
 
   @State() result: any[];
-  @State() status: string;
+  @State() status: {message: string, ops: number, elapsed: number, fetched: number};
   @State() error: string;
   @State() loading = false;
 
@@ -366,11 +366,16 @@ export class WarpViewEditor {
           response.text().then(res => {
             this.LOG.debug(['execute'], 'response', res);
             this.warpViewEditorWarpscriptResult.emit(res);
-            this.status = `Your script execution took
+            this.status = {
+              message: `Your script execution took
  ${WarpViewEditor.formatElapsedTime(parseInt(response.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${response.headers.get('x-warp10-fetched')} datapoints and performed
- ${response.headers.get('x-warp10-ops')}  WarpScript operations.`;
+ ${response.headers.get('x-warp10-ops')}  WarpScript operations.`,
+              ops: parseInt(response.headers.get('x-warp10-ops')),
+              elapsed: parseInt(response.headers.get('x-warp10-elapsed')),
+              fetched: parseInt(response.headers.get('x-warp10-fetched'))
+            };
             this.warpViewEditorStatusEvent.emit(this.status);
             const parsed = new JsonLib().parse(res, undefined);
             this.result = [...parsed];
@@ -444,7 +449,7 @@ export class WarpViewEditor {
 
     const message =
       this.status && this.displayMessages ?
-        <div class={this.innerConfig.messageClass}>{this.status}</div>
+        <div class={this.innerConfig.messageClass}>{this.status.message}</div>
         : '';
 
     // noinspection JSXNamespaceValidation
