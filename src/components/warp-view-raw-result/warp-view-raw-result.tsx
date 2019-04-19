@@ -112,24 +112,26 @@ export class WarpViewRawResult {
   }
 
   adjustHeight() {
-    const el = this.editor;
-    const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
-    const containerHeight = codeContainer.offsetHeight;
-    let prevLineCount = 0;
-    if (!containerHeight) {
-      // dom hasn't finished settling down. wait a bit more.
-      setTimeout(() => this.adjustHeight(), 0);
-    } else {
-      setTimeout(() => {
-        const height =
-          codeContainer.childElementCount > prevLineCount
-            ? codeContainer.offsetHeight // unfold
-            : codeContainer.childElementCount * this.LINE_HEIGHT + this.CONTAINER_GUTTER; // fold
-        prevLineCount = codeContainer.childElementCount;
-        el.style.height = height + 'px';
-        console.log(height);
-        this.resEd.layout();
-      }, 0);
+    if(this.editor) {
+      const el = this.editor;
+      const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
+      const containerHeight = codeContainer.offsetHeight;
+      let prevLineCount = 0;
+      if (!containerHeight) {
+        // dom hasn't finished settling down. wait a bit more.
+        setTimeout(() => this.adjustHeight(), 0);
+      } else {
+        setTimeout(() => {
+          const height =
+            codeContainer.childElementCount > prevLineCount
+              ? codeContainer.offsetHeight // unfold
+              : codeContainer.childElementCount * this.LINE_HEIGHT + this.CONTAINER_GUTTER; // fold
+          prevLineCount = codeContainer.childElementCount;
+          el.style.height = height + 'px';
+          console.log(height);
+          this.resEd.layout();
+        }, 0);
+      }
     }
   }
 
