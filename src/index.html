@@ -25,6 +25,9 @@
   <script src="/build/warpview-editor.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
   <style>
     body {
       padding: 0;
@@ -61,7 +64,7 @@
         @training/dataset0
         // warp.store.hbase.puts.committed is the number of datapoints committed to
         // HBase since the restart of the Store daemon
-        [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 1 h ] FETCH
+        [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 365 d ] FETCH
         [ SWAP mapper.rate 1 0 0 ] MAP
         // Keep only 1000 datapoints per GTS
         1000 LTTB
@@ -94,8 +97,20 @@
         %> LMAP
       </warp-view-editor>
     </div>
+    <div class="card-footer">
+      <div class="btn btn-danger" id="abort">Abort</div>
+    </div>
   </div>
 </main>
+<script language="JavaScript">
+    $(document).ready(() => {
+        $('#abort').click(function () {
+            document.getElementById('editor').abort();
+        });
+    });
+
+</script>
+
 </body>
 
 </html>

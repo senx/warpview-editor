@@ -54,6 +54,11 @@ export class Utils {
     }
   };
 
+  /**
+   *
+   * @param _element
+   * @return {any}
+   */
   static detectResize(_element) {
     let promise: any = {};
     let _listener = [];

@@ -39,6 +39,7 @@
   "dependencies": {
     "@giwisoft/wc-split": "^0.0.5",
     "@giwisoft/wc-tabs": "^0.0.5",
+    "abortcontroller-polyfill": "^1.3.0",
     "monaco-editor": "0.15.6",
     "whatwg-fetch": "3.0.0"
   },

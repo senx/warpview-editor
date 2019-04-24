@@ -14,21 +14,23 @@
  *  limitations under the License.
  */
 
-import {Component, Element, Event, EventEmitter, Method, Prop, State, Watch} from '@stencil/core/dist';
-import monaco, {MarkedString} from '@timkendrick/monaco-editor/dist/standalone';
-import {Monarch} from '../../monarch';
-import {WarpScript} from '../../ref';
-import {globalfunctions as wsGlobals} from '../../wsGlobals';
-import {Utils} from '../../lib/utils';
-import {Config} from '../../lib/config';
+import { Component, Element, Event, EventEmitter, Method, Prop, State, Watch } from '@stencil/core/dist';
+import monaco, { MarkedString } from '@timkendrick/monaco-editor/dist/standalone';
+import { Monarch } from '../../monarch';
+import { WarpScript } from '../../ref';
+import { globalfunctions as wsGlobals } from '../../wsGlobals';
+import { Utils } from '../../lib/utils';
+import { Config } from '../../lib/config';
 import Hover = monaco.languages.Hover;
 import IReadOnlyModel = monaco.editor.IReadOnlyModel;
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import IEditorConstructionOptions = monaco.editor.IEditorConstructionOptions;
 import '@giwisoft/wc-tabs';
 import '@giwisoft/wc-split';
-import {Logger} from '../../lib/logger';
-import {JsonLib} from '../../lib/jsonLib';
+import { Logger } from '../../lib/logger';
+import { JsonLib } from '../../lib/jsonLib';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
+import 'whatwg-fetch'
 
 @Component({
   tag: 'warp-view-editor',
@@ -48,21 +50,21 @@ export class WarpViewEditor {
    */
   private static getType(tags: string[], name: string): monaco.languages.CompletionItemKind {
     const t = tags.join(' ');
-    if (t.indexOf('constant') > -1) {
+    if(t.indexOf('constant') > -1) {
       return monaco.languages.CompletionItemKind.Enum;
-    } else if (t.indexOf('reducer') > -1 && name !== 'REDUCE') {
+    } else if(t.indexOf('reducer') > -1 && name !== 'REDUCE') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('mapper') > -1 && name !== 'MAP') {
+    } else if(t.indexOf('mapper') > -1 && name !== 'MAP') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('bucketize') > -1 && name !== 'BUCKETIZE') {
+    } else if(t.indexOf('bucketize') > -1 && name !== 'BUCKETIZE') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('filter') > -1 && name !== 'FILTER') {
+    } else if(t.indexOf('filter') > -1 && name !== 'FILTER') {
       return monaco.languages.CompletionItemKind.Interface;
-    } else if (t.indexOf('control') > -1) {
+    } else if(t.indexOf('control') > -1) {
       return monaco.languages.CompletionItemKind.Keyword;
-    } else if (t.indexOf('operators') > -1) {
+    } else if(t.indexOf('operators') > -1) {
       return monaco.languages.CompletionItemKind.Method;
-    } else if (t.indexOf('stack') > -1) {
+    } else if(t.indexOf('stack') > -1) {
       return monaco.languages.CompletionItemKind.Module;
     } else {
       return monaco.languages.CompletionItemKind.Function;
@@ -75,16 +77,16 @@ export class WarpViewEditor {
    * @returns {string}
    */
   private static formatElapsedTime(elapsed: number) {
-    if (elapsed < 1000) {
+    if(elapsed < 1000) {
       return elapsed.toFixed(3) + ' ns';
     }
-    if (elapsed < 1000000) {
+    if(elapsed < 1000000) {
       return (elapsed / 1000).toFixed(3) + ' μs';
     }
-    if (elapsed < 1000000000) {
+    if(elapsed < 1000000000) {
       return (elapsed / 1000000).toFixed(3) + ' ms';
     }
-    if (elapsed < 1000000000000) {
+    if(elapsed < 1000000000000) {
       return (elapsed / 1000000000).toFixed(3) + ' s ';
     }
     // Max exec time for nice output: 999.999 minutes (should be OK, timeout should happen before that).
@@ -113,13 +115,15 @@ export class WarpViewEditor {
   @Event() warpViewEditorWarpscriptResult: EventEmitter;
   @Event() warpViewEditorDatavizRequested: EventEmitter;
   @Event() warpViewEditorLoaded: EventEmitter;
+  @Event() warpViewEditorSize: EventEmitter;
 
   @State() result: any[];
-  @State() status: {message: string, ops: number, elapsed: number, fetched: number};
+  @State() status: { message: string, ops: number, elapsed: number, fetched: number };
   @State() error: string;
   @State() loading = false;
 
-
+  private abortController: AbortController = new AbortController();
+  private abortSignal: AbortSignal = this.abortController.signal;
   private LOG: Logger;
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
@@ -159,19 +163,19 @@ export class WarpViewEditor {
    */
   @Watch('theme')
   themeHandler(newValue: string, oldValue: string) {
-    this.LOG.debug(['themeHandler'], 'The new value of theme is: ', newValue, oldValue);
-    if ('dark' === newValue) {
+    this.LOG.debug([ 'themeHandler' ], 'The new value of theme is: ', newValue, oldValue);
+    if('dark' === newValue) {
       this.monacoTheme = 'vs-dark';
     } else {
       this.monacoTheme = 'vs';
     }
-    this.LOG.debug(['themeHandler'], 'The new value of theme is: ', this.monacoTheme);
+    this.LOG.debug([ 'themeHandler' ], 'The new value of theme is: ', this.monacoTheme);
     monaco.editor.setTheme(this.monacoTheme);
   }
 
   @Watch('warpscript')
   warpscriptHandler(newValue: string, oldValue: string) {
-    this.LOG.debug(['warpscriptHandler'], 'The new value of warpscript is: ', newValue, oldValue);
+    this.LOG.debug([ 'warpscriptHandler' ], 'The new value of warpscript is: ', newValue, oldValue);
     this.result = undefined;
     this.ed.setValue(newValue);
   }
@@ -182,83 +186,83 @@ export class WarpViewEditor {
    */
   componentWillLoad() {
     this.LOG = new Logger(WarpViewEditor, this.debug);
-    if (typeof this.config === 'string') {
+    if(typeof this.config === 'string') {
       this.innerConfig = Utils.mergeDeep(this.innerConfig, JSON.parse(this.config));
     } else {
       this.innerConfig = Utils.mergeDeep(this.innerConfig, this.config);
     }
-    this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
+    this.LOG.debug([ 'componentWillLoad' ], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
     //add blank lines when needed
-    for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
+    for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
       this.innerCode += '\n';
     }
-    if ('dark' === this.theme) {
+    if('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
-    this.LOG.debug(['componentWillLoad'], 'componentWillLoad theme is: ', this.theme);
-    if (!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
-      monaco.languages.register({id: this.WARPSCRIPT_LANGUAGE});
-      this.LOG.debug(['componentWillLoad'], 'register: ', this.WARPSCRIPT_LANGUAGE);
+    this.LOG.debug([ 'componentWillLoad' ], 'componentWillLoad theme is: ', this.theme);
+    if(!monaco.languages.getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
+      monaco.languages.register({ id: this.WARPSCRIPT_LANGUAGE });
+      this.LOG.debug([ 'componentWillLoad' ], 'register: ', this.WARPSCRIPT_LANGUAGE);
       monaco.languages.setMonarchTokensProvider(this.WARPSCRIPT_LANGUAGE, Monarch.rules);
       monaco.languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
           wordPattern: /[^\s\t]+/,
           comments: {
             lineComment: '//',
-            blockComment: ['/**', '*/'],
+            blockComment: [ '/**', '*/' ],
           },
           brackets: [
-            ['{', '}'],
-            ['[', ']'],
-            ['(', ')'],
-            ['<%', '%>'],
-            ['<\'', '\'>'],
-            ['[[', ']]'],
+            [ '{', '}' ],
+            [ '[', ']' ],
+            [ '(', ')' ],
+            [ '<%', '%>' ],
+            [ '<\'', '\'>' ],
+            [ '[[', ']]' ],
           ],
           autoClosingPairs: [
-            {open: '{', close: '}'},
-            {open: '[', close: ']'},
-            {open: '(', close: ')'},
-            {open: '<%', close: '%>'},
-            {open: '[[', close: ']]'},
-            {open: ' \'', close: '\'', notIn: ['string', 'comment']},
-            {open: '<\'', close: '\'>'},
-            {open: '"', close: '"', notIn: ['string']},
-            {open: '`', close: '`', notIn: ['string', 'comment']},
-            {open: '/**', close: ' */', notIn: ['string']},
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '<%', close: '%>' },
+            { open: '[[', close: ']]' },
+            { open: ' \'', close: '\'', notIn: [ 'string', 'comment' ] },
+            { open: '<\'', close: '\'>' },
+            { open: '"', close: '"', notIn: [ 'string' ] },
+            { open: '`', close: '`', notIn: [ 'string', 'comment' ] },
+            { open: '/**', close: ' */', notIn: [ 'string' ] },
           ],
           surroundingPairs: [
-            {open: '{', close: '}'},
-            {open: '[', close: ']'},
-            {open: '(', close: ')'},
-            {open: '[[', close: ']]'},
-            {open: '<%', close: '%>'},
-            {open: '<\'', close: '\'>'},
-            {open: '\'', close: '\''},
-            {open: '"', close: '"'},
-            {open: '`', close: '`'},
+            { open: '{', close: '}' },
+            { open: '[', close: ']' },
+            { open: '(', close: ')' },
+            { open: '[[', close: ']]' },
+            { open: '<%', close: '%>' },
+            { open: '<\'', close: '\'>' },
+            { open: '\'', close: '\'' },
+            { open: '"', close: '"' },
+            { open: '`', close: '`' },
           ],
           onEnterRules: [
             {
               // e.g. /** | */
               beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
               afterText: /^\s*\*\/$/,
-              action: {indentAction: monaco.languages.IndentAction.IndentOutdent, appendText: ' * '},
+              action: { indentAction: monaco.languages.IndentAction.IndentOutdent, appendText: ' * ' },
             },
             {
               // e.g. /** ...|
               beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
-              action: {indentAction: monaco.languages.IndentAction.None, appendText: ' * '},
+              action: { indentAction: monaco.languages.IndentAction.None, appendText: ' * ' },
             },
             {
               // e.g.  * ...|
               beforeText: /^(\t|( {2}))* \*( ([^*]|\*(?!\/))*)?$/,
-              action: {indentAction: monaco.languages.IndentAction.None, appendText: '* '},
+              action: { indentAction: monaco.languages.IndentAction.None, appendText: '* ' },
             },
             {
               // e.g.  */|
               beforeText: /^(\t|( {2}))* \*\/\s*$/,
-              action: {indentAction: monaco.languages.IndentAction.None, removeText: 1},
+              action: { indentAction: monaco.languages.IndentAction.None, removeText: 1 },
             },
           ],
         },
@@ -267,15 +271,15 @@ export class WarpViewEditor {
         provideHover: (model: IReadOnlyModel, position: monaco.Position) => {
           const word = model.getWordAtPosition(position);
           const range = new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
-          this.LOG.debug(['componentWillLoad'], 'provideHover', model, position, word);
+          this.LOG.debug([ 'componentWillLoad' ], 'provideHover', model, position, word);
           const name = word.word;
-          const entry = wsGlobals[name];
-          if (entry && entry.description) {
+          const entry = wsGlobals[ name ];
+          if(entry && entry.description) {
             const signature = entry.signature || '';
-            const contents: MarkedString[] = ['### ' + name, {
+            const contents: MarkedString[] = [ '### ' + name, {
               language: this.WARPSCRIPT_LANGUAGE,
               value: signature,
-            }, entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)];
+            }, entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`) ];
             return {
               range: range,
               contents: contents,
@@ -290,7 +294,7 @@ export class WarpViewEditor {
         provideCompletionItems: () => {
           const defs = [];
           WarpScript.reference.forEach(f => {
-            defs.push({label: f.name, kind: WarpViewEditor.getType(f.tags, f.name)});
+            defs.push({ label: f.name, kind: WarpViewEditor.getType(f.tags, f.name) });
           });
           return defs;
         },
@@ -304,8 +308,8 @@ export class WarpViewEditor {
    */
   componentDidLoad() {
     try {
-      this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
-      this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
+      this.LOG.debug([ 'componentDidLoad' ], 'warpscript', this.warpscript);
+      this.LOG.debug([ 'componentDidLoad' ], 'inner: ', this.innerCode);
       const edOpts: IEditorConstructionOptions = {
         quickSuggestionsDelay: this.innerConfig.editor.quickSuggestionsDelay,
         quickSuggestions: this.innerConfig.editor.quickSuggestions,
@@ -317,25 +321,25 @@ export class WarpViewEditor {
         readOnly: this.innerConfig.readOnly,
         folding: true,
       };
-      this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
+      this.LOG.debug([ 'componentDidLoad' ], 'edOpts: ', edOpts);
       this.ed = monaco.editor.create(this.editor, edOpts);
-      this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
-      if (this.ed) {
+      this.ed.getModel().updateOptions({ tabSize: this.innerConfig.editor.tabSize });
+      if(this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
-          this.LOG.debug(['componentDidLoad'], 'ws changed', event);
+          this.LOG.debug([ 'componentDidLoad' ], 'ws changed', event);
           this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
       }
       this.resize(true);
       const panel1 = document.querySelector('div.panel1');
-      if (panel1) {
-        Utils.detectResize(panel1).addResizeListener(() => {
+      if(panel1) {
+        Utils.detectResize(panel1).addResizeListener((s) => {
+          this.warpViewEditorSize.emit(s);
           this.resize(false);
         });
-        console.log('addEventListener');
       }
-    } catch (e) {
-      console.error('[WarpViewEditor] - componentDidLoad', e);
+    } catch(e) {
+      this.LOG.error(['WarpViewEditor'], 'componentDidLoad', e);
     }
   }
 
@@ -344,10 +348,15 @@ export class WarpViewEditor {
    *
    */
   componentDidUnload() {
-    this.LOG.debug(['componentDidUnload'], 'Component removed from the DOM');
-    if (this.ed) {
+    this.LOG.debug([ 'componentDidUnload' ], 'Component removed from the DOM');
+    if(this.ed) {
       this.ed.dispose();
     }
+  }
+
+  @Method()
+  abort() {
+    this.abortController.abort();
   }
 
   /**
@@ -358,13 +367,13 @@ export class WarpViewEditor {
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
-    if (this.ed) {
-      this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
+    if(this.ed) {
+      this.LOG.debug([ 'execute' ], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
-      fetch(this.url, {method: 'POST', body: this.ed.getValue()}).then(response => {
-        if (response.ok) {
+      fetch(this.url, { method: 'POST', body: this.ed.getValue(), signal: this.abortSignal }).then(response => {
+        if(response.ok) {
           response.text().then(res => {
-            this.LOG.debug(['execute'], 'response', res);
+            this.LOG.debug([ 'execute' ], 'response', res);
             this.warpViewEditorWarpscriptResult.emit(res);
             this.status = {
               message: `Your script execution took
@@ -378,29 +387,37 @@ export class WarpViewEditor {
             };
             this.warpViewEditorStatusEvent.emit(this.status);
             const parsed = new JsonLib().parse(res, undefined);
-            this.result = [...parsed];
+            this.result = [ ...parsed ];
             this.loading = false;
           }, err => {
             this.error = err;
             this.warpViewEditorErrorEvent.emit(this.error);
             this.loading = false;
-            this.LOG.error(['execute'], err);
+            this.LOG.error([ 'execute' ], err);
           });
         } else {
           this.error = response.statusText;
           this.warpViewEditorErrorEvent.emit(this.error);
           this.loading = false;
-          this.LOG.error(['execute'], response.statusText);
+          this.LOG.error([ 'execute' ], response.statusText);
         }
       }, err => {
-        this.error = err;
+        if(err.name === 'AbortError') {
+          this.error = 'Aborted';
+          this.warpViewEditorErrorEvent.emit(this.error);
+          this.LOG.debug([ 'execute' ], 'aborted');
+        } else {
+          this.error = err;
+          this.LOG.error([ 'execute' ], err);
+        }
         this.warpViewEditorErrorEvent.emit(this.error);
         this.loading = false;
-        this.LOG.error(['execute'], err);
+        this.result = undefined;
+        this.status = undefined;
       });
     } else {
       this.loading = false;
-      this.LOG.error(['execute'], 'no active editor');
+      this.LOG.error([ 'execute' ], 'no active editor');
     }
   }
 
@@ -413,11 +430,11 @@ export class WarpViewEditor {
 
   resize(initial) {
     window.setTimeout(() => {
-      if (this.layout) {
+      if(this.layout) {
         let h: number = !!this.heightPx
-            ? this.heightPx
-            : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19));
-        if (!initial) {
+          ? this.heightPx
+          : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19));
+        if(!initial) {
           h = Math.min(h, this.editor.parentElement.getBoundingClientRect().height);
         }
         this.editor.style.height = (h - this.buttons.getBoundingClientRect().height) + 'px';
@@ -480,7 +497,7 @@ export class WarpViewEditor {
                   <div ref={(el) => this.editor = el as HTMLDivElement}/>
                 </div>
                 <div class={'editor-buttons ' + this.innerConfig.buttons.class}>{datavizBtn} {execBtn}</div>
-                {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
+                {this.error || this.result ? <div class='messages'>{message} {error}</div> : { loading }}
               </wc-tabs-content>
               <wc-tabs-content slot='content' name='tab2'>
                 <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>

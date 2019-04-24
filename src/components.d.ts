@@ -34,6 +34,7 @@ declare global {
 
   namespace StencilComponents {
     interface WarpViewEditor {
+      'abort': () => void;
       'config': Config | string;
       'debug': boolean;
       'displayMessages': boolean;
@@ -79,6 +80,7 @@ declare global {
       'onWarpViewEditorDatavizRequested'?: (event: CustomEvent) => void;
       'onWarpViewEditorErrorEvent'?: (event: CustomEvent) => void;
       'onWarpViewEditorLoaded'?: (event: CustomEvent) => void;
+      'onWarpViewEditorSize'?: (event: CustomEvent) => void;
       'onWarpViewEditorStatusEvent'?: (event: CustomEvent) => void;
       'onWarpViewEditorWarpscriptChanged'?: (event: CustomEvent) => void;
       'onWarpViewEditorWarpscriptResult'?: (event: CustomEvent) => void;
