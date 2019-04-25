@@ -99,15 +99,20 @@
     </div>
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>
+      <span id="size"></span>
     </div>
   </div>
 </main>
 <script language="JavaScript">
-    $(document).ready(() => {
-        $('#abort').click(function () {
-            document.getElementById('editor').abort();
-        });
+
+  $(document).ready(() => {
+    $('#abort').click(function () {
+      document.getElementById('editor').abort();
     });
+    document.addEventListener('warpViewEditorSize', function (e) {
+      $('#size').text(JSON.stringify(e.detail));
+    });
+  });
 
 </script>
 
