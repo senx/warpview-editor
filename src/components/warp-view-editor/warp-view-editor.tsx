@@ -122,8 +122,8 @@ export class WarpViewEditor {
   @State() error: string;
   @State() loading = false;
 
-  private abortController: AbortController = new AbortController();
-  private abortSignal: AbortSignal = this.abortController.signal;
+  private abortController: AbortController;
+  private abortSignal: AbortSignal;
   private LOG: Logger;
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
@@ -366,6 +366,8 @@ export class WarpViewEditor {
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
+    this.abortController =  new AbortController();
+    this.abortSignal = this.abortController.signal;
     if (this.ed) {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
@@ -427,7 +429,9 @@ export class WarpViewEditor {
     this.warpViewEditorDatavizRequested.emit(this.result);
   }
 
-  resize(initial) {
+
+  @Method()
+  resize(initial: boolean) {
     window.setTimeout(() => {
       if (this.layout) {
         let h: number = !!this.heightPx

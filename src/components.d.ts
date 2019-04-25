@@ -42,6 +42,7 @@ declare global {
       'heightLine': number;
       'heightPx': number;
       'horizontalLayout': boolean;
+      'resize': (initial: boolean) => void;
       'showDataviz': boolean;
       'showExecute': boolean;
       'tabbed': boolean;
