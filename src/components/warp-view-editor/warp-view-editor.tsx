@@ -434,7 +434,7 @@ export class WarpViewEditor {
   resize(initial: boolean) {
     window.setTimeout(() => {
       if (this.layout) {
-        let h: number = !!this.heightPx
+        let h: number = !!this.heightPx && initial
           ? this.heightPx
           : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19));
         if (!initial) {
