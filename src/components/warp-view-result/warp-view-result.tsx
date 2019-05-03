@@ -47,19 +47,24 @@ export class WarpViewResult {
   }
 
   render() {
+
+
     // noinspection JSXNamespaceValidation
     return (
       <div class={'wrapper ' + this.theme}>
+
         {this.result && GTSLib.isArray(this.result) ?
           <div class={this.theme + ' raw'}>
             {this.result.map((line, index) => (
               <span class="line">
               <pre class="line-num">{index === 0 ? '[TOP]' : index + 1}</pre>
-              <pre class="line-content">{JSON.stringify(line).replace(/,/gi, ', ')}</pre>
+              <pre class="line-content">{JSON.stringify(line)}</pre>
             </span>
             ))}
           </div>
-          : <p>Parsing JSON</p>
+          :   <div class='loader'>
+            <div class='spinner'/>
+          </div>
         }
       </div>
     );

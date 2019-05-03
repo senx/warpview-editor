@@ -366,7 +366,7 @@ export class WarpViewEditor {
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
-    this.abortController =  new AbortController();
+    this.abortController = new AbortController();
     this.abortSignal = this.abortController.signal;
     if (this.ed) {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
@@ -519,36 +519,36 @@ export class WarpViewEditor {
           </div>
         </div>
         : <div ref={(el) => this.layout = el as HTMLDivElement} class={nonTabbedClasses}>
-          <div class='panel1'>
-            <div ref={(el) => this.editor = el as HTMLDivElement}/>
-            {loading}
-            <div class={this.innerConfig.buttons.class} ref={(el) => this.buttons = el as HTMLDivElement}>
-              {datavizBtn}
-              {execBtn}
-            </div>
-          </div>
-          <div class='panel2'>
-            {this.error || this.result ? <div class='messages'>{message} {error}</div> : ''}
-            {!!this.result
-              ? <div>
-                <div class={'wrapper ' + this.theme}>
-                  <wc-tabs>
-                    <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
-                    <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
-
-                    <wc-tabs-content slot='content' name='tab1'>
-                      <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-                    </wc-tabs-content>
-
-                    <wc-tabs-content slot='content' name='tab2'>
-                      <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-                    </wc-tabs-content>
-                  </wc-tabs>
-                </div>
+            <div class='panel1'>
+              <div ref={(el) => this.editor = el as HTMLDivElement}/>
+              {loading}
+              <div class={this.innerConfig.buttons.class} ref={(el) => this.buttons = el as HTMLDivElement}>
+                {datavizBtn}
+                {execBtn}
               </div>
-              : ''
-            }
-          </div>
+            </div>
+            <div class='panel2'>
+              {this.error || this.result ? <div class='messages'>{message} {error}</div> : ''}
+              {!!this.result
+                ? <div>
+                  <div class={'wrapper ' + this.theme}>
+                    <wc-tabs>
+                      <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
+                      <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
+
+                      <wc-tabs-content slot='content' name='tab1'>
+                        <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
+                      </wc-tabs-content>
+
+                      <wc-tabs-content slot='content' name='tab2'>
+                        <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
+                      </wc-tabs-content>
+                    </wc-tabs>
+                  </div>
+                </div>
+                : ''
+              }
+            </div>
         </div>
       }
     </div>;

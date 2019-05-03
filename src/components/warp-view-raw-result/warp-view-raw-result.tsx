@@ -62,8 +62,10 @@ export class WarpViewRawResult {
 
   @Watch('result')
   resultHandler(newValue: any, _oldValue: any) {
+    this.loading = true;
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue, _oldValue);
     this.buildEditor(JSON.stringify(this.result));
+    this.loading = false;
   }
 
   /**
@@ -82,7 +84,6 @@ export class WarpViewRawResult {
    * @param {string} json
    */
   buildEditor(json: string) {
-    this.loading = true;
     console.debug('[WarpViewRawResult] - buildEditor', json);
     if (!this.resEd) {
       this.resEd = monaco.editor.create(
@@ -108,7 +109,6 @@ export class WarpViewRawResult {
     if (window) {
       window.addEventListener("resize",() => setTimeout(() => this.adjustHeight(), 0));
     }
-    this.loading = false;
   }
 
   adjustHeight() {
@@ -128,7 +128,6 @@ export class WarpViewRawResult {
               : codeContainer.childElementCount * this.LINE_HEIGHT + this.CONTAINER_GUTTER; // fold
           prevLineCount = codeContainer.childElementCount;
           el.style.height = height + 'px';
-          console.log(height);
           this.resEd.layout();
         }, 0);
       }
@@ -137,7 +136,9 @@ export class WarpViewRawResult {
 
   componentDidLoad() {
     console.debug('[WarpViewRawResult] - componentDidLoad', this.result);
+    this.loading = true;
     this.buildEditor(JSON.stringify(this.result));
+    this.loading = false;
   }
 
   render() {
