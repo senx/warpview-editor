@@ -1,5 +1,5 @@
 /*!
- *  Copyright 2018  SenX S.A.S.
+ *  Copyright 2019  SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,71 +13,82 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 warp-view-editor {
+  height: 100%;
+  width: 100%;
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+
   .warpscript {
     display: none;
   }
 
-  wc-tabs-content {
-    height: 100%;
+  .editor {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-  }
-
-  .editor-wrapper {
     height: 100%;
+    max-height: 100% !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 
-  .layout {
-    display: grid;
-    grid-gap: 10px;
+  .wrapper-main {
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
 
-    &.vertical-layout {
-      flex-direction: column;
-      align-items: stretch;
-      grid-template-columns: 100%;
-
-      .panel1 {
-        resize: vertical;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        position: relative;
-        min-height: 100px;
-
-        &::after {
-          content: "\2195";
-          font-size: 14px;
-          position: absolute;
-          height: 22px;
-          width: 20px;
-          text-align: center;
-          bottom: 0;
-          right: 0;
-          background-color: #c0c0c0;
-          color: #404040;
-          cursor: row-resize;
-        }
-      }
+    &.dark {
+      background-color: #1e1e1e;
+      color: #f8f9fa;
+      --wc-tab-header-border-color: #343a40;
+      --wc-tab-header-selected-border-color: #343a40;
+      --wc-tab-header-bg-color: transparent;
+      --wc-tab-header-color: #f8f9fa;
+      --wc-tab-header-selected-color: #1e1e1e;
+      --wc-tab-header-selected-bg-color: #f8f9fa;
+      --wc-tab-header-disabled-color: rgba(255, 255, 255, .5);
+      --wc-tab-header-disabled-bg-color: rgba(0, 0, 0, .5);
+      --wc-split-gutter-color: #343a40;
     }
 
-    &.horizontal-layout {
-      flex-direction: row;
-      align-items: stretch;
-      grid-template-rows: 100%;
-      grid-template-columns: 50% 50%;
+    &.light {
+      background-color: #fff !important;
+      color: #000;
+    }
+  }
 
-      .panel1 {
-        grid-column: 1;
-        justify-self: stretch;
-        align-self: start;
-      }
+  div[slot] {
+    height: 100%;
+    overflow: hidden;
+  }
 
-      .panel2 {
-        grid-column: 2;
-        justify-self: stretch;
-        align-self: start;
-        min-height: 300px;
-        background-color: #2b91af;
-      }
+  .tab-wrapper {
+    height: 100%;
+  }
+
+  .warpview-buttons {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: auto;
+
+    .messages {
+      padding-left: 10px;
+      width: 100%;
     }
   }
 
@@ -97,6 +108,10 @@ warp-view-editor {
     left: 0;
     bottom: 0;
     right: 0;
+  }
+
+  .messages {
+    float: right;
   }
 
   .loader:after {
@@ -129,77 +144,5 @@ warp-view-editor {
     }
   }
 
-  .clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
 
-  .wrapper-tabbed {
-    min-height: 100%;
-
-    .editor-wrapper {
-      position: absolute;
-      height: calc(100% - 60px);
-      width: 100%;
-      display: block;
-      z-index: 1;
-    }
-
-    .result-wrapper {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      display: block;
-      z-index: 1;
-    }
-
-    .editor-buttons {
-      position: absolute;
-      width: 100%;
-      display: block;
-      z-index: 1;
-      bottom: 0;
-      height: 60px;
-      padding: 10px;
-    }
-
-    wc-tabs-content {
-      height: calc(100% - 42px);
-      position: absolute;
-      margin: -10px;
-      width: 100%;
-    }
-
-    .messages {
-      position: absolute;
-      z-index: 1;
-      width: 50%;
-      bottom: 0;
-      right: 0;
-      margin-right: 10px;
-    }
-  }
-
-  .wrapper, .wrapper-tabbed {
-    position: relative;
-
-    &.dark {
-      background-color: #1e1e1e !important;
-      color: #fff;
-      --wc-tab-header-border-color: #000000 !important;
-      --wc-tab-header-selected-border-color: #000000 !important;
-      --wc-tab-header-bg-color: #343a40 !important;
-      --wc-tab-header-color: rgba(255, 255, 255, .5) !important;
-      --wc-tab-header-selected-color: #ffffff !important;
-      --wc-tab-header-selected-bg-color: #343a40 !important;
-      --wc-tab-header-disabled-color: rgba(255, 255, 255, .5) !important;
-      --wc-tab-header-disabled-bg-color: transparent !important;
-    }
-
-    &.light {
-      background-color: #fff !important;
-      color: #000;
-    }
-  }
 }

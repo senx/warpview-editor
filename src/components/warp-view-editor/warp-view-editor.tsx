@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {Component, Element, Event, EventEmitter, Method, Prop, State, Watch} from '@stencil/core/dist';
+import {Component, Element, Event, EventEmitter, Listen, Method, Prop, State, Watch} from '@stencil/core/dist';
 import monaco, {MarkedString} from '@timkendrick/monaco-editor/dist/standalone';
 import {Monarch} from '../../monarch';
 import {WarpScript} from '../../ref';
@@ -30,6 +30,7 @@ import '@giwisoft/wc-split';
 import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+import ResizeObserver from 'resize-observer-polyfill';
 import 'whatwg-fetch';
 
 @Component({
@@ -94,7 +95,6 @@ export class WarpViewEditor {
   }
 
   @Element() el: HTMLStencilElement;
-
   @Prop() url: string = '';
   @Prop() theme: string = 'light';
   @Prop() warpscript: string;
@@ -108,6 +108,7 @@ export class WarpViewEditor {
   @Prop() heightPx: number;
   @Prop() tabbed: boolean = false;
   @Prop() debug = false;
+  @Prop() initialSize: { w: number, h: number, name?: string, p: number };
 
   @Event() warpViewEditorStatusEvent: EventEmitter;
   @Event() warpViewEditorErrorEvent: EventEmitter;
@@ -127,9 +128,9 @@ export class WarpViewEditor {
   private LOG: Logger;
   private WARPSCRIPT_LANGUAGE = 'warpscript';
   private ed: IStandaloneCodeEditor;
+  private wrapper: HTMLDivElement;
   private editor: HTMLDivElement;
   private buttons: HTMLDivElement;
-  private layout: HTMLDivElement;
   private monacoTheme = 'vs';
   private innerCode: string;
   private innerConfig: Config = {
@@ -155,6 +156,7 @@ export class WarpViewEditor {
       minLineNumber: 10
     },
   };
+  ro: ResizeObserver;
 
   /**
    *
@@ -193,6 +195,7 @@ export class WarpViewEditor {
     }
     this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
+    // this.el.textContent = this.el.textContent.replace(this.innerCode, '');
     //add blank lines when needed
     for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
       this.innerCode += '\n';
@@ -307,6 +310,9 @@ export class WarpViewEditor {
    *
    */
   componentDidLoad() {
+    this.el.style.height = this.heightPx ? this.heightPx + 'px' : '100%';
+    this.wrapper.style.height = this.heightPx ? this.heightPx + 'px' : (this.el.parentElement.clientHeight - 20) + 'px';
+    console.log('this.heightPx', this.heightPx, this.el.style.height);
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
       this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
@@ -331,12 +337,6 @@ export class WarpViewEditor {
         });
       }
       this.resize(true);
-      const panel1 = document.querySelector('div.panel1');
-      if (panel1) {
-        Utils.detectResize(panel1).addResizeListener(() => {
-          this.resize(false);
-        });
-      }
     } catch (e) {
       this.LOG.error(['WarpViewEditor'], 'componentDidLoad', e);
     }
@@ -351,8 +351,12 @@ export class WarpViewEditor {
     if (this.ed) {
       this.ed.dispose();
     }
+    this.ro.disconnect();
   }
 
+  /**
+   *
+   */
   @Method()
   abort() {
     this.abortController.abort();
@@ -429,27 +433,28 @@ export class WarpViewEditor {
     this.warpViewEditorDatavizRequested.emit(this.result);
   }
 
+  /**
+   *
+   * @param event
+   */
+  @Listen('document:resize')
+  @Listen('resized')
+  onResized(event) {
+    this.LOG.debug(['onResized'], event.detail.editor);
+    this.warpViewEditorSize.emit(event.detail.editor);
+  }
 
+  /**
+   *
+   * @param {boolean} initial
+   */
   @Method()
   resize(initial: boolean) {
     window.setTimeout(() => {
-      if (this.layout) {
-        let h: number = !!this.heightPx && initial
-          ? this.heightPx
-          : Math.max(this.editor.parentElement.getBoundingClientRect().height, ((this.heightLine || this.ed.getModel().getLineCount()) * 19));
-        if (!initial) {
-          h = Math.min(h, this.editor.parentElement.getBoundingClientRect().height);
-        }
-        this.editor.style.height = (h - this.buttons.getBoundingClientRect().height) + 'px';
-        this.editor.style.width = this.editor.parentElement.getBoundingClientRect().width + 'px';
-
-        this.warpViewEditorSize.emit({
-          h: (h - this.buttons.getBoundingClientRect().height),
-          w: this.editor.parentElement.getBoundingClientRect().width
-        });
+      if (initial) {
+        this.editor.style.height = `calc(100% - ${this.buttons ? this.buttons.getBoundingClientRect().height : 100}px )`;
+        this.warpViewEditorLoaded.emit();
       }
-      this.ed.layout();
-      this.warpViewEditorLoaded.emit();
     }, initial ? 500 : 100);
   }
 
@@ -472,85 +477,61 @@ export class WarpViewEditor {
       </button>
       : '';
 
+    // noinspection ThisExpressionReferencesGlobalObjectJS
     const message =
       this.status && this.displayMessages ?
         <div class={this.innerConfig.messageClass}>{this.status.message}</div>
         : '';
 
-    // noinspection JSXNamespaceValidation
+    // noinspection ThisExpressionReferencesGlobalObjectJS
     const error = this.error && this.displayMessages ?
       <div class={this.innerConfig.errorClass}>{this.error}</div> : '';
 
-    const nonTabbedClasses = {
-      'layout': true,
-      'horizontal-layout': !!this.horizontalLayout,
-      'vertical-layout': !this.horizontalLayout,
-    };
 
+    // noinspection ThisExpressionReferencesGlobalObjectJS
+    return <div class={'wrapper-main ' + this.theme} ref={(el) => this.wrapper = el as HTMLDivElement}>
+      <wc-split items={[
+        {
+          name: 'editor',
+          'size': this.initialSize ? this.initialSize.p || 50 : 50
+        }, {
+          'name': 'result',
+          'size': this.initialSize ? 100 - this.initialSize.p || 50 : 50
+        }
+      ]}>
+        <div slot="editor" class="editor-wrapper">
+          <div ref={(el) => this.editor = el as HTMLDivElement}/>
+          {loading}
+          <div class={'warpview-buttons ' + this.innerConfig.buttons.class}
+               ref={(el) => this.buttons = el as HTMLDivElement}>
+            {datavizBtn}
+            {execBtn}
+            {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
+          </div>
+        </div>
+        <div slot="result">
+          <wc-tabs>
+            <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
+            <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
 
-    return <div>
+            <wc-tabs-content slot='content' name='tab1'>
+              <div class="tab-wrapper">
+                <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
+              </div>
+            </wc-tabs-content>
+
+            <wc-tabs-content slot='content' name='tab2'>
+              <div class="tab-wrapper">
+                <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
+              </div>
+            </wc-tabs-content>
+          </wc-tabs>
+        </div>
+      </wc-split>
       <div class='warpscript'>
         <slot/>
       </div>
-      {!!this.tabbed
-        ? <div ref={(el) => this.layout = el as HTMLDivElement}>
-          <div class={'wrapper-tabbed ' + this.theme}>
-            <wc-tabs>
-              <wc-tabs-header slot='header' name='tab1'>Editor</wc-tabs-header>
-              <wc-tabs-header slot='header' name='tab2' disabled={!this.result}>Stack</wc-tabs-header>
-              <wc-tabs-header slot='header' name='tab3' disabled={!this.result}>Raw JSON</wc-tabs-header>
-
-              <wc-tabs-content slot='content' name='tab1'>
-                <div class='editor-wrapper'>
-                  <div ref={(el) => this.editor = el as HTMLDivElement}/>
-                </div>
-                <div class={'editor-buttons ' + this.innerConfig.buttons.class}>{datavizBtn} {execBtn}</div>
-                {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
-              </wc-tabs-content>
-              <wc-tabs-content slot='content' name='tab2'>
-                <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-              </wc-tabs-content>
-              <wc-tabs-content slot='content' name='tab3'>
-                <div class='result-wrapper'>
-                  <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-                </div>
-              </wc-tabs-content>
-            </wc-tabs>
-          </div>
-        </div>
-        : <div ref={(el) => this.layout = el as HTMLDivElement} class={nonTabbedClasses}>
-            <div class='panel1'>
-              <div ref={(el) => this.editor = el as HTMLDivElement}/>
-              {loading}
-              <div class={this.innerConfig.buttons.class} ref={(el) => this.buttons = el as HTMLDivElement}>
-                {datavizBtn}
-                {execBtn}
-              </div>
-            </div>
-            <div class='panel2'>
-              {this.error || this.result ? <div class='messages'>{message} {error}</div> : ''}
-              {!!this.result
-                ? <div>
-                  <div class={'wrapper ' + this.theme}>
-                    <wc-tabs>
-                      <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
-                      <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
-
-                      <wc-tabs-content slot='content' name='tab1'>
-                        <warp-view-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-                      </wc-tabs-content>
-
-                      <wc-tabs-content slot='content' name='tab2'>
-                        <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
-                      </wc-tabs-content>
-                    </wc-tabs>
-                  </div>
-                </div>
-                : ''
-              }
-            </div>
-        </div>
-      }
     </div>;
   }
+
 }

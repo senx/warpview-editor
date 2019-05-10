@@ -1,5 +1,5 @@
 /*!
- *  Copyright 2018  SenX S.A.S.
+ *  Copyright 2019  SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  */
 
 warp-view-result {
+  position: relative;
+  overflow-y: auto;
+
+  .wrapper-result {
+    width: 100%;
+  }
+
   .loader .spinner {
     border: 5px solid #f3f3f3;
     -webkit-animation: spin 1s linear infinite;
@@ -69,7 +76,7 @@ warp-view-result {
   }
 
   .wrapper {
-    max-width: calc(100% - 4em);
+    //   max-width: calc(100% - 4em);
     &.dark {
       background-color: #1e1e1e !important;
       color: #fff;
@@ -106,6 +113,7 @@ warp-view-result {
         white-space: -o-pre-wrap;
         word-wrap: break-word;
       }
+
       .line-num {
         color: #2b91af;
       }
@@ -129,6 +137,7 @@ warp-view-result {
         white-space: -o-pre-wrap;
         word-wrap: break-word;
       }
+
       .line-num {
         color: #5a5a5a;
       }

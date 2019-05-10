@@ -29,7 +29,8 @@
   ],
   "scripts": {
     "build": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\"",
-    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --es5 --watch\" \"stencil-dev-server\"",
+    "dev": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --watch\" \"stencil-dev-server\"",
+    "dev:ff": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --dev --es5 --watch\" \"stencil-dev-server\"",
     "serve": "stencil-dev-server",
     "start": "sd concurrent \"node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/.bin/stencil build --prod\" \"stencil-dev-server\"",
     "test": "jest --no-cache",
@@ -37,10 +38,11 @@
     "test.watch": "jest --watch --no-cache"
   },
   "dependencies": {
-    "@giwisoft/wc-split": "^0.0.5",
-    "@giwisoft/wc-tabs": "^0.0.5",
+    "@giwisoft/wc-split": "0.0.7",
+    "@giwisoft/wc-tabs": "0.0.7",
     "abortcontroller-polyfill": "^1.3.0",
     "monaco-editor": "0.15.6",
+    "resize-observer-polyfill": "^1.5.1",
     "whatwg-fetch": "3.0.0"
   },
   "devDependencies": {

@@ -43,8 +43,9 @@
 <body class="d-flex flex-column vh-100 align-items-stretch">
 
 <main role="main" class="container flex-fill">
+<h1>WarpView Editor</h1>
   <div class="card">
-    <div class="card-body">
+    <div class="card-body" style="min-height: 600px">
       <!--suppress HtmlUnknownTag -->
       <warp-view-editor url="https://warp.senx.io/api/v0/exec" theme="dark" id="editor"
                         show-dataviz="false" show-execute="true"
@@ -60,7 +61,26 @@
                         "readOnly": false,
                         "hover": true
                         }'
-      >[ "a" "b" "b,c,f" 5 6 ]</warp-view-editor>
+      >@training/dataset0
+// warp.store.hbase.puts.committed is the number of datapoints committed to
+// HBase since the restart of the Store daemon
+[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
+[ SWAP mapper.rate 1 0 0 ] MAP
+
+// Keep only 1000 datapoints per GTS
+1000 LTTB
+DUP
+// Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
+5 false ESDTEST
+// Convert the ticks identified by ESDTEST into an annotation GTS
+<%
+ DROP 		// excude element index
+ NEWGTS 	// create a new GTS
+ SWAP 		// get timestamp list
+ <% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
+%> LMAP
+2 ->LIST // Put our GTS in a list
+ZIP // merge into a list of GTS</warp-view-editor>
     </div>
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>
@@ -68,7 +88,7 @@
     </div>
   </div>
 </main>
-<script language="JavaScript">
+<script >
   $(document).ready(() => {
     $('#abort').click(function () {
       document.getElementById('editor').abort();
