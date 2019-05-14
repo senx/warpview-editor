@@ -117,6 +117,8 @@ export class WarpViewEditor {
   @Event() warpViewEditorDatavizRequested: EventEmitter;
   @Event() warpViewEditorLoaded: EventEmitter;
   @Event() warpViewEditorSize: EventEmitter;
+  @Event() warpViewEditorBreakPoint: EventEmitter;
+
 
   @State() result: any[];
   @State() status: { message: string, ops: number, elapsed: number, fetched: number };
@@ -133,6 +135,9 @@ export class WarpViewEditor {
   private buttons: HTMLDivElement;
   private monacoTheme = 'vs';
   private innerCode: string;
+  private breakpoints = {};
+  private decoration = [];
+
   private innerConfig: Config = {
     buttons: {
       class: '',
@@ -153,7 +158,8 @@ export class WarpViewEditor {
       quickSuggestionsDelay: 10,
       quickSuggestions: true,
       tabSize: 2,
-      minLineNumber: 10
+      minLineNumber: 10,
+      enableDebug: false
     },
   };
   ro: ResizeObserver;
@@ -326,9 +332,19 @@ export class WarpViewEditor {
         hover: this.innerConfig.hover,
         readOnly: this.innerConfig.readOnly,
         folding: true,
+        glyphMargin: this.innerConfig.editor.enableDebug,
       };
       this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
       this.ed = monaco.editor.create(this.editor, edOpts);
+      if(this.innerConfig.editor.enableDebug) {
+        this.ed.onMouseDown(e => {
+          if(e.event.leftButton) {
+            if(e.target.type === 2 || e.target.type === 3 || e.target.type === 4) {
+              this.toggleBreakPoint(e.target.position.lineNumber);
+            }
+          }
+        });
+      }
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
       if (this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
@@ -360,6 +376,50 @@ export class WarpViewEditor {
   @Method()
   abort() {
     this.abortController.abort();
+  }
+
+  @Method()
+  displayResult(result: string) {
+    this.result = new JsonLib().parse(result, undefined);
+  }
+
+  /**
+   *
+   * @param {number} line
+   */
+  @Method()
+  highlight(line: number) {
+    const currentKey = 'hl-' + line;
+    Object.keys(this.breakpoints).forEach(k => {
+      if (k.startsWith('hl')) {
+        delete this.breakpoints[k];
+      }
+    });
+    this.breakpoints[currentKey] = {
+      range: new monaco.Range(line, 1, line, 1),
+      options: {
+        isWholeLine: true,
+        className: 'warpviewContentClass'
+      }
+    };
+    this.decoration = this.ed.deltaDecorations(this.decoration, Utils.toArray(this.breakpoints));
+  }
+
+  private toggleBreakPoint(line: number) {
+    const currentKey = 'bp-' + line;
+    if (this.breakpoints[currentKey]) {
+      delete this.breakpoints[currentKey];
+    } else {
+      this.breakpoints[currentKey] = {
+        range: new monaco.Range(line, 1, line, 1),
+        options: {
+          isWholeLine: true,
+          glyphMarginClassName: 'warpviewGlyphMarginClass'
+        }
+      }
+    }
+    this.warpViewEditorBreakPoint.emit(this.breakpoints);
+    this.decoration = this.ed.deltaDecorations(this.decoration, Utils.toArray(this.breakpoints));
   }
 
   /**

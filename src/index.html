@@ -59,7 +59,7 @@
                        "execButton" : { "class" : "btn btn-success" },
                        "datavizButton" : { "class" : "btn btn-success" },
                         "readOnly": false,
-                        "hover": true
+                        "hover": true, "editor": {"enableDebug": true}
                         }'
       >@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
@@ -85,6 +85,7 @@ ZIP // merge into a list of GTS</warp-view-editor>
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>
       <span id="size"></span>
+      <span id="breakpoints"></span>
     </div>
   </div>
 </main>
@@ -95,6 +96,9 @@ ZIP // merge into a list of GTS</warp-view-editor>
     });
     document.addEventListener('warpViewEditorSize', function (e) {
       $('#size').text(JSON.stringify(e.detail));
+    });
+    document.addEventListener('warpViewEditorBreakPoint', function (e) {
+      $('#breakpoints').text(JSON.stringify(e.detail));
     });
   });
 

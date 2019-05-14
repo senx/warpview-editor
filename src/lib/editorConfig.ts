@@ -19,4 +19,5 @@ export class EditorConfig {
   quickSuggestions?: boolean = true;
   tabSize?: number = 2;
   minLineNumber?: number = 10;
+  enableDebug?: boolean = false;
 }
