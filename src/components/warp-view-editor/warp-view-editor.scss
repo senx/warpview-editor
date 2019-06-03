@@ -18,6 +18,10 @@ warp-view-editor {
   height: 100%;
   width: 100%;
 
+  &text {
+    color: lime;
+  }
+
   & > div {
     width: 100%;
     height: 100%;
@@ -48,7 +52,6 @@ warp-view-editor {
     bottom: 0;
     right: 0;
     margin: 10px;
-
     &.dark {
       background-color: #1e1e1e;
       color: #f8f9fa;

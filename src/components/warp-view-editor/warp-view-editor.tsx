@@ -195,7 +195,7 @@ export class WarpViewEditor {
     }
     this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
-    // this.el.textContent = this.el.textContent.replace(this.innerCode, '');
+ //   this.el.textContent = this.el.textContent.replace(this.innerCode, '');
     //add blank lines when needed
     for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
       this.innerCode += '\n';
@@ -325,6 +325,7 @@ export class WarpViewEditor {
         theme: this.monacoTheme,
         hover: this.innerConfig.hover,
         readOnly: this.innerConfig.readOnly,
+        fixedOverflowWidgets: true,
         folding: true,
       };
       this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
@@ -391,8 +392,20 @@ export class WarpViewEditor {
               fetched: parseInt(response.headers.get('x-warp10-fetched'))
             };
             this.warpViewEditorStatusEvent.emit(this.status);
-            const parsed = new JsonLib().parse(res, undefined);
-            this.result = [...parsed];
+
+            try {
+              const parsed = new JsonLib().parse(res, undefined);
+              this.result = [...parsed];
+            } catch (e) {
+              if (e.name && e.message && e.at && e.text) {
+                this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
+              } else {
+                this.error = e.toString();
+              }
+              this.result = [res];
+              this.LOG.error(['execute'], this.error);
+              this.warpViewEditorErrorEvent.emit(this.error);
+            }
             this.loading = false;
           }, err => {
             this.error = err;
@@ -500,6 +513,9 @@ export class WarpViewEditor {
         }
       ]}>
         <div slot="editor" class="editor-wrapper">
+          <div class='warpscript'>
+            <slot/>
+          </div>
           <div ref={(el) => this.editor = el as HTMLDivElement}/>
           {loading}
           <div class={'warpview-buttons ' + this.innerConfig.buttons.class}
@@ -528,9 +544,7 @@ export class WarpViewEditor {
           </wc-tabs>
         </div>
       </wc-split>
-      <div class='warpscript'>
-        <slot/>
-      </div>
+
     </div>;
   }
 

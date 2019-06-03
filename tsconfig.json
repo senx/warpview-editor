@@ -4,6 +4,8 @@
     "allowUnreachableCode": false,
     "declaration": false,
     "experimentalDecorators": true,
+    "declarationMap": false,
+    "sourceMap": false,
     "lib": [
       "dom",
       "es2015",
