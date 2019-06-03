@@ -37,6 +37,7 @@ export class Config {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,
     tabSize: 2,
-    minLineNumber: 10
+    minLineNumber: 10,
+    enableDebug: false
   };
 }

@@ -54,4 +54,15 @@ export class Utils {
     }
   };
 
+  /**
+   *
+   * @param obj
+   * @return {any[]}
+   */
+  static toArray(obj: any): any[] {
+    const arr = [];
+    Object.keys(obj).forEach(k => arr.push(obj[k]));
+    return arr;
+  }
+
 }

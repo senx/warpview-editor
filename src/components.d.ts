@@ -38,9 +38,11 @@ declare global {
       'config': Config | string;
       'debug': boolean;
       'displayMessages': boolean;
+      'displayResult': (result: string) => void;
       'execute': () => void;
       'heightLine': number;
       'heightPx': number;
+      'highlight': (line: number) => void;
       'horizontalLayout': boolean;
       'initialSize': { w: number, h: number, name?: string, p: number };
       'resize': (initial: boolean) => void;
@@ -80,6 +82,7 @@ declare global {
       'heightPx'?: number;
       'horizontalLayout'?: boolean;
       'initialSize'?: { w: number, h: number, name?: string, p: number };
+      'onWarpViewEditorBreakPoint'?: (event: CustomEvent) => void;
       'onWarpViewEditorDatavizRequested'?: (event: CustomEvent) => void;
       'onWarpViewEditorErrorEvent'?: (event: CustomEvent) => void;
       'onWarpViewEditorLoaded'?: (event: CustomEvent) => void;

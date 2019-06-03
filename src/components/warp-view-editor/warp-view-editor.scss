@@ -31,6 +31,18 @@ warp-view-editor {
     display: none;
   }
 
+
+  .warpviewGlyphMarginClass:after {
+    color: var(--warpview-editor-breakpoint-color, #ff0000);
+    font-size: 20px;
+    content: "●";
+    margin-left: 15px;
+  }
+
+  .warpviewContentClass {
+    background: var(--warpview-editor-selected-line-color, unquote('#00abc066'));
+  }
+
   .editor {
     position: absolute;
     left: 0;
