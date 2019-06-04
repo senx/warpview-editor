@@ -44,7 +44,7 @@ declare global {
       'heightPx': number;
       'highlight': (line: number) => void;
       'horizontalLayout': boolean;
-      'initialSize': { w: number, h: number, name?: string, p: number };
+      'initialSize': { w?: number, h?: number, name?: string, p?: number };
       'resize': (initial: boolean) => void;
       'showDataviz': boolean;
       'showExecute': boolean;
@@ -81,7 +81,7 @@ declare global {
       'heightLine'?: number;
       'heightPx'?: number;
       'horizontalLayout'?: boolean;
-      'initialSize'?: { w: number, h: number, name?: string, p: number };
+      'initialSize'?: { w?: number, h?: number, name?: string, p?: number };
       'onWarpViewEditorBreakPoint'?: (event: CustomEvent) => void;
       'onWarpViewEditorDatavizRequested'?: (event: CustomEvent) => void;
       'onWarpViewEditorErrorEvent'?: (event: CustomEvent) => void;

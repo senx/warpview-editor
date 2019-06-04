@@ -108,7 +108,7 @@ export class WarpViewEditor {
   @Prop() heightPx: number;
   @Prop() tabbed: boolean = false;
   @Prop() debug = false;
-  @Prop() initialSize: { w: number, h: number, name?: string, p: number };
+  @Prop() initialSize: { w?: number, h?: number, name?: string, p?: number };
 
   @Event() warpViewEditorStatusEvent: EventEmitter;
   @Event() warpViewEditorErrorEvent: EventEmitter;
@@ -201,7 +201,6 @@ export class WarpViewEditor {
     }
     this.LOG.debug(['componentWillLoad'], 'innerConfig: ', this.innerConfig, this.config);
     this.innerCode = this.el.textContent;
- //   this.el.textContent = this.el.textContent.replace(this.innerCode, '');
     //add blank lines when needed
     for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
       this.innerCode += '\n';
@@ -318,7 +317,6 @@ export class WarpViewEditor {
   componentDidLoad() {
     this.el.style.height = this.heightPx ? this.heightPx + 'px' : '100%';
     this.wrapper.style.height = this.heightPx ? this.heightPx + 'px' : (this.el.parentElement.clientHeight - 20) + 'px';
-    console.log('this.heightPx', this.heightPx, this.el.style.height);
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
       this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
@@ -563,15 +561,7 @@ export class WarpViewEditor {
 
     // noinspection ThisExpressionReferencesGlobalObjectJS
     return <div class={'wrapper-main ' + this.theme} ref={(el) => this.wrapper = el as HTMLDivElement}>
-      <wc-split items={[
-        {
-          name: 'editor',
-          'size': this.initialSize ? this.initialSize.p || 50 : 50
-        }, {
-          'name': 'result',
-          'size': this.initialSize ? 100 - this.initialSize.p || 50 : 50
-        }
-      ]}>
+      <wc-split items={this.getItems()}>
         <div slot="editor" class="editor-wrapper">
           <div class='warpscript'>
             <slot/>
@@ -585,7 +575,7 @@ export class WarpViewEditor {
             {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
           </div>
         </div>
-        <div slot="result">
+        { this.showExecute ? <div slot="result">
           <wc-tabs>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
@@ -602,10 +592,20 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
           </wc-tabs>
-        </div>
+        </div>: '' }
       </wc-split>
 
     </div>;
   }
 
+  private getItems() {
+    const headers = [];
+    if(this.showExecute) {
+      headers.push({name: 'editor',size: this.initialSize ? this.initialSize.p || 50 : 50});
+      headers.push({name: 'result',size: this.initialSize ? 100 - this.initialSize.p || 50 : 50});
+    } else {
+      headers.push({name: 'editor',size: 100});
+    }
+    return headers;
+  }
 }
