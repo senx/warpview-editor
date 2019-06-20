@@ -85,7 +85,7 @@ export class WarpViewRawResult {
    */
   buildEditor(json: string) {
     console.debug('[WarpViewRawResult] - buildEditor', json);
-    if (!this.resEd) {
+    if (!this.resEd &&json) {
       this.resEd = monaco.editor.create(
         this.editor, {
           value: '',
@@ -109,6 +109,7 @@ export class WarpViewRawResult {
     if (window) {
       window.addEventListener("resize",() => setTimeout(() => this.adjustHeight(), 0));
     }
+    this.loading = false;
   }
 
   adjustHeight() {
