@@ -64,7 +64,9 @@ export class WarpViewRawResult {
   resultHandler(newValue: any, _oldValue: any) {
     this.loading = true;
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue, _oldValue);
-    this.buildEditor(JSON.stringify(this.result));
+    if(newValue) {
+      this.buildEditor(JSON.stringify(this.result));
+    }
     this.loading = false;
   }
 

@@ -187,6 +187,7 @@ export class WarpViewEditor {
     this.LOG.debug(['warpscriptHandler'], 'The new value of warpscript is: ', newValue, oldValue);
     this.result = undefined;
     this.ed.setValue(newValue);
+    this.loading = false;
   }
 
   // noinspection JSUnusedGlobalSymbols
@@ -336,10 +337,10 @@ export class WarpViewEditor {
       };
       this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
       this.ed = monaco.editor.create(this.editor, edOpts);
-      if(this.innerConfig.editor.enableDebug) {
+      if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
-          if(e.event.leftButton) {
-            if(e.target.type === 2 || e.target.type === 3 || e.target.type === 4) {
+          if (e.event.leftButton) {
+            if (e.target.type === 2 || e.target.type === 3 || e.target.type === 4) {
               this.toggleBreakPoint(e.target.position.lineNumber);
             }
           }
@@ -416,7 +417,7 @@ export class WarpViewEditor {
           isWholeLine: true,
           glyphMarginClassName: 'warpviewGlyphMarginClass'
         }
-      }
+      };
     }
     this.warpViewEditorBreakPoint.emit(this.breakpoints);
     this.decoration = this.ed.deltaDecorations(this.decoration, Utils.toArray(this.breakpoints));
@@ -576,7 +577,7 @@ export class WarpViewEditor {
             {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
           </div>
         </div>
-        { this.showResult? <div slot="result">
+        {this.showResult ? <div slot="result">
           <wc-tabs>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
@@ -593,7 +594,7 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
           </wc-tabs>
-        </div>: '' }
+        </div> : ''}
       </wc-split>
 
     </div>;
@@ -601,11 +602,11 @@ export class WarpViewEditor {
 
   private getItems() {
     const headers = [];
-    if(this.showResult) {
-      headers.push({name: 'editor',size: this.initialSize ? this.initialSize.p || 50 : 50});
-      headers.push({name: 'result',size: this.initialSize ? 100 - this.initialSize.p || 50 : 50});
+    if (this.showResult) {
+      headers.push({name: 'editor', size: this.initialSize ? this.initialSize.p || 50 : 50});
+      headers.push({name: 'result', size: this.initialSize ? 100 - this.initialSize.p || 50 : 50});
     } else {
-      headers.push({name: 'editor',size: 100});
+      headers.push({name: 'editor', size: 100});
     }
     return headers;
   }
