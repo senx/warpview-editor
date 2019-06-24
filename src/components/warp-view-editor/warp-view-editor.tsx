@@ -601,7 +601,7 @@ export class WarpViewEditor {
 
   private getItems() {
     const headers = [];
-    if(this.showExecute) {
+    if(this.showResult) {
       headers.push({name: 'editor',size: this.initialSize ? this.initialSize.p || 50 : 50});
       headers.push({name: 'result',size: this.initialSize ? 100 - this.initialSize.p || 50 : 50});
     } else {
