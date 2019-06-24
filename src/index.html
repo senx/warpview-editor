@@ -100,6 +100,7 @@ ZIP // merge into a list of GTS</warp-view-editor>
     </div>
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>
+      <div class="btn btn-warning" id="inject">Inject Random WS</div>
       <span id="size"></span>
       <span id="breakpoints"></span>
     </div>
@@ -107,6 +108,9 @@ ZIP // merge into a list of GTS</warp-view-editor>
 </main>
 <script >
   $(document).ready(() => {
+    $('#inject').click(function () {
+      $('#editor').attr('warpscript', Math.random().toString(36));
+    });
     $('#abort').click(function () {
       document.getElementById('editor').abort();
     });

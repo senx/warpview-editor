@@ -61,9 +61,7 @@ export class WarpViewResult {
             </span>
               ))}
             </div>
-            : <div class='loader'>
-              <div class='spinner'/>
-            </div>
+            : ''
           }
       </div>
     );

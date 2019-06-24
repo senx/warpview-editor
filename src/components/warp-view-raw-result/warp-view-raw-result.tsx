@@ -64,9 +64,7 @@ export class WarpViewRawResult {
   resultHandler(newValue: any, _oldValue: any) {
     this.loading = true;
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue, _oldValue);
-    if(newValue) {
-      this.buildEditor(JSON.stringify(this.result));
-    }
+    this.buildEditor(JSON.stringify(this.result || ''));
     this.loading = false;
   }
 
@@ -87,12 +85,12 @@ export class WarpViewRawResult {
    */
   buildEditor(json: string) {
     console.debug('[WarpViewRawResult] - buildEditor', json);
-    if (!this.resEd &&json) {
+    if (!this.resEd && json) {
       this.resEd = monaco.editor.create(
         this.editor, {
           value: '',
           language: 'json',
-          minimap: { enabled : true },
+          minimap: {enabled: true},
           automaticLayout: true,
           scrollBeyondLastLine: false,
           theme: this.monacoTheme,
@@ -109,13 +107,13 @@ export class WarpViewRawResult {
     this.resEd.setValue(json);
     this.adjustHeight();
     if (window) {
-      window.addEventListener("resize",() => setTimeout(() => this.adjustHeight(), 0));
+      window.addEventListener('resize', () => setTimeout(() => this.adjustHeight(), 0));
     }
     this.loading = false;
   }
 
   adjustHeight() {
-    if(this.editor) {
+    if (this.editor) {
       const el = this.editor;
       const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
       const containerHeight = codeContainer.offsetHeight;
@@ -147,7 +145,7 @@ export class WarpViewRawResult {
   render() {
     // noinspection JSXNamespaceValidation
     return (
-      <div class={'wrapper ' + this.theme}>
+      <div class={'wrapper ' + this.theme}>{this.loading}
         {this.loading ?
           <div class="loader">
             <div class="spinner"/>
