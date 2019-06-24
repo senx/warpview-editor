@@ -48,6 +48,7 @@ declare global {
       'resize': (initial: boolean) => void;
       'showDataviz': boolean;
       'showExecute': boolean;
+      'showResult': boolean;
       'tabbed': boolean;
       'theme': string;
       'url': string;
@@ -92,6 +93,7 @@ declare global {
       'onWarpViewEditorWarpscriptResult'?: (event: CustomEvent) => void;
       'showDataviz'?: boolean;
       'showExecute'?: boolean;
+      'showResult'?: boolean;
       'tabbed'?: boolean;
       'theme'?: string;
       'url'?: string;

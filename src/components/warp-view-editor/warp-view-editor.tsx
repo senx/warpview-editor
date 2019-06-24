@@ -100,6 +100,7 @@ export class WarpViewEditor {
   @Prop() warpscript: string;
   @Prop() showDataviz = false;
   @Prop() showExecute = true;
+  @Prop() showResult = true;
   @Prop() horizontalLayout = false;
   @Prop() config: Config | string;
   @Prop() displayMessages = true;
@@ -575,7 +576,7 @@ export class WarpViewEditor {
             {this.error || this.result ? <div class='messages'>{message} {error}</div> : {loading}}
           </div>
         </div>
-        { this.showExecute ? <div slot="result">
+        { this.showResult? <div slot="result">
           <wc-tabs>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
