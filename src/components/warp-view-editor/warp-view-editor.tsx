@@ -185,7 +185,6 @@ export class WarpViewEditor {
   @Watch('warpscript')
   warpscriptHandler(newValue: string, oldValue: string) {
     this.LOG.debug(['warpscriptHandler'], 'The new value of warpscript is: ', newValue, oldValue);
-    this.result = undefined;
     this.ed.setValue(newValue);
     this.loading = false;
   }
