@@ -462,7 +462,7 @@ export class WarpViewEditor {
                 this.error = e.toString();
               }
               this.result = [res];
-              this.LOG.error(['execute'], this.error);
+              this.LOG.error(['execute 1'], this.error);
               this.warpViewEditorErrorEvent.emit(this.error);
             }
             this.loading = false;
@@ -470,22 +470,26 @@ export class WarpViewEditor {
             this.error = err;
             this.warpViewEditorErrorEvent.emit(this.error);
             this.loading = false;
-            this.LOG.error(['execute'], err);
+            this.LOG.error(['execute 2'], err);
           });
         } else {
           this.error = response.statusText;
           this.warpViewEditorErrorEvent.emit(this.error);
           this.loading = false;
-          this.LOG.error(['execute'], response.statusText);
+          this.LOG.error(['execute 3'], response.statusText);
         }
       }, err => {
         if (err.name === 'AbortError') {
           this.error = 'Aborted';
           this.warpViewEditorErrorEvent.emit(this.error);
-          this.LOG.debug(['execute'], 'aborted');
+          this.LOG.debug(['execute 4'], 'aborted');
         } else {
-          this.error = err;
-          this.LOG.error(['execute'], err);
+          if(err.name === 'TypeError') {
+            this.error = 'Unable to reach '+ this.url;
+          } else {
+            this.error = err.message || 'Unable to reach ' + this.url;
+          }
+          this.LOG.error(['execute 5'], {e: err});
         }
         this.warpViewEditorErrorEvent.emit(this.error);
         this.loading = false;
