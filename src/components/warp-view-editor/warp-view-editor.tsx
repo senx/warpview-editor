@@ -316,8 +316,11 @@ export class WarpViewEditor {
    *
    */
   componentDidLoad() {
-    this.el.style.height = this.heightPx ? this.heightPx + 'px' : '100%';
-    this.wrapper.style.height = this.heightPx ? this.heightPx + 'px' : (this.el.parentElement.clientHeight - 20) + 'px';
+    if (this.heightPx) { //override at element level
+      this.el.style.height = this.heightPx+'px';
+      this.wrapper.style.height = this.heightPx+'px';
+    }
+
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
       this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
