@@ -125,6 +125,7 @@ export class WarpViewEditor {
   @State() status: { message: string, ops: number, elapsed: number, fetched: number };
   @State() error: string;
   @State() loading = false;
+  @State() selectedResultTab: number = -1;
 
   private abortController: AbortController;
   private abortSignal: AbortSignal;
@@ -317,8 +318,8 @@ export class WarpViewEditor {
    */
   componentDidLoad() {
     if (this.heightPx) { //override at element level
-      this.el.style.height = this.heightPx+'px';
-      this.wrapper.style.height = this.heightPx+'px';
+      this.el.style.height = this.heightPx + 'px';
+      this.wrapper.style.height = this.heightPx + 'px';
     }
 
     try {
@@ -438,7 +439,17 @@ export class WarpViewEditor {
     if (this.ed) {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
-      fetch(this.url, {method: 'POST', body: this.ed.getValue(), signal: this.abortSignal}).then(response => {
+      //parse comments to look for inline url or preview modifiers
+      let modifiers: any = Utils.readCommentsModifiers(this.ed.getValue());
+      let previewType = modifiers.preview || "none";
+      if (previewType == 'imag') {
+        this.selectedResultTab = 2; //select image tab.
+      } else if (this.selectedResultTab == 2) {
+        this.selectedResultTab = 0; //on next execution, select results tab.
+      }
+      let executionUrl = modifiers.warp10URL || this.url;
+      console.log("preview",previewType)
+      fetch(executionUrl, { method: 'POST', body: this.ed.getValue(), signal: this.abortSignal }).then(response => {
         if (response.ok) {
           response.text().then(res => {
             this.LOG.debug(['execute'], 'response', res);
@@ -487,10 +498,10 @@ export class WarpViewEditor {
           this.warpViewEditorErrorEvent.emit(this.error);
           this.LOG.debug(['execute 4'], 'aborted');
         } else {
-          if(err.name === 'TypeError') {
-            this.error = 'Unable to reach '+ this.url;
+          if (err.name === 'TypeError') {
+            this.error = 'Unable to reach ' + executionUrl;
           } else {
-            this.error = err.message || 'Unable to reach ' + this.url;
+            this.error = err.message || 'Unable to reach ' + executionUrl;
           }
           this.LOG.error(['execute 5'], {e: err});
         }
@@ -584,9 +595,10 @@ export class WarpViewEditor {
           </div>
         </div>
         {this.showResult ? <div slot="result">
-          <wc-tabs>
+          <wc-tabs class='wctabs' selection={this.selectedResultTab}>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
+            <wc-tabs-header slot='header' name='tab3'>Images</wc-tabs-header>
 
             <wc-tabs-content slot='content' name='tab1'>
               <div class="tab-wrapper">
@@ -597,6 +609,12 @@ export class WarpViewEditor {
             <wc-tabs-content slot='content' name='tab2'>
               <div class="tab-wrapper">
                 <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
+              </div>
+            </wc-tabs-content>
+
+            <wc-tabs-content slot='content' name='tab3'>
+              <div class="tab-wrapper">
+                <warp-view-image-result theme={this.theme} result={this.result} config={this.innerConfig} />
               </div>
             </wc-tabs-content>
           </wc-tabs>
