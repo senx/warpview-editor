@@ -573,6 +573,8 @@ export class WarpViewEditor {
     window.setTimeout(() => {
       if (initial && (!!this.heightPx)) {
         this.editor.style.height = `calc(100% - ${this.buttons ? this.buttons.getBoundingClientRect().height : 100}px )`;
+      }
+      if (initial) {
         this.warpViewEditorLoaded.emit();
       }
     }, initial ? 500 : 100);
@@ -650,7 +652,7 @@ export class WarpViewEditor {
                 <warp-view-image-result theme={this.theme} result={this.result} config={this.innerConfig} />
               </div>
             </wc-tabs-content> : '' }
-            
+
           </wc-tabs>
         </div> : ''}
       </wc-split>
