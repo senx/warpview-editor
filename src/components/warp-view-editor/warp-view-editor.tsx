@@ -606,6 +606,7 @@ export class WarpViewEditor {
     const error = this.error && this.displayMessages ?
       <div class={this.innerConfig.errorClass}>{this.error}</div> : '';
 
+    const responsiveStyle = { height: '80%', width: '100%' }
 
     // noinspection ThisExpressionReferencesGlobalObjectJS
     return <div class={'wrapper-main ' + this.theme} ref={(el) => this.wrapper = el as HTMLDivElement}>
@@ -635,8 +636,8 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
 
-            <wc-tabs-content slot='content' name='tab2'>
-              <div class="tab-wrapper">
+            <wc-tabs-content slot='content' name='tab2' responsive='true' >
+              <div class="tab-wrapper" style={responsiveStyle} >
                 <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
               </div>
             </wc-tabs-content>
