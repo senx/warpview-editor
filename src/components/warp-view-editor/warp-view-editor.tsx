@@ -109,6 +109,7 @@ export class WarpViewEditor {
   @Prop() heightPx: number;
   @Prop() tabbed: boolean = false;
   @Prop() debug = false;
+  @Prop() imageTab = false;
   @Prop() initialSize: { w?: number, h?: number, name?: string, p?: number };
 
   @Event() warpViewEditorStatusEvent: EventEmitter;
@@ -628,7 +629,8 @@ export class WarpViewEditor {
           <wc-tabs class='wctabs' selection={this.selectedResultTab}>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
-            <wc-tabs-header slot='header' name='tab3'>Images</wc-tabs-header>
+            
+            {this.imageTab ? <wc-tabs-header slot='header' name='tab3'>Images</wc-tabs-header> : ''}
 
             <wc-tabs-content slot='content' name='tab1'>
               <div class="tab-wrapper">
@@ -642,11 +644,13 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
 
+            {this.imageTab ? 
             <wc-tabs-content slot='content' name='tab3'>
               <div class="tab-wrapper">
                 <warp-view-image-result theme={this.theme} result={this.result} config={this.innerConfig} />
               </div>
-            </wc-tabs-content>
+            </wc-tabs-content> : '' }
+            
           </wc-tabs>
         </div> : ''}
       </wc-split>
