@@ -107,6 +107,43 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface WarpViewImageResult {
+      'config': object;
+      'result': any[];
+      'theme': string;
+    }
+  }
+
+  interface HTMLWarpViewImageResultElement extends StencilComponents.WarpViewImageResult, HTMLStencilElement {}
+
+  var HTMLWarpViewImageResultElement: {
+    prototype: HTMLWarpViewImageResultElement;
+    new (): HTMLWarpViewImageResultElement;
+  };
+  interface HTMLElementTagNameMap {
+    'warp-view-image-result': HTMLWarpViewImageResultElement;
+  }
+  interface ElementTagNameMap {
+    'warp-view-image-result': HTMLWarpViewImageResultElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'warp-view-image-result': JSXElements.WarpViewImageResultAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WarpViewImageResultAttributes extends HTMLAttributes {
+      'config'?: object;
+      'result'?: any[];
+      'theme'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface WarpViewRawResult {
       'config': object;
       'heightLine': number;
