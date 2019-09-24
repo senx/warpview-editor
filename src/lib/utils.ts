@@ -100,7 +100,7 @@ export class Utils {
         }
       }
       else {
-        break; //no more comments at the beginning of the file
+        if (l > 0) { break; } //no more comments at the beginning of the file. two first lines could be empty
       }
     }
     return result;

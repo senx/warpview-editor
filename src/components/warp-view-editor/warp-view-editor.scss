@@ -31,6 +31,13 @@ warp-view-editor {
     display: none;
   }
 
+  .editor-wrapper {
+    overflow: auto;
+  }
+
+  .wctabs {
+    height: 100%;
+  }
 
   .warpviewGlyphMarginClass:after {
     color: var(--warpview-editor-breakpoint-color, #ff0000);
@@ -52,13 +59,13 @@ warp-view-editor {
     max-height: 100% !important;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+  //  overflow: hidden;
   }
 
   .wrapper-main {
-    height: calc(100% - 20px);
+    //height: calc(100% - 20px);
     width: calc(100% - 20px);
-    position: absolute;
+   // position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
@@ -86,7 +93,7 @@ warp-view-editor {
 
   div[slot] {
     height: 100%;
-    overflow: hidden;
+  //  overflow: hidden;
   }
 
   .tab-wrapper {

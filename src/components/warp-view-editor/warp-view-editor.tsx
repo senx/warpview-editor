@@ -139,6 +139,7 @@ export class WarpViewEditor {
   private innerCode: string;
   private breakpoints = {};
   private decoration = [];
+  private previousParentHeight = -1;
 
   private innerConfig: Config = {
     buttons: {
@@ -312,16 +313,44 @@ export class WarpViewEditor {
     }
   }
 
+
+  resizeWatcher() {
+    const editorParentHeight = this.editor.parentElement.getBoundingClientRect().height
+      - parseInt(window.getComputedStyle(this.editor.parentElement).getPropertyValue("padding-top"))
+      - parseInt(window.getComputedStyle(this.editor.parentElement).getPropertyValue("padding-bottom"));
+
+    const warpviewParentHeight = this.el.parentElement.getBoundingClientRect().height
+      - parseInt(window.getComputedStyle(this.el.parentElement).getPropertyValue("padding-top"))
+      - parseInt(window.getComputedStyle(this.el.parentElement).getPropertyValue("padding-bottom"));
+
+    //fix the 5px editor height in chrome by setting the wrapper height at element level
+    if (Math.abs(this.wrapper.getBoundingClientRect().height - warpviewParentHeight) > 30) {
+      console.log("putain, pas bon", this.wrapper.getBoundingClientRect().height, warpviewParentHeight)
+      this.LOG.debug(["resize"], "resize wrapper to parent height " + warpviewParentHeight)
+      this.wrapper.style.height = warpviewParentHeight + "px";
+    }
+    //watch for editor parent' size change
+    if (editorParentHeight != this.previousParentHeight) {
+      this.previousParentHeight = editorParentHeight;
+      // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
+      let editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.getBoundingClientRect().height : 0);
+      let editorW = Math.floor(this.editor.parentElement.getBoundingClientRect().width);
+      this.LOG.debug(["resize"], "resized editor to ", editorW, editorH)
+      this.ed.layout({ height: editorH, width: editorW });
+      this.editor.style.overflow = 'hidden';
+    }
+  }
   // noinspection JSUnusedGlobalSymbols
   /**
    *
    */
   componentDidLoad() {
-    if (this.heightPx) { //override at element level
+    if (!!this.heightPx) { //if height-px is set, size is fixed.
       this.el.style.height = this.heightPx + 'px';
       this.wrapper.style.height = this.heightPx + 'px';
+    } else {
+      setInterval(this.resizeWatcher.bind(this),200); //compute the layout manually in a 200ms timer
     }
-
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
       this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
@@ -330,7 +359,7 @@ export class WarpViewEditor {
         quickSuggestions: this.innerConfig.editor.quickSuggestions,
         value: this.warpscript || this.innerCode,
         language: this.WARPSCRIPT_LANGUAGE,
-        automaticLayout: true,
+        automaticLayout: (!!this.heightPx), //monaco auto layout is ok if parent has a fixed size, not 100% or a calc ( % px ) formula.
         theme: this.monacoTheme,
         hover: this.innerConfig.hover,
         readOnly: this.innerConfig.readOnly,
@@ -541,7 +570,7 @@ export class WarpViewEditor {
   @Method()
   resize(initial: boolean) {
     window.setTimeout(() => {
-      if (initial) {
+      if (initial && (!!this.heightPx)) {
         this.editor.style.height = `calc(100% - ${this.buttons ? this.buttons.getBoundingClientRect().height : 100}px )`;
         this.warpViewEditorLoaded.emit();
       }
