@@ -609,7 +609,7 @@ export class WarpViewEditor {
     const error = this.error && this.displayMessages ?
       <div class={this.innerConfig.errorClass}>{this.error}</div> : '';
 
-    const responsiveStyle = { height: '80%', width: '100%', overflow:'hidden' }
+    const responsiveStyle = { height: 'calc( 100% - 22px )', width: '100%', overflow:'hidden' }
 
     // noinspection ThisExpressionReferencesGlobalObjectJS
     return <div class={'wrapper-main ' + this.theme} ref={(el) => this.wrapper = el as HTMLDivElement}>
