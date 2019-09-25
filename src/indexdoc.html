@@ -153,7 +153,13 @@ line-height: 1.15;
     <div id="main" class="container">
 
       <h1>Typical doc layout</h1>
-      <h3>Example 1 (no height constain)</h3>
+
+      <p>Test for Chrome and Firefox</p>
+      <p>
+        Tests: play with resizable div, play with the editor/result splitter. The component height must remain stable, and always fit to target. 
+
+      </p>
+      <h3>Example 1 (min height 400 + height 400 on parent div)</h3>
 
       <div class="card mb-4">
         <div class="card-body warpscript-wrapper" style="min-height: 400px;height: 400px">
@@ -180,10 +186,10 @@ Pencode //render the image in a base64 format on the stack
         </div>
       </div>
 
-      <h3>Example 2 (height-px fixed to 400)</h3>
+      <h3>Example 2 (height-px fixed to 400 with the component height-px property)</h3>
 
       <div class="card mb-4">
-          <div class="card-body warpscript-wrapper" style="min-height: 400px">
+          <div class="card-body warpscript-wrapper" >
               <warp-view-editor url="https://warp.senx.io/api/v0/exec" image-tab="true" show-dataviz="false" height-px="400" show-execute="true" height-line="20" config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}" class="hydrated">
 //advanced example : create a random star background with motion blur, with a well known spaceship over it.
 // @preview image
@@ -276,6 +282,61 @@ Pencode //render the image to have a b64 png on the top of the stack.
   
   
         
+
+        <h3>Example 3 (min height 400, height 1000, one line script)</h3>
+
+        <div class="card mb-4">
+            <div class="card-body warpscript-wrapper" style="min-height: 400px; height: 1000px;">
+                <warp-view-editor url="https://warp.senx.io/api/v0/exec" image-tab="true" show-dataviz="false" show-execute="true" height-line="20" config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}" class="hydrated">1 100 <% { SWAP DUP TOSTRING SWAP } %> FOR</warp-view-editor>
+            </div>
+          </div>
+      
+        
+
+        <h3>Example 4 (min height 100, height 100 on parent div)</h3>
+
+        <div class="card mb-4">
+            <div class="card-body warpscript-wrapper" style="min-height: 100px; height: 100px;">
+                <warp-view-editor url="https://warp.senx.io/api/v0/exec" image-tab="true" show-dataviz="false" show-execute="true" height-line="20" config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}" class="hydrated">
+1 50 <% 
+"huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line "
+
+%> FOR
+                
+                </warp-view-editor>
+            </div>
+          </div>
+      
+          <h3>Example 5 (min height 300px on parent div)</h3>
+<p>Please never do that... Firefox don't like it.</p>
+          <div class="card mb-4">
+              <div class="card-body warpscript-wrapper" style="min-height: 300px">
+                  <warp-view-editor url="https://warp.senx.io/api/v0/exec" image-tab="true" show-dataviz="false" show-execute="true" height-line="20" config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}" class="hydrated">
+  1 20 <% 
+  "huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line "
+  
+  %> FOR
+                  
+                  </warp-view-editor>
+              </div>
+            </div>
+        
+
+          <h3>Example 6 (no height constrain at all on parent div)</h3>
+<p>Please never to do that... at least put a minimum height in the div. In the Raw JSON view, there will be a problem.</p>
+          <div class="card mb-4">
+              <div class="card-body warpscript-wrapper" style="">
+                  <warp-view-editor url="https://warp.senx.io/api/v0/exec" image-tab="true" show-dataviz="false" show-execute="true" height-line="20" config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}" class="hydrated">
+  1 20 <% 
+  "huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line huge line "
+  
+  %> FOR
+                  
+                  </warp-view-editor>
+              </div>
+            </div>
+        
+          
 
 
     </div>
