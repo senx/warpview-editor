@@ -94,7 +94,7 @@ export class WarpViewRawResult {
           automaticLayout: true,
           scrollBeyondLastLine: false,
           theme: this.monacoTheme,
-          readOnly: false,
+          readOnly: true,
           fixedOverflowWidgets: true,
           lineNumbers: 'on',
           wordWrap: 'on'
@@ -110,9 +110,10 @@ export class WarpViewRawResult {
     //console.log(this.resEd.getActions())
     
     //autoformat output if less than 1M
-    if (json.length < 1000000) {
-      this.resEd.getAction("editor.action.formatDocument").run();
-    }
+    // TODO : this steals focus... have to find a workaround.
+    // if (json.length < 1000000) {
+    //   this.resEd.getAction("editor.action.formatDocument").run();
+    // }
     
 
     if (window) {
