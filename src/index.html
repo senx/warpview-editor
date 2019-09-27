@@ -53,16 +53,33 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .resizable {
+      resize: both;
+      overflow: hidden;
+    }
+    
+    .movehandle {
+    height: 20px;
+    width: 20px;
+    top:0;
+    right: 0;
+    position: absolute;
+    background-color: lightgray;
+    border: none;
+    cursor:move;
+    background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
+    background-size: 20px 20px ;
+  }
   </style>
 </head>
 
 <body class="d-flex flex-column vh-100 align-items-stretch">
-
+<a href="indexdoc.html">doc test</a>
 <main role="main" class="container flex-fill">
 <h1>WarpView Editor</h1>
-  <div class="card">
-    <div class="card-body" style="min-height: 600px">
-      <!--suppress HtmlUnknownTag -->
+  <div class="card ">
+    <div class="card-body resizable" style="height: 500px; width: 100%;"> 
+
       <warp-view-editor url="https://warp.senx.io/api/v0/exec" theme="dark" id="editor"
                         show-dataviz="false" show-execute="true"
                         height-line="20"
@@ -97,6 +114,8 @@ DUP
 %> LMAP
 2 ->LIST // Put our GTS in a list
 ZIP // merge into a list of GTS</warp-view-editor>
+        
+
     </div>
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>

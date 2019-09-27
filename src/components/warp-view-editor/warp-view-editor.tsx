@@ -109,6 +109,7 @@ export class WarpViewEditor {
   @Prop() heightPx: number;
   @Prop() tabbed: boolean = false;
   @Prop() debug = false;
+  @Prop() imageTab = false;
   @Prop() initialSize: { w?: number, h?: number, name?: string, p?: number };
 
   @Event() warpViewEditorStatusEvent: EventEmitter;
@@ -125,6 +126,7 @@ export class WarpViewEditor {
   @State() status: { message: string, ops: number, elapsed: number, fetched: number };
   @State() error: string;
   @State() loading = false;
+  @State() selectedResultTab: number = -1;
 
   private abortController: AbortController;
   private abortSignal: AbortSignal;
@@ -138,6 +140,7 @@ export class WarpViewEditor {
   private innerCode: string;
   private breakpoints = {};
   private decoration = [];
+  private previousParentHeight = -1;
 
   private innerConfig: Config = {
     buttons: {
@@ -311,13 +314,44 @@ export class WarpViewEditor {
     }
   }
 
+
+  resizeWatcher() {
+    const editorParentHeight = this.editor.parentElement.getBoundingClientRect().height
+      - parseInt(window.getComputedStyle(this.editor.parentElement).getPropertyValue("padding-top"))
+      - parseInt(window.getComputedStyle(this.editor.parentElement).getPropertyValue("padding-bottom"));
+
+    const warpviewParentHeight = this.el.parentElement.getBoundingClientRect().height
+      - parseInt(window.getComputedStyle(this.el.parentElement).getPropertyValue("padding-top"))
+      - parseInt(window.getComputedStyle(this.el.parentElement).getPropertyValue("padding-bottom"));
+
+    //fix the 5px editor height in chrome by setting the wrapper height at element level
+    if (Math.abs(this.wrapper.getBoundingClientRect().height - warpviewParentHeight) > 30) {
+      console.log("putain, pas bon", this.wrapper.getBoundingClientRect().height, warpviewParentHeight)
+      this.LOG.debug(["resize"], "resize wrapper to parent height " + warpviewParentHeight)
+      this.wrapper.style.height = warpviewParentHeight + "px";
+    }
+    //watch for editor parent' size change
+    if (editorParentHeight != this.previousParentHeight) {
+      this.previousParentHeight = editorParentHeight;
+      // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
+      let editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.getBoundingClientRect().height : 0);
+      let editorW = Math.floor(this.editor.parentElement.getBoundingClientRect().width);
+      this.LOG.debug(["resize"], "resized editor to ", editorW, editorH)
+      this.ed.layout({ height: editorH, width: editorW });
+      this.editor.style.overflow = 'hidden';
+    }
+  }
   // noinspection JSUnusedGlobalSymbols
   /**
    *
    */
   componentDidLoad() {
-    this.el.style.height = this.heightPx ? this.heightPx + 'px' : '100%';
-    this.wrapper.style.height = this.heightPx ? this.heightPx + 'px' : (this.el.parentElement.clientHeight - 20) + 'px';
+    if (!!this.heightPx) { //if height-px is set, size is fixed.
+      this.el.style.height = this.heightPx + 'px';
+      this.wrapper.style.height = this.heightPx + 'px';
+    } else {
+      setInterval(this.resizeWatcher.bind(this),200); //compute the layout manually in a 200ms timer
+    }
     try {
       this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
       this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
@@ -326,7 +360,7 @@ export class WarpViewEditor {
         quickSuggestions: this.innerConfig.editor.quickSuggestions,
         value: this.warpscript || this.innerCode,
         language: this.WARPSCRIPT_LANGUAGE,
-        automaticLayout: true,
+        automaticLayout: (!!this.heightPx), //monaco auto layout is ok if parent has a fixed size, not 100% or a calc ( % px ) formula.
         theme: this.monacoTheme,
         hover: this.innerConfig.hover,
         readOnly: this.innerConfig.readOnly,
@@ -435,7 +469,17 @@ export class WarpViewEditor {
     if (this.ed) {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
-      fetch(this.url, {method: 'POST', body: this.ed.getValue(), signal: this.abortSignal}).then(response => {
+      //parse comments to look for inline url or preview modifiers
+      let modifiers: any = Utils.readCommentsModifiers(this.ed.getValue());
+      let previewType = modifiers.preview || "none";
+      if (previewType == 'imag') {
+        this.selectedResultTab = 2; //select image tab.
+      } else if (this.selectedResultTab == 2) {
+        this.selectedResultTab = 0; //on next execution, select results tab.
+      }
+      let executionUrl = modifiers.warp10URL || this.url;
+      console.log("preview",previewType)
+      fetch(executionUrl, { method: 'POST', body: this.ed.getValue(), signal: this.abortSignal }).then(response => {
         if (response.ok) {
           response.text().then(res => {
             this.LOG.debug(['execute'], 'response', res);
@@ -484,10 +528,10 @@ export class WarpViewEditor {
           this.warpViewEditorErrorEvent.emit(this.error);
           this.LOG.debug(['execute 4'], 'aborted');
         } else {
-          if(err.name === 'TypeError') {
-            this.error = 'Unable to reach '+ this.url;
+          if (err.name === 'TypeError') {
+            this.error = 'Unable to reach ' + executionUrl;
           } else {
-            this.error = err.message || 'Unable to reach ' + this.url;
+            this.error = err.message || 'Unable to reach ' + executionUrl;
           }
           this.LOG.error(['execute 5'], {e: err});
         }
@@ -527,8 +571,10 @@ export class WarpViewEditor {
   @Method()
   resize(initial: boolean) {
     window.setTimeout(() => {
-      if (initial) {
+      if (initial && (!!this.heightPx)) {
         this.editor.style.height = `calc(100% - ${this.buttons ? this.buttons.getBoundingClientRect().height : 100}px )`;
+      }
+      if (initial) {
         this.warpViewEditorLoaded.emit();
       }
     }, initial ? 500 : 100);
@@ -563,6 +609,7 @@ export class WarpViewEditor {
     const error = this.error && this.displayMessages ?
       <div class={this.innerConfig.errorClass}>{this.error}</div> : '';
 
+    const responsiveStyle = { height: 'calc( 100% - 22px )', width: '100%', overflow:'hidden' }
 
     // noinspection ThisExpressionReferencesGlobalObjectJS
     return <div class={'wrapper-main ' + this.theme} ref={(el) => this.wrapper = el as HTMLDivElement}>
@@ -581,9 +628,11 @@ export class WarpViewEditor {
           </div>
         </div>
         {this.showResult ? <div slot="result">
-          <wc-tabs>
+          <wc-tabs class='wctabs' selection={this.selectedResultTab}>
             <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
             <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>
+            
+            {this.imageTab ? <wc-tabs-header slot='header' name='tab3'>Images</wc-tabs-header> : ''}
 
             <wc-tabs-content slot='content' name='tab1'>
               <div class="tab-wrapper">
@@ -591,11 +640,19 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
 
-            <wc-tabs-content slot='content' name='tab2'>
-              <div class="tab-wrapper">
+            <wc-tabs-content slot='content' name='tab2' responsive='true' >
+              <div class="tab-wrapper" style={responsiveStyle} >
                 <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
               </div>
             </wc-tabs-content>
+
+            {this.imageTab ? 
+            <wc-tabs-content slot='content' name='tab3'>
+              <div class="tab-wrapper">
+                <warp-view-image-result theme={this.theme} result={this.result} config={this.innerConfig} />
+              </div>
+            </wc-tabs-content> : '' }
+
           </wc-tabs>
         </div> : ''}
       </wc-split>

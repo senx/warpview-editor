@@ -44,6 +44,7 @@ declare global {
       'heightPx': number;
       'highlight': (line: number) => void;
       'horizontalLayout': boolean;
+      'imageTab': boolean;
       'initialSize': { w?: number, h?: number, name?: string, p?: number };
       'resize': (initial: boolean) => void;
       'showDataviz': boolean;
@@ -82,6 +83,7 @@ declare global {
       'heightLine'?: number;
       'heightPx'?: number;
       'horizontalLayout'?: boolean;
+      'imageTab'?: boolean;
       'initialSize'?: { w?: number, h?: number, name?: string, p?: number };
       'onWarpViewEditorBreakPoint'?: (event: CustomEvent) => void;
       'onWarpViewEditorDatavizRequested'?: (event: CustomEvent) => void;
@@ -99,6 +101,43 @@ declare global {
       'url'?: string;
       'warpscript'?: string;
       'widthPx'?: number;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface WarpViewImageResult {
+      'config': object;
+      'result': any[];
+      'theme': string;
+    }
+  }
+
+  interface HTMLWarpViewImageResultElement extends StencilComponents.WarpViewImageResult, HTMLStencilElement {}
+
+  var HTMLWarpViewImageResultElement: {
+    prototype: HTMLWarpViewImageResultElement;
+    new (): HTMLWarpViewImageResultElement;
+  };
+  interface HTMLElementTagNameMap {
+    'warp-view-image-result': HTMLWarpViewImageResultElement;
+  }
+  interface ElementTagNameMap {
+    'warp-view-image-result': HTMLWarpViewImageResultElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'warp-view-image-result': JSXElements.WarpViewImageResultAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WarpViewImageResultAttributes extends HTMLAttributes {
+      'config'?: object;
+      'result'?: any[];
+      'theme'?: string;
     }
   }
 }

@@ -94,7 +94,7 @@ export class WarpViewRawResult {
           automaticLayout: true,
           scrollBeyondLastLine: false,
           theme: this.monacoTheme,
-          readOnly: false,
+          readOnly: true,
           fixedOverflowWidgets: true,
           lineNumbers: 'on',
           wordWrap: 'on'
@@ -102,12 +102,22 @@ export class WarpViewRawResult {
       );
     }
 
-    this.resEd.getModel().onDidChangeContent(() => setTimeout(() => this.adjustHeight(), 0));
-    this.resEd.onDidChangeModelDecorations(() => setTimeout(() => this.adjustHeight(), 0));
+    
+    //this.resEd.getModel().onDidChangeContent(() => setTimeout(() => this.adjustHeight(), 0));
+    //this.resEd.onDidChangeModelDecorations(() => setTimeout(() => this.adjustHeight(), 0));
     this.resEd.setValue(json);
-    this.adjustHeight();
+    //this.adjustHeight();
+    //console.log(this.resEd.getActions())
+    
+    //autoformat output if less than 1M
+    // TODO : this steals focus... have to find a workaround.
+    // if (json.length < 1000000) {
+    //   this.resEd.getAction("editor.action.formatDocument").run();
+    // }
+    
+
     if (window) {
-      window.addEventListener('resize', () => setTimeout(() => this.adjustHeight(), 0));
+      //window.addEventListener('resize', () => setTimeout(() => this.adjustHeight(), 0));
     }
     this.loading = false;
   }
