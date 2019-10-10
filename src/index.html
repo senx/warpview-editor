@@ -122,6 +122,7 @@ ZIP // merge into a list of GTS</warp-view-editor>
       <div class="btn btn-warning" id="inject">Inject Random WS</div>
       <span id="size"></span>
       <span id="breakpoints"></span>
+      <span id="ctrlclick"></span>
     </div>
   </div>
 </main>
@@ -138,6 +139,9 @@ ZIP // merge into a list of GTS</warp-view-editor>
     });
     document.addEventListener('warpViewEditorBreakPoint', function (e) {
       $('#breakpoints').text(JSON.stringify(e.detail));
+    });
+    document.addEventListener('warpViewEditorCtrlClick', function (e) {
+      $('#ctrlclick').text(JSON.stringify(e.detail));
     });
   });
 
