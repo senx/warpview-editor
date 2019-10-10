@@ -32,7 +32,7 @@ import {JsonLib} from '../../lib/jsonLib';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import ResizeObserver from 'resize-observer-polyfill';
 import 'whatwg-fetch';
-import { specialCommentCommands } from '../../lib/warpScriptParser';
+import { specialCommentCommands,docGenerationParams } from '../../lib/warpScriptParser';
 import WarpScriptParser from '../../lib/warpScriptParser';
 
 @Component({
@@ -408,11 +408,8 @@ export class WarpViewEditor {
               }
             }
           });
-          this.warpViewEditorCtrlClick.emit({
-            'repos': repos,
-            'endpoint': specialHeaders.endpoint || this.url,
-            'name': name
-          })
+          let docParams: docGenerationParams = { endpoint: specialHeaders.endpoint || this.url, macroName: name, wfRepos: repos };
+          this.warpViewEditorCtrlClick.emit(docParams);
         }
       });
     } catch (e) {

@@ -27,6 +27,7 @@ export interface specialCommentCommands {
   displayPreviewOpt?: string
 }
 
+export interface docGenerationParams { macroName: string; wfRepos: string[], endpoint: string };
 
 /**
  * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
