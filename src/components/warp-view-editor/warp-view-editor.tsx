@@ -668,7 +668,7 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
 
-            <wc-tabs-content slot='content' name='tab2' responsive='true' >
+            <wc-tabs-content slot='content' name='tab2' responsive={true} >
               <div class="tab-wrapper" style={responsiveStyle} >
                 <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
               </div>
