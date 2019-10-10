@@ -14,12 +14,7 @@
  *  limitations under the License.
  */
 
-/**
- * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
- * 
- * P.Papin 
- * 
- */
+
 
 
 /**
@@ -33,6 +28,10 @@ export interface specialCommentCommands {
 }
 
 
+/**
+ * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
+ *  
+ */
 export default class WarpScriptParser {
 
   
