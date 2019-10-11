@@ -66,44 +66,4 @@ export class Utils {
   }
 
 
-  static readCommentsModifiers(executedWarpScript: string): any {
-    let result: any = {};
-    let warpscriptlines = executedWarpScript.split('\n');
-    for (let l = 0; l < warpscriptlines.length; l++) {
-      let currentline = warpscriptlines[l];
-      if (currentline.startsWith("//")) {
-        //find and extract // @paramname parameters
-        let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
-        let lineonMatch: RegExpMatchArray | null;
-        let re = RegExp(extraparamsPattern);
-        while (lineonMatch = re.exec(currentline.replace('\r', ''))) {  //think about windows... \r\n in mc2 files !
-          let parametername = lineonMatch[1];
-          let parametervalue = lineonMatch[2];
-          switch (parametername) {
-            case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
-              result.warp10URL = parametervalue;   // overrides the Warp10URL configuration
-              break;
-            case "localmacrosubstitution":
-              result.substitutionWithLocalMacros = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
-              break;
-            case "timeunit":
-              if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
-                result.previewTimeUnit = parametervalue.trim();
-              }
-              break;
-            case "preview":
-              result.preview = parametervalue.toLowerCase().substr(0, 4)
-              break;
-            default:
-              break;
-          }
-        }
-      }
-      else {
-        if (l > 0) { break; } //no more comments at the beginning of the file. two first lines could be empty
-      }
-    }
-    return result;
-  }
-
 }

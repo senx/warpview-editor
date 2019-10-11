@@ -32,6 +32,8 @@ import {JsonLib} from '../../lib/jsonLib';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import ResizeObserver from 'resize-observer-polyfill';
 import 'whatwg-fetch';
+import { specialCommentCommands,docGenerationParams } from '../../lib/warpScriptParser';
+import WarpScriptParser from '../../lib/warpScriptParser';
 
 @Component({
   tag: 'warp-view-editor',
@@ -120,7 +122,7 @@ export class WarpViewEditor {
   @Event() warpViewEditorLoaded: EventEmitter;
   @Event() warpViewEditorSize: EventEmitter;
   @Event() warpViewEditorBreakPoint: EventEmitter;
-
+  @Event() warpViewEditorCtrlClick: EventEmitter;
 
   @State() result: any[];
   @State() status: { message: string, ops: number, elapsed: number, fetched: number };
@@ -387,6 +389,29 @@ export class WarpViewEditor {
         });
       }
       this.resize(true);
+      //manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
+      this.ed.onMouseDown(e => {
+        if (e.event.ctrlKey) {
+          // ctrl click on which word ?
+          let name: string = this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()).word;
+          // parse the warpscript
+          let ws: string = this.ed.getValue();
+          let specialHeaders: specialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
+          let repos: string[] = [];
+          let statements: string[] = WarpScriptParser.parseWarpScriptStatements(ws);
+          statements.forEach((st, i) => {
+            if (st == "WF.ADDREPO" && i > 0) {
+              let previousstatement = statements[i - 1];
+              if ((previousstatement.startsWith('"') && previousstatement.endsWith('"')) || (previousstatement.startsWith("'") && previousstatement.endsWith("'"))) {
+                // this is a valid string.
+                repos.push(previousstatement.substring(1, previousstatement.length - 1));
+              }
+            }
+          });
+          let docParams: docGenerationParams = { endpoint: specialHeaders.endpoint || this.url, macroName: name, wfRepos: repos };
+          this.warpViewEditorCtrlClick.emit(docParams);
+        }
+      });
     } catch (e) {
       this.LOG.error(['WarpViewEditor'], 'componentDidLoad', e);
     }
@@ -470,14 +495,14 @@ export class WarpViewEditor {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
       //parse comments to look for inline url or preview modifiers
-      let modifiers: any = Utils.readCommentsModifiers(this.ed.getValue());
-      let previewType = modifiers.preview || "none";
-      if (previewType == 'imag') {
+      let specialHeaders: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
+      let previewType = specialHeaders.displayPreviewOpt || "none";
+      if (previewType == 'I') {
         this.selectedResultTab = 2; //select image tab.
       } else if (this.selectedResultTab == 2) {
         this.selectedResultTab = 0; //on next execution, select results tab.
       }
-      let executionUrl = modifiers.warp10URL || this.url;
+      let executionUrl = specialHeaders.endpoint || this.url;
       console.log("preview",previewType)
       fetch(executionUrl, { method: 'POST', body: this.ed.getValue(), signal: this.abortSignal }).then(response => {
         if (response.ok) {
@@ -640,7 +665,7 @@ export class WarpViewEditor {
               </div>
             </wc-tabs-content>
 
-            <wc-tabs-content slot='content' name='tab2' responsive='true' >
+            <wc-tabs-content slot='content' name='tab2' responsive={true} >
               <div class="tab-wrapper" style={responsiveStyle} >
                 <warp-view-raw-result theme={this.theme} result={this.result} config={this.innerConfig}/>
               </div>
