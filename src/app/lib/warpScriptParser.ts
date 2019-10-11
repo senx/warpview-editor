@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019  SenX S.A.S.
+ *  Copyright 2019 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,14 +31,14 @@ export interface docGenerationParams { macroName: string; wfRepos: string[], end
 
 /**
  * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
- *  
+ *
  */
 export default class WarpScriptParser {
 
-  
+
 
   /**
-   * Unlike parseWarpScriptMacros, this function return a very simple list of statements (as strings), ignoring comments. 
+   * Unlike parseWarpScriptMacros, this function return a very simple list of statements (as strings), ignoring comments.
    * [ '"HELLO"' '"WORLD"' '+' '2' '2' '*' ]
    */
   public static parseWarpScriptStatements(ws: String): string[] {

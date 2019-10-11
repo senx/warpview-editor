@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018  SenX S.A.S.
+ *  Copyright 2019 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,14 +18,10 @@ import {Monarch} from '../../lib/monarch';
 import {WarpScript} from '../../lib/ref';
 import {globalfunctions as wsGlobals} from '../../lib/wsGlobals';
 import {Utils} from '../../lib/utils';
+import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../lib/config';
-import '@giwisoft/wc-tabs';
-import '@giwisoft/wc-split';
 import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-import ResizeObserver from 'resize-observer-polyfill';
-import 'whatwg-fetch';
 import WarpScriptParser, {docGenerationParams, specialCommentCommands} from '../../lib/warpScriptParser';
 import {
   AfterViewInit,
@@ -53,6 +49,12 @@ import register = languages.register;
 import registerHoverProvider = languages.registerHoverProvider;
 import registerCompletionItemProvider = languages.registerCompletionItemProvider;
 import create = editor.create;
+import setLanguageConfiguration = languages.setLanguageConfiguration;
+import setMonarchTokensProvider = languages.setMonarchTokensProvider;
+import '@giwisoft/wc-tabs';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+import 'whatwg-fetch';
+import '@giwisoft/wc-split';
 
 @Component({
   selector: 'warpview-editor',
@@ -226,9 +228,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // noinspection JSUnusedGlobalSymbols
-  /**
-   *
-   */
   ngOnInit() {
     if (typeof this.config === 'string') {
       this.innerConfig = Utils.mergeDeep(this.innerConfig, JSON.parse(this.config));
@@ -244,12 +243,12 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     if ('dark' === this._theme) {
       this.monacoTheme = 'vs-dark';
     }
-    this.LOG.debug(['ngOnInit'], 'componentWillLoad theme is: ', this._theme);
+    this.LOG.debug(['ngOnInit'], 'ngOnInit theme is: ', this._theme);
     if (!getLanguages().find(l => l.id === this.WARPSCRIPT_LANGUAGE)) {
       register({id: this.WARPSCRIPT_LANGUAGE});
       this.LOG.debug(['ngOnInit'], 'register: ', this.WARPSCRIPT_LANGUAGE);
-      languages.setMonarchTokensProvider(this.WARPSCRIPT_LANGUAGE, Monarch.rules);
-      languages.setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
+      setMonarchTokensProvider(this.WARPSCRIPT_LANGUAGE, Monarch.rules);
+      setLanguageConfiguration(this.WARPSCRIPT_LANGUAGE, {
           wordPattern: /[^\s\t]+/,
           comments: {
             lineComment: '//',
@@ -315,7 +314,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         provideHover: (model: IReadOnlyModel, position: Position) => {
           const word = model.getWordAtPosition(position);
           const range = new Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
-          this.LOG.debug(['componentWillLoad'], 'provideHover', model, position, word);
+          this.LOG.debug(['ngOnInit'], 'provideHover', model, position, word);
           const name = word.word;
           const entry = wsGlobals[name];
           if (entry && entry.description) {
@@ -391,8 +390,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       setInterval(this.resizeWatcher.bind(this), 200);
     }
     try {
-      this.LOG.debug(['componentDidLoad'], 'warpscript', this.warpscript);
-      this.LOG.debug(['componentDidLoad'], 'inner: ', this.innerCode);
+      this.LOG.debug(['ngAfterViewInit'], 'warpscript', this.warpscript);
+      this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode);
       const edOpts: IEditorConstructionOptions = {
         quickSuggestionsDelay: this.innerConfig.editor.quickSuggestionsDelay,
         quickSuggestions: this.innerConfig.editor.quickSuggestions,
@@ -406,7 +405,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         folding: true,
         glyphMargin: this.innerConfig.editor.enableDebug,
       };
-      this.LOG.debug(['componentDidLoad'], 'edOpts: ', edOpts);
+      this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -420,7 +419,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
       if (this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
-          this.LOG.debug(['componentDidLoad'], 'ws changed', event);
+          this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
           this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
       }
@@ -456,7 +455,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         }
       });
     } catch (e) {
-      this.LOG.error(['WarpViewEditor'], 'componentDidLoad', e);
+      this.LOG.error(['ngAfterViewInit'], 'componentDidLoad', e);
     }
   }
 

@@ -20,7 +20,7 @@
     <div slot="editor" class="editor-wrapper">
       <div class='warpscript'>
         <ng-content></ng-content>
-      </div>
+      </div>{{showResult}}
       <div #editor></div>
       <div class="loader" *ngIf="loading">
         <div class="spinner"></div>
@@ -36,9 +36,6 @@
         <div class='messages' *ngIf="error || result">
           <div *ngIf="status && displayMessages" [class]="innerConfig.messageClass" [innerHTML]="status.message"></div>
           <div *ngIf="error && displayMessages" [class]="innerConfig.errorClass" [innerHTML]="error"></div>
-        </div>
-        <div class="loader" *ngIf="!error && !result">
-          <div class="spinner"></div>
         </div>
       </div>
     </div>

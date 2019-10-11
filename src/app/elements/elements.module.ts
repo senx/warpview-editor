@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018  SenX S.A.S.
+ *  Copyright 2019 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -50,14 +50,6 @@ import {WarpViewResult} from './warp-view-result/warp-view-result';
 })
 export class ElementsModule {
   constructor(private injector: Injector) {
-    window['MonacoEnvironment'] = {
-      getWorkerUrl: (moduleId, label) => {
-        if (label === 'json') {
-          return '/assets/jsonWorker.js';
-        }
-        return '/assets/workerMain.js';
-      }
-    };
   }
 
   ngDoBootstrap() {
