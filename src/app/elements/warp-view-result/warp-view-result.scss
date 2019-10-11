@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-warp-view-result {
+:host {
   position: relative;
   overflow-y: auto;
 
@@ -125,8 +125,6 @@ warp-view-result {
       //noinspection CssInvalidPropertyValue
       pre {
         color: #fff;
-        font-family: "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-        font-weight: normal;
         font-size: 14px;
         line-height: 19px;
         min-height: 19px;

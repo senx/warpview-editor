@@ -18,22 +18,13 @@ export class GTSLib {
 
   static color = ['#4D4D4D', '#5DA5DA', '#FAA43A', '#60BD68', '#F17CB0', '#B2912F', '#B276B2', '#DECF3F', '#F15854', '#607D8B'];
 
-  /**
-   * Get a color from index
-   * @param i
-   * @returns {string}
-   */
   static getColor(i) {
     return GTSLib.color[i % GTSLib.color.length];
   }
 
-  /**
-   * Return a Set
-   * @param arr
-   * @returns {any[]}
-   */
   static unique(arr) {
-    let u = {}, a = [];
+    const u = {};
+    const a = [];
     for (let i = 0, l = arr.length; i < l; ++i) {
       if (!u.hasOwnProperty(arr[i])) {
         a.push(arr[i]);
@@ -43,13 +34,8 @@ export class GTSLib {
     return a;
   }
 
-  /**
-   * Convert hex to RGB
-   * @param hex
-   * @returns {number[]}
-   */
   static hexToRgb(hex) {
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [
       parseInt(result[1], 16),
       parseInt(result[2], 16),
@@ -57,21 +43,10 @@ export class GTSLib {
     ] : null;
   }
 
-  /**
-   * Add an alpha channel
-   * @param color
-   * @param {number} alpha
-   * @returns {string}
-   */
   static transparentize(color, alpha: number): string {
     return 'rgba(' + GTSLib.hexToRgb(color).concat(alpha).join(',') + ')';
   }
 
-  /**
-   * Test if value is an array
-   * @param value
-   * @returns {any | boolean}
-   */
   static isArray(value) {
     return value && typeof value === 'object' && value instanceof Array && typeof value.length === 'number'
       && typeof value.splice === 'function' && !(value.propertyIsEnumerable('length'));
@@ -138,11 +113,6 @@ export class GTSLib {
     return true;
   }
 
-  /**
-   *
-   * @param item
-   * @returns {boolean}
-   */
   static isPositionsArrayWithTwoValues(item) {
     if ((item === null) || (item.positions === null)) {
       return false;
@@ -161,7 +131,7 @@ export class GTSLib {
   }
 
   static metricFromJSON(json) {
-    let metric = {
+    const metric = {
       ts: json[0],
       value: undefined,
       alt: undefined,
@@ -197,19 +167,13 @@ export class GTSLib {
         l: json.l,
         a: json.a,
         v: json.v,
-        id: id,
+        id,
       },
     };
   }
 
-  /**
-   *
-   * @param jsonList
-   * @param prefixId
-   * @returns {{content: any[]}}
-   */
   static gtsFromJSONList(jsonList, prefixId) {
-    let gtsList = [];
+    const gtsList = [];
     let id;
     jsonList.forEach((item, i) => {
       let gts = item;
@@ -231,14 +195,14 @@ export class GTSLib {
         gtsList.push({
           image: gts,
           caption: 'Image',
-          id: id,
+          id,
         });
       }
       if (GTSLib.isEmbeddedImageObject(gts)) {
         gtsList.push({
           image: gts.image,
           caption: gts.caption,
-          id: id,
+          id,
         });
       }
     });
@@ -247,21 +211,17 @@ export class GTSLib {
     };
   }
 
-  /**
-   *
-   * @param arr1
-   * @returns {any}
-   */
   static flatDeep(arr1) {
-    return arr1.reduce((acc, val) => Array.isArray(val) ? acc.concat(GTSLib.flatDeep(val)) : acc.concat(val), []);
-  };
+    // tslint:disable-next-line:only-arrow-functions
+    return arr1.reduce(function(acc, val) {
+      if (Array.isArray(val)) {
+        acc.concat(GTSLib.flatDeep(val));
+      } else {
+        acc.concat(val);
+      }
+    }, []);
+  }
 
-  /**
-   *
-   * @param a
-   * @param r
-   * @returns {any}
-   */
   static flattenGtsIdArray(a, r) {
     let elem;
     let j;
@@ -282,7 +242,7 @@ export class GTSLib {
   }
 
   static serializeGtsMetadata(gts) {
-    let serializedLabels = [];
+    const serializedLabels = [];
     Object.keys(gts.l).forEach((key) => {
       serializedLabels.push(key + '=' + gts.l[key]);
     });
@@ -290,34 +250,33 @@ export class GTSLib {
   }
 
   static gtsToPath(gts) {
-    let path = [];
+    const path = [];
     // Sort values
-    gts.v = gts.v.sort(function(a, b) {
+    gts.v = gts.v.sort((a, b) => {
       return a[0] - b[0];
     });
-    for (let i = 0; i < gts.v.length; i++) {
-      let metric = gts.v[i];
-      if (metric.length === 2) {
+    gts.v.forEach((g, i) => {
+      if (g.length === 2) {
         // timestamp, value
       }
-      if (metric.length === 3) {
+      if (g.length === 3) {
         // timestamp, elevation, value
       }
-      if (metric.length === 4) {
+      if (g.length === 4) {
         // timestamp, lat, lon, value
-        path.push({ts: Math.floor(metric[0] / 1000), lat: metric[1], lon: metric[2], val: metric[3]});
+        path.push({ts: Math.floor(g[0] / 1000), lat: g[1], lon: g[2], val: g[3]});
       }
-      if (metric.length === 5) {
+      if (g.length === 5) {
         // timestamp, lat, lon, elevation, value
         path.push({
-          ts: Math.floor(metric[0] / 1000),
-          lat: metric[1],
-          lon: metric[2],
-          elev: metric[3],
-          val: metric[4],
+          ts: Math.floor(g[0] / 1000),
+          lat: g[1],
+          lon: g[2],
+          elev: g[3],
+          val: g[4],
         });
       }
-    }
+    });
     return path;
   }
 
@@ -330,7 +289,8 @@ export class GTSLib {
     if (a.c !== b.c) {
       return false;
     }
-    for (let p in a.l) {
+    // tslint:disable-next-line:forin
+    for (const p in a.l) {
       if (!b.l.hasOwnProperty(p)) {
         return false;
       }
@@ -338,7 +298,7 @@ export class GTSLib {
         return false;
       }
     }
-    for (let p in b.l) {
+    for (const p in b.l) {
       if (!a.l.hasOwnProperty(p)) {
         return false;
       }
@@ -397,9 +357,7 @@ export class GTSLib {
     if (gts.isSorted) {
       return;
     }
-    gts.v = gts.v.sort(function(a, b) {
-      return a[0] - b[0];
-    });
+    gts.v = gts.v.sort((a, b) => a[0] - b[0]);
     gts.isSorted = true;
   }
 
@@ -411,10 +369,6 @@ export class GTSLib {
     return [gts.v[0][0], gts.v[gts.v.length - 1][0]];
   }
 
-  /**
-   * Generate a guid
-   * @returns {string}
-   */
   static guid() {
     let uuid = '', i, random;
     for (i = 0; i < 32; i++) {

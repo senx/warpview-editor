@@ -1,42 +1,33 @@
 /*
- *  Copyright 2018  SenX S.A.S.
+ * Copyright 2019 SenX S.A.S.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
-/* tslint:disable:no-console */
 
 export class Logger {
 
   className: string;
-  isDebug: boolean = false;
+  isDebug = false;
 
-  /**
-   *
-   * @param className
-   * @param {boolean} isDebug
-   */
   constructor(className: any, isDebug: boolean = false) {
     this.className = className.name;
     this.isDebug = isDebug;
   }
 
-  /**
-   *
-   * @param {LEVEL} level
-   * @param {any[]} methods
-   * @param {any[]} args
-   */
+  setDebug(debug: boolean) {
+    this.isDebug = debug;
+  }
+
   log(level: LEVEL, methods: any[], args: any[]) {
     let logChain = [];
     logChain.push(`[${this.className}] ${methods.join(' - ')}`);
@@ -44,6 +35,7 @@ export class Logger {
     switch (level) {
       case LEVEL.DEBUG: {
         if (this.isDebug) {
+          // tslint:disable-next-line:no-console
           console.debug(...logChain);
         }
         break;
@@ -68,38 +60,18 @@ export class Logger {
     }
   }
 
-  /**
-   *
-   * @param {any[]} methods
-   * @param args
-   */
   debug(methods: any[], ...args: any[]) {
     this.log(LEVEL.DEBUG, methods, args);
   }
 
-  /**
-   *
-   * @param {any[]} methods
-   * @param args
-   */
   error(methods: any[], ...args: any[]) {
     this.log(LEVEL.ERROR, methods, args);
   }
 
-  /**
-   *
-   * @param {any[]} methods
-   * @param args
-   */
   warn(methods: any[], ...args: any[]) {
     this.log(LEVEL.WARN, methods, args);
   }
 
-  /**
-   *
-   * @param {any[]} methods
-   * @param args
-   */
   info(methods: any[], ...args: any[]) {
     this.log(LEVEL.INFO, methods, args);
   }
