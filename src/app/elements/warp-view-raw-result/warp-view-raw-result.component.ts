@@ -36,8 +36,7 @@ import create = editor.create;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor') editor: ElementRef;
-
+  @ViewChild('editor', {static: true}) editor: ElementRef;
   @Input() set theme(newValue: string) {
     // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue);
@@ -59,8 +58,9 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   @Input() set result(newValue: any[]) {
     this.loading = true;
     // tslint:disable-next-line:no-console
+    this._result = newValue;
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue);
-    this.buildEditor(JSON.stringify(this.result || ''));
+    this.buildEditor(JSON.stringify(this._result || ''));
     this.loading = false;
   }
 

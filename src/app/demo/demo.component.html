@@ -19,6 +19,7 @@
   <div class="card-body resizable" style="height: 500px; width: 100%;">
 
     <warpview-editor url="https://warp.senx.io/api/v0/exec"
+                     #editor
                      [theme]="'dark'" id="editor"
                      [showDataviz]="false" [showExecute]="true"
                      [heightLine]="20"
@@ -29,8 +30,9 @@
 
   </div>
   <div class="card-footer">
-    <div class="btn btn-danger" id="abort">Abort</div>
-    <div class="btn btn-warning" id="inject">Inject Random WS</div>
+    <div class="btn btn-primary"(click)="exec()">Exec</div>
+    <div class="btn btn-danger" (click)="abort()">Abort</div>
+    <div class="btn btn-warning">Inject Random WS</div>
     <span id="size"></span>
     <span id="breakpoints"></span>
     <span id="ctrlclick"></span>

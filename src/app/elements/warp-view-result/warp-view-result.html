@@ -16,9 +16,9 @@
 
 <div [class]="'wrapper-result ' + theme">
   <div *ngIf="result && isArray(result)" [class]="theme + ' raw'">
-<span *ngFor="let line of result; let index= $index" class="line">
+<span *ngFor="let line of result; let index= index" class="line">
               <pre class="line-num">{{index === 0 ? '[TOP]' : index + 1}}</pre>
-              <pre class="line-content">{{line | json}}</pre>
+              <pre class="line-content">{{stingify(line)}}</pre>
             </span>
   </div>
 </div>

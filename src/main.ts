@@ -19,8 +19,10 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import {AppModule} from './app/app.module';
 import {environment} from './environments/environment';
-import * as wcSplit from '@giwisoft/wc-split/dist/loader';
-import * as wcTabs from '@giwisoft/wc-tabs/dist/loader';
+import * as wcSplit from '@giwisoft/wc-split/loader';
+import * as wcTabs from '@giwisoft/wc-tabs/loader';
+import '@giwisoft/wc-split';
+import '@giwisoft/wc-tabs';
 
 if (environment.production) {
   enableProdMode();

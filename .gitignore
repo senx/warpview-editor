@@ -1,5 +1,3 @@
-ww@giwisoft/wc-splitw/
-
 *~
 *.sw[mnpcod]
 *.log
@@ -24,4 +22,4 @@ UserInterfaceState.xcuserstate
 .env
 dist/
 www/
-/src/vs/
+vs/

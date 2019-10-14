@@ -29,7 +29,8 @@ const routes: Routes = [
     {
       scrollPositionRestoration: 'enabled',
       onSameUrlNavigation: 'reload',
-      anchorScrolling: 'enabled'
+      anchorScrolling: 'enabled',
+      useHash: true
     }
   ),],
   exports: [RouterModule]

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'warpview-demo',
@@ -22,6 +22,7 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
+  @ViewChild('editor', {static: true}) editor: ElementRef<HTMLElement>;
   config = {
     quickSuggestionsDelay: 3000,
     suggestOnTriggerCharacters: false,
@@ -60,4 +61,13 @@ ZIP // merge into a list of GTS`;
   ngOnInit() {
   }
 
+  abort() {
+    // @ts-ignore
+    this.editor.abort();
+  }
+
+  exec() {
+    // @ts-ignore
+    this.editor.execute();
+  }
 }

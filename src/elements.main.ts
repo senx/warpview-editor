@@ -19,11 +19,15 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import {ElementsModule} from './app/elements/elements.module';
 import {environment} from './environments/environment';
+import * as wcSplit from '@giwisoft/wc-split/loader';
+import * as wcTabs from '@giwisoft/wc-tabs/loader';
 
 if (environment.production) {
   enableProdMode();
 }
-
+[wcSplit, wcTabs].forEach(wc => wc.defineCustomElements(window).then(() => {
+  // empty
+}).catch(err => console.log('main.ts', err)));
 platformBrowserDynamic().bootstrapModule(ElementsModule).then(ref => {
   // Ensure Angular destroys itself on hot reloads.
   if (window['ngRef']) {

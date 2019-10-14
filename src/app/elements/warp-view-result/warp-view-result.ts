@@ -38,4 +38,7 @@ export class WarpViewResult {
   isArray(arr: any) {
     return GTSLib.isArray(arr);
   }
+  stingify(str) {
+    return JSON.stringify(str)
+  }
 }
