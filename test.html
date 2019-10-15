@@ -23,7 +23,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Warp-View Editor</title>
   <script src="./elements/warpview-editor.js"></script>
-  <link rel="stylesheet" src="./elements/warpview-editor.css">
+  <link rel="stylesheet" href="./elements/warpview-editor.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -71,6 +71,8 @@
       background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
       background-size: 20px 20px ;
     }
+
+
   </style>
 </head>
 
@@ -95,7 +97,7 @@
                         "readOnly": false,
                         "hover": true, "editor": {"enableDebug": true}
                         }'
-      >@training/dataset0
+                        warpscript="@training/dataset0
         // warp.store.hbase.puts.committed is the number of datapoints committed to
         // HBase since the restart of the Store daemon
         [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
@@ -114,7 +116,8 @@
         <% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
         %> LMAP
         2 ->LIST // Put our GTS in a list
-        ZIP // merge into a list of GTS</warp-view-editor>
+        ZIP // merge into a list of GTS"
+      ></warp-view-editor>
 
 
     </div>
