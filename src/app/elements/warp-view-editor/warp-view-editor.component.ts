@@ -23,6 +23,7 @@ import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
 import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
 import {
+  AfterContentChecked,
   AfterViewInit,
   Component,
   ElementRef,
@@ -50,7 +51,7 @@ import create = editor.create;
   styleUrls: ['./warp-view-editor.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentChecked {
 
   @Input() url = '';
 
@@ -124,6 +125,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
   @ViewChild('buttons', {static: true}) buttons: ElementRef<HTMLDivElement>;
+  @ViewChild("content", {static: true}) contentWrapper: ElementRef;
 
   result: any[];
   status: { message: string, ops: number, elapsed: number, fetched: number };
@@ -269,8 +271,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
       if (this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
-          this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
-          this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+            this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
+            this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
         this.ed.onMouseDown(e => {
@@ -305,6 +307,21 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
     } catch (e) {
       this.LOG.error(['ngAfterViewInit'], 'componentDidLoad', e);
+    }
+  }
+
+
+  ngAfterContentChecked(): void {
+    if (this.contentWrapper.nativeElement.textContent !== this.innerCode) {
+      this.innerCode = this.contentWrapper.nativeElement.textContent;
+      // add blank lines when needed
+      for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
+        this.innerCode += '\n';
+      }
+      if (this.ed) {
+        this.LOG.debug(['ngAfterContentChecked'], this.innerCode);
+        this.ed.setValue(this.innerCode);
+      }
     }
   }
 

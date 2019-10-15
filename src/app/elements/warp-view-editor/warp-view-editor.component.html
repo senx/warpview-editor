@@ -21,7 +21,7 @@
   </div>
   <wc-split [items]="getItems()">
     <div slot="editor" class="editor-wrapper">
-      <div class='warpscript'>
+      <div class="warpscript" #content>
         <ng-content></ng-content>
       </div>
       <div #editor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
