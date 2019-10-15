@@ -15,6 +15,7 @@
  */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Config } from "../lib/config";
 
 @Component({
   selector: 'warpview-demo',
@@ -22,18 +23,19 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', {static: true}) editor: ElementRef<HTMLElement>;
+  @ViewChild('editor', { static: true }) editor: ElementRef<HTMLElement>;
   config = {
-    quickSuggestionsDelay: 3000,
-    suggestOnTriggerCharacters: false,
     messageClass: 'alert alert-info message',
     errorClass: 'alert alert-danger error',
-    execButton: {class: 'btn btn-success'},
-    datavizButton: {class: 'btn btn-success'},
+    execButton: { class: 'btn btn-success' },
+    datavizButton: { class: 'btn btn-success' },
     readOnly: false,
     hover: true,
-    editor: {enableDebug: true}
-  };
+    editor: {
+      enableDebug: true, quickSuggestionsDelay: 3000,
+      suggestOnTriggerCharacters: false
+    }
+  } as Config;
   warpscript = `@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
 // HBase since the restart of the Store daemon
@@ -55,6 +57,7 @@ SWAP // get timestamp list
 2 ->LIST // Put our GTS in a list
 ZIP // merge into a list of GTS`;
   ctrlClick: any;
+
   constructor() {
   }
 

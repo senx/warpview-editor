@@ -18,21 +18,21 @@ import {ButtonConfig} from './buttonConfig';
 import {EditorConfig} from './editorConfig';
 
 export class Config {
-  buttons: ButtonConfig = {
+  buttons?: ButtonConfig = {
     class: ''
   };
-  execButton: ButtonConfig = {
+  execButton?: ButtonConfig = {
     class: '',
     label: 'Execute'
   };
-  datavizButton: ButtonConfig = {
+  datavizButton?: ButtonConfig = {
     class: '',
     label: 'Visualize'
   };
-  hover = true;
-  readOnly = false;
-  messageClass = '';
-  errorClass = '';
+  hover? = true;
+  readOnly? = false;
+  messageClass? = '';
+  errorClass? = '';
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,
