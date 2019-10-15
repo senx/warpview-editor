@@ -1,5 +1,5 @@
 {
-  "name": "@senx/warpview-editor",
+  "name": "@giwisoft/warpview-editor",
   "version": "1.2.1",
   "description": "WarpScript editor",
   "repository": {
@@ -25,9 +25,10 @@
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist/"
+    "elements/"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build:elements",
     "ng": "ng",
     "dev": "yarn copy && ng serve",
     "build": "ng build",

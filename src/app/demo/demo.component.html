@@ -25,7 +25,19 @@
                      [heightLine]="20"
                      [horizontalLayout]="false" [debug]="true"
                      (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
-                     [config]="config">{{warpscript}}</warpview-editor>
+                     config='{
+  "messageClass": "alert alert-info message",
+  "errorClass": "alert alert-danger error",
+  "execButton" : { "class" : "btn btn-success" },
+  "datavizButton" : { "class" : "btn btn-success" },
+  "readOnly": false,
+  "hover": true,
+  "editor": {
+    "enableDebug": true,
+    "quickSuggestionsDelay":3000,
+    "suggestOnTriggerCharacters": false
+  }
+}'>{{warpscript}}</warpview-editor>
 
 
   </div>

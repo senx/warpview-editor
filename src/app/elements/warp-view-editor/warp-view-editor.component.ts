@@ -107,7 +107,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() horizontalLayout = false;
 
   @Input() set config(config: Config | string) {
-    let conf = (typeof config === 'string') ? JSON.parse(config) : config;
+    let conf = (typeof config === 'string') ? JSON.parse(config || '{}') : config || {};
     this.innerConfig = Utils.mergeDeep(this.innerConfig, conf);
     this.LOG.debug(['config'], this.innerConfig, conf);
     if(this.ed) {
@@ -153,6 +153,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   _warpscript: string;
   // tslint:disable-next-line:variable-name
   _debug = false;
+  lastKnownWS: string;
   private LOG: Logger;
   private ed: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
@@ -161,6 +162,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private decoration = [];
   private previousParentHeight = -1;
   private request: Subscription;
+  private initDone = false;
 
   innerConfig = new Config();
   ro: ResizeObserver;
@@ -171,7 +173,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   // noinspection JSUnusedGlobalSymbols
   ngOnInit() {
-    this.LOG.debug(['ngOnInit'], 'innerConfig: ', this.innerConfig, this.config);
+    this.LOG.debug(['ngOnInit'], 'innerConfig: ', this.innerConfig);
+    this.LOG.debug(['ngOnInit'], 'textContent: ', this.el.nativeElement.textContent, this.contentWrapper.nativeElement.innerText);
+    this.LOG.debug(['ngOnInit'], 'innerHTML: ', this.el.nativeElement.innerHTML, this.contentWrapper.nativeElement.innerHTML);
     this.innerCode = this.el.nativeElement.textContent;
     // add blank lines when needed
     for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
@@ -247,7 +251,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode);
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
       const edOpts: IEditorConstructionOptions = this.setOptions();
-      edOpts.value = this._warpscript || this.innerCode;
+      this.lastKnownWS = this._warpscript || this.innerCode;
+      edOpts.value = this.lastKnownWS;
       edOpts.theme = this.monacoTheme;
       edOpts.language = ProviderRegistrar.WARPSCRIPT_LANGUAGE;
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
@@ -264,8 +269,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.ed.getModel().updateOptions({ tabSize: this.innerConfig.editor.tabSize });
       if(this.ed) {
         this.ed.getModel().onDidChangeContent((event) => {
-          this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
-          this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+          if(this.lastKnownWS !== this.ed.getValue()) {
+            this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
+            this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+          }
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
         this.ed.onMouseDown(e => {
@@ -305,15 +312,19 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   ngAfterContentChecked(): void {
-    if(this.contentWrapper.nativeElement.textContent !== this.innerCode) {
-      this.innerCode = this.contentWrapper.nativeElement.textContent;
-      // add blank lines when needed
-      for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
-        this.innerCode += '\n';
-      }
-      if(this.ed) {
+    if(this.contentWrapper.nativeElement.textContent !== this.innerCode && !!this.lastKnownWS) {
+      if(!this.initDone) {
+        console.log('ngAfterContentChecked, contentWrapper', this.contentWrapper.nativeElement.innerHTML,  'text', this.contentWrapper.nativeElement.textContent);
+        console.log('ngAfterContentChecked, el', this.el.nativeElement.innerHTML, 'text', this.el.nativeElement.textContent);
+        this.innerCode = this.contentWrapper.nativeElement.textContent;
+        // add blank lines when needed
+        for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
+          this.innerCode += '\n';
+        }
         this.LOG.debug(['ngAfterContentChecked'], this.innerCode);
+        this.lastKnownWS = this.innerCode;
         this.ed.setValue(this.innerCode);
+        this.initDone = true;
       }
     }
   }

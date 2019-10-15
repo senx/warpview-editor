@@ -25,7 +25,8 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
 <html>
 <head>
   <title>Test</title>
-  <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/dist/warpview-editor.js"></script>
+  <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/elements/warpview-editor.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@senx/warpview-editor@x.x.x/elements/warpview-editor.css">
 </head>
 <body>
   <warp-view-editor url="https://warp.senx.io/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'
