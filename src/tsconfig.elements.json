@@ -1,6 +1,13 @@
 {
   "extends": "../tsconfig.json",
   "strictMetadataEmit": false,
+  "angularCompilerOptions": {
+    "enableResourceInlining": false
+  },
+  "lib": [
+    "es2017",
+    "dom"
+  ],
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "types": []

@@ -145,7 +145,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "warpview",
+      "prefix": "warpview-editor",
       "schematics": {},
       "architect": {
         "build": {
@@ -179,14 +179,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "none",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
+              "extractLicenses": false,
+              "vendorChunk": false,
               "buildOptimizer": false,
               "budgets": [
                 {
@@ -246,24 +246,6 @@
         }
       }
     },
-    "elements-e2e": {
-      "root": "projects/elements-e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/elements-e2e/protractor.conf.js",
-            "devServerTarget": "elements:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "elements:serve:production"
-            }
-          }
-        }}
-    }
   },
   "defaultProject": "warpview-editor"
 }

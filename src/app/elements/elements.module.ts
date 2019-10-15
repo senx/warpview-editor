@@ -47,7 +47,12 @@ import {GTSLib} from '../lib/gts.lib';
   ],
   providers: [GTSLib],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: []
+  entryComponents: [
+    WarpViewEditorComponent,
+    WarpViewImageResult,
+    WarpViewResult,
+    WarpViewRawResultComponent
+  ]
 })
 export class ElementsModule {
   constructor(private injector: Injector) {
