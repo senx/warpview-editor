@@ -52,7 +52,7 @@ import IEditorOptions = editor.IEditorOptions;
   styleUrls: ['./warp-view-editor.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentChecked {
+export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() url = '';
 
@@ -311,7 +311,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
 
-  ngAfterContentChecked(): void {
+ /* ngAfterContentChecked(): void {
     if(this.contentWrapper.nativeElement.textContent !== this.innerCode && !!this.lastKnownWS) {
       if(!this.initDone) {
         console.log('ngAfterContentChecked, contentWrapper', this.contentWrapper.nativeElement.innerHTML,  'text', this.contentWrapper.nativeElement.textContent);
@@ -327,7 +327,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.initDone = true;
       }
     }
-  }
+  }*/
 
   ngOnDestroy() {
     this.LOG.debug(['ngOnDestroy'], 'Component removed from the DOM');
