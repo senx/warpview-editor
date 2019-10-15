@@ -54,7 +54,7 @@ SWAP // get timestamp list
 %> LMAP
 2 ->LIST // Put our GTS in a list
 ZIP // merge into a list of GTS`;
-
+  ctrlClick: any;
   constructor() {
   }
 
@@ -69,5 +69,9 @@ ZIP // merge into a list of GTS`;
   exec() {
     // @ts-ignore
     this.editor.execute();
+  }
+
+  warpViewEditorCtrlClick(event) {
+    this.ctrlClick = event;
   }
 }

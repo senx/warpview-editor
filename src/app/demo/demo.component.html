@@ -25,6 +25,7 @@
                      [heightLine]="20"
                      [horizontalLayout]="false" [debug]="true"
                      [warpscript]="warpscript"
+                     (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
                      [config]="config"></warpview-editor>
 
 
@@ -35,6 +36,6 @@
     <div class="btn btn-warning">Inject Random WS</div>
     <span id="size"></span>
     <span id="breakpoints"></span>
-    <span id="ctrlclick"></span>
+    <span id="ctrlclick">{{ctrlClick | json}}</span>
   </div>
 </div>

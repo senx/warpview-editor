@@ -113,7 +113,7 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
         wordWrap: 'on'
       });
     }
-    this.resEd.setValue(json);
+    this.resEd.setValue(json || '');
     this.loading = false;
   }
 

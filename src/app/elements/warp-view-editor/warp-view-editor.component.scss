@@ -59,18 +59,18 @@
     max-height: 100% !important;
     margin: 0;
     padding: 0;
-  //  overflow: hidden;
+    //  overflow: hidden;
   }
 
   .wrapper-main {
-    //height: calc(100% - 20px);
     width: calc(100% - 20px);
-   // position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     margin: 10px;
+
     &.dark {
       background-color: #1e1e1e;
       color: #f8f9fa;
@@ -93,7 +93,6 @@
 
   div[slot] {
     height: 100%;
-  //  overflow: hidden;
   }
 
   .tab-wrapper {
@@ -114,37 +113,34 @@
     }
   }
 
-  .loader .spinner {
-    border: 5px solid #f3f3f3;
-    -webkit-animation: spin 1s linear infinite;
-    animation: spin 1s linear infinite;
-    border-top: 5px solid #555;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    position: fixed;
-    overflow: visible;
-    z-index: 999;
-    margin: auto;
+  .loader {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
     top: 0;
+    z-index: 1;
     left: 0;
-    bottom: 0;
     right: 0;
+    bottom: 0;
+
+    .spinner {
+      border: 5px solid #f3f3f3;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
+      border-top: 5px solid #555;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      overflow: visible;
+      z-index: 999;
+      margin: auto;
+      top: calc(50% - 25px);
+      left: calc(50% - 25px);
+    }
   }
 
   .messages {
     float: right;
-  }
-
-  .loader:after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
   }
 
   /* Safari */
@@ -165,6 +161,4 @@
       transform: rotate(360deg);
     }
   }
-
-
 }

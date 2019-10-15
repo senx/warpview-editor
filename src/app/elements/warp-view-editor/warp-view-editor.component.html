@@ -16,15 +16,15 @@
 
 
 <div [class]="'wrapper-main ' + _theme" #wrapper>
+  <div class="loader" *ngIf="loading">
+    <div class="spinner"></div>
+  </div>
   <wc-split [items]="getItems()">
     <div slot="editor" class="editor-wrapper">
       <div class='warpscript'>
         <ng-content></ng-content>
       </div>
-      <div #editor></div>
-      <div class="loader" *ngIf="loading">
-        <div class="spinner"></div>
-      </div>
+      <div #editor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
       <div [class]="'warpview-buttons ' + innerConfig.buttons.class" #buttons>
         <button type='button' [class]="innerConfig.datavizButton.class"
                 *ngIf="showDataviz && result"
