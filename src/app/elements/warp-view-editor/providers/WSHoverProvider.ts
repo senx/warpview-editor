@@ -17,9 +17,9 @@
 
 import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
 import {globalfunctions as wsGlobals} from '../../../lib/wsGlobals';
+import {MarkedString, MarkupContent} from 'vscode-languageserver-types';
 import HoverProvider = languages.HoverProvider;
 import Hover = languages.Hover;
-import {MarkedString, MarkupContent} from 'vscode-languageserver-types';
 
 export class WSHoverProvider implements HoverProvider {
   languageId: string;
@@ -35,14 +35,18 @@ export class WSHoverProvider implements HoverProvider {
     const entry = wsGlobals[name];
     if (entry && entry.description) {
       const signature = (entry.signature || '').split('\n').map(s => '+ ' + s).join('\n');
-      const contents: MarkedString[] = ['### ' + name, signature, entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)];
-      return <Hover> {range, contents: this.toMarkedStringArray(contents)};
+      const contents: MarkedString[] = [
+        '### ' + name,
+        signature,
+        entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)
+      ];
+      return {range, contents: this.toMarkedStringArray(contents)} as Hover;
     }
     return undefined;
   }
 
   isMarkupContent(thing: any): thing is MarkupContent {
-    return thing && typeof thing === 'object' && typeof (<MarkupContent> thing).kind === 'string';
+    return thing && typeof thing === 'object' && typeof (thing as MarkupContent).kind === 'string';
   }
 
   toMarkdownString(entry: MarkupContent | MarkedString): IMarkdownString {

@@ -15,7 +15,7 @@
  */
 
 import {GTSLib} from '../../lib/gts.lib';
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'warpview-image-result',
@@ -28,8 +28,9 @@ export class WarpViewImageResult {
   @Input() set result(newValue: any[]) {
     this._result = newValue;
     this.loading = true;
+    // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue);
-    if (newValue && GTSLib.isArray(newValue)) {
+    if (newValue && this.gtsLib.isArray(newValue)) {
       this.imageList = newValue.filter((v: any) => {
         return ((typeof (v) === 'string') && (String(v).startsWith('data:image/png;base64,')));
       });
@@ -58,12 +59,16 @@ export class WarpViewImageResult {
   // tslint:disable-next-line:variable-name
   _result: any[] = [];
   // tslint:disable-next-line:variable-name
-  _theme: string = 'light';
+  _theme = 'light';
 
   loading = false;
   imageList: string[] = [];
 
+  constructor(private gtsLib: GTSLib) {
+
+  }
+
   isArray(arr: any) {
-    return GTSLib.isArray(arr);
+    return this.gtsLib.isArray(arr);
   }
 }

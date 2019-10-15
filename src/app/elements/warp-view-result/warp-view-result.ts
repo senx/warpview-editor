@@ -26,19 +26,18 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
 export class WarpViewResult {
 
   @Input() result: any[] = [];
-  @Input() theme: string = 'light';
+  @Input() theme = 'light';
   @Input() config: object = {};
   @Input() loading = false;
 
-  /**
-   *
-   * @param arr
-   * @returns {boolean}
-   */
+  constructor(private gtsLib: GTSLib) {
+
+  }
+
   isArray(arr: any) {
-    return GTSLib.isArray(arr);
+    return this.gtsLib.isArray(arr);
   }
   stingify(str) {
-    return JSON.stringify(str)
+    return JSON.stringify(str);
   }
 }

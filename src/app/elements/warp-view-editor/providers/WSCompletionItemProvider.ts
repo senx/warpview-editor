@@ -39,14 +39,14 @@ export class WSCompletionItemProvider implements CompletionItemProvider {
         label: f.name,
         insertText: f.name,
         range: undefined,
-        kind: WSCompletionItemProvider.getType(f.tags, f.name)
+        kind: this.getType(f.tags, f.name)
       };
       defs.suggestions.push(item);
     });
     return Promise.resolve(defs);
   }
 
-  static getType(tags: string[], name: string): CompletionItemKind {
+  getType(tags: string[], name: string): CompletionItemKind {
     const t = tags.join(' ');
     if (t.indexOf('constant') > -1) {
       return CompletionItemKind.Enum;

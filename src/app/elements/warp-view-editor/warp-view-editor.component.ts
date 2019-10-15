@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal */
 /*
  *  Copyright 2019 SenX S.A.S.
  *
@@ -14,13 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+/* tslint:disable:no-string-literal */
 import {editor, Range} from 'monaco-editor';
 import {Utils} from '../../lib/utils';
 import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../lib/config';
 import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
-import WarpScriptParser, {docGenerationParams, specialCommentCommands} from '../../lib/warpScriptParser';
+import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
 import {
   AfterViewInit,
   Component,
@@ -34,9 +35,9 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
-import {Observable, of, Subscription, throwError} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
@@ -144,7 +145,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentHeight = -1;
   private request: Subscription;
 
-  private innerConfig: Config = {
+  innerConfig: Config = {
     buttons: {
       class: '',
     },
@@ -192,7 +193,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     }
     this.LOG.debug(['ngOnInit'], 'ngOnInit theme is: ', this._theme);
 
-    (<any> self).MonacoEnvironment = {
+    (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
 		baseUrl: 'https://unpkg.com/monaco-editor@0.18.1/min/'
@@ -278,7 +279,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             const name: string = this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()).word;
             // parse the warpscript
             const ws: string = this.ed.getValue();
-            const specialHeaders: specialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
+            const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
             const repos: string[] = [];
             const statements: string[] = WarpScriptParser.parseWarpScriptStatements(ws);
             statements.forEach((st, i) => {
@@ -293,7 +294,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                 }
               }
             });
-            const docParams: docGenerationParams = {
+            const docParams: DocGenerationParams = {
               endpoint: specialHeaders.endpoint || this.url,
               macroName: name,
               wfRepos: repos
@@ -388,7 +389,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;
       // parse comments to look for inline url or preview modifiers
-      const specialHeaders: specialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
+      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
       const previewType = specialHeaders.displayPreviewOpt || 'none';
       if (previewType === 'I') {
         this.selectedResultTab = 2; // select image tab.
@@ -461,7 +462,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk22')))
       .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk23')))
       .forEach(e => {
-        if(!e.textContent.startsWith('$')) {
+        if (!e.textContent.startsWith('$')) {
           (e as HTMLElement).classList.add('mouseOver');
         }
       });
@@ -490,7 +491,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     }, initial ? 500 : 100);
   }
 
-  private getItems() {
+  getItems() {
     const headers = [];
     if (this.showResult) {
       headers.push({name: 'editor', size: this.initialSize ? this.initialSize.p || 50 : 50});

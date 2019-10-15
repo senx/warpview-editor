@@ -35,7 +35,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "copy": "cp -r node_modules/monaco-editor/dev/vs src/assets/.",
-    "build:elements": "node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@angular/cli/bin/ng build elements --prod && node scripts/build-elements.js",
+    "build:elements": "yarn copy && node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@angular/cli/bin/ng build elements --prod && node scripts/build-elements.js",
     "gen": "cd src/app/elements/ && ng g component --module=elements.module.ts --entryComponent=true --skipTests=true --style=scss --viewEncapsulation=ShadowDom --export=true"
   },
   "dependencies": {

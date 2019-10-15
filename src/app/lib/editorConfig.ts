@@ -15,9 +15,9 @@
  */
 
 export class EditorConfig {
-  quickSuggestionsDelay?: number = 10;
-  quickSuggestions?: boolean = true;
-  tabSize?: number = 2;
-  minLineNumber?: number = 10;
-  enableDebug?: boolean = false;
+  quickSuggestionsDelay? = 10;
+  quickSuggestions? = true;
+  tabSize? = 2;
+  minLineNumber? = 10;
+  enableDebug? = false;
 }

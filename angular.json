@@ -181,12 +181,12 @@
               ],
               "optimization": true,
               "outputHashing": "none",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
-              "namedChunks": false,
+              "namedChunks": true,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "buildOptimizer": false,
               "budgets": [
                 {
@@ -262,17 +262,7 @@
               "devServerTarget": "elements:serve:production"
             }
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "projects/elements-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
+        }}
     }
   },
   "defaultProject": "warpview-editor"

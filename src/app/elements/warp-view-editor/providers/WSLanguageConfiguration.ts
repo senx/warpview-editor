@@ -19,7 +19,7 @@ import {languages} from 'monaco-editor';
 import IndentAction = languages.IndentAction;
 
 export class WSLanguageConfiguration {
-  static getConfiguration(languageId: string): languages.LanguageConfiguration {
+  getConfiguration(): languages.LanguageConfiguration {
     return {
       wordPattern: /[^\s\t]+/,
       comments: {

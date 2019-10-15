@@ -1,4 +1,4 @@
-/*!
+/*
  *  Copyright 2019 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import "~monaco-editor/min/vs/editor/editor.main.css";
 
-span.mouseOver {
-  cursor: pointer;
-  text-decoration: underline;
-}
+const fs = require('fs-extra');
+const concat = require('concat');
+(async function build() {
+  const files = [
+    './dist/elements/runtime.js',
+    './dist/elements/polyfills.js',
+    './dist/elements/es2015-polyfills.js',
+    './dist/elements/scripts.js',
+    './dist/elements/main.js',
+  ];
+  await fs.ensureDir('elements');
+  await concat(files, 'elements/warpview-editor.js');
+  await fs.copyFile('./dist/elements/styles.css', 'elements/warpview-editor.css');
+  try {
+    await fs.copy('./dist/elements/assets/', 'elements/assets/')
+  } catch (e) {
+    // nothing
+  }
+})();

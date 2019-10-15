@@ -15,19 +15,21 @@
  */
 
 
-
-
 /**
  * Parsing result of // @command parameter  in the beginning of the WarpScript
  */
-export interface specialCommentCommands {
+export interface SpecialCommentCommands {
   endpoint?: string;
-  timeunit?: string;
-  localmacrosubstitution?: boolean,
-  displayPreviewOpt?: string
+  timeUnit?: string;
+  localMacroSubstitution?: boolean;
+  displayPreviewOpt?: string;
 }
 
-export interface docGenerationParams { macroName: string; wfRepos: string[], endpoint: string };
+export interface DocGenerationParams {
+  macroName: string;
+  wfRepos: string[];
+  endpoint: string;
+}
 
 /**
  * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
@@ -36,73 +38,86 @@ export interface docGenerationParams { macroName: string; wfRepos: string[], end
 export default class WarpScriptParser {
 
 
-
   /**
    * Unlike parseWarpScriptMacros, this function return a very simple list of statements (as strings), ignoring comments.
    * [ '"HELLO"' '"WORLD"' '+' '2' '2' '*' ]
    */
-  public static parseWarpScriptStatements(ws: String): string[] {
+  public static parseWarpScriptStatements(ws: string): string[] {
 
-    let i: number = 0;
-    let result: string[] = [];
+    let i = 0;
+    const result: string[] = [];
 
-    while (i < ws.length - 1 ) { //often test 2 characters
-      if (ws.charAt(i) == '<' && ws.charAt(i + 1) == "'") { //start of a multiline, look for end
+    while (i < ws.length - 1) { // often test 2 characters
+      if (ws.charAt(i) === '<' && ws.charAt(i + 1) === '\'') { // start of a multiline, look for end
         // console.log(i, 'start of multiline');
-        let lines: string[] = ws.substring(i, ws.length).split('\n');
+        const lines: string[] = ws.substring(i, ws.length).split('\n');
         let lc = 0;
-        while (lc < lines.length && lines[lc].trim() != "'>") { i += lines[lc].length + 1; lc++; }
+        while (lc < lines.length && lines[lc].trim() !== '\'>') {
+          i += lines[lc].length + 1;
+          lc++;
+        }
         i += lines[lc].length + 1;
         // console.log(i, 'end of multiline');
       }
-      if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '*') { //start one multiline comment, seek for end of comment
+      if (ws.charAt(i) === '/' && ws.charAt(i + 1) === '*') { // start one multiline comment, seek for end of comment
         // console.log(i, 'start of multiline comment');
         i++;
-        while (i < ws.length - 1 && !(ws.charAt(i) == '*' && ws.charAt(i + 1) == '/')) { i++; }
+        while (i < ws.length - 1 && !(ws.charAt(i) === '*' && ws.charAt(i + 1) === '/')) {
+          i++;
+        }
         i += 2;
         // console.log(i, 'end of multiline comment');
       }
-      if (ws.charAt(i) == '/' && ws.charAt(i + 1) == '/') { //start single line comment, seek for end of line
+      if (ws.charAt(i) === '/' && ws.charAt(i + 1) === '/') { // start single line comment, seek for end of line
         // console.log(i, 'start of a comment');
         i++;
-        while (i < ws.length - 1 && (ws.charAt(i) != '\n')) { i++; }
+        while (i < ws.length - 1 && (ws.charAt(i) !== '\n')) {
+          i++;
+        }
         // console.log(i, 'end of a comment');
       }
 
-      if (ws.charAt(i) == "'") { //start of string, seek for end
+      if (ws.charAt(i) === '\'') { // start of string, seek for end
         // console.log(i, 'start of string');
-        let start = i;
+        const start = i;
         i++;
-        while (i < ws.length && ws.charAt(i) != "'" && ws.charAt(i) != '\n') { i++; }
+        while (i < ws.length && ws.charAt(i) !== '\'' && ws.charAt(i) !== '\n') {
+          i++;
+        }
         i++;
         result.push(ws.substring(start, i));
         // console.log(i, 'end of string');
       }
-      if (ws.charAt(i) == '"') { //start of string, seek for end
+      // start of string, seek for end
+      if (ws.charAt(i) === '"') {
         // console.log(i, 'start of string');
-        let start = i;
+        const start = i;
         i++;
-        while (i < ws.length && ws.charAt(i) != '"' && ws.charAt(i) != '\n') { i++; }
+        while (i < ws.length && ws.charAt(i) !== '"' && ws.charAt(i) !== '\n') {
+          i++;
+        }
         // console.log(i, 'end of string');
         i++;
         result.push(ws.substring(start, i));
       }
 
-      if (ws.charAt(i) == '<' && ws.charAt(i + 1) == '%') { //start of a macro.
+      if (ws.charAt(i) === '<' && ws.charAt(i + 1) === '%') { // start of a macro.
         // console.log(i, 'start of macro');
-        result.push("<%");
+        result.push('<%');
         i += 2;
       }
 
-      if (ws.charAt(i) == '%' && ws.charAt(i + 1) == '>') { //end of a macro.
+      if (ws.charAt(i) === '%' && ws.charAt(i + 1) === '>') { // end of a macro.
         // console.log(i, 'end of macro');
-        result.push("%>");
+        result.push('%>');
         i += 2;
       }
 
-      if (ws.charAt(i) != ' ' && ws.charAt(i) != '\n') {
-        let start = i;
-        while (i < ws.length && ws.charAt(i) != ' ' && ws.charAt(i) != '\n') { i++; }
+      if (ws.charAt(i) !== ' ' && ws.charAt(i) !== '\n') {
+        const start = i;
+        while (i < ws.length && ws.charAt(i) !== ' ' && ws.charAt(i) !== '\n') {
+          i++;
+        }
         result.push(ws.substring(start, i));
       }
       i++;
@@ -112,46 +127,58 @@ export default class WarpScriptParser {
   }
 
 
-  public static extractSpecialComments(executedWarpScript: string): specialCommentCommands {
-    let result: specialCommentCommands = {};
-    let warpscriptlines = executedWarpScript.split('\n');
-    for (let l = 0; l < warpscriptlines.length; l++) {
-      let currentline = warpscriptlines[l];
-      if (currentline.startsWith("//")) {
-        //find and extract // @paramname parameters
-        let extraparamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
-        let lineonMatch: RegExpMatchArray | null;
-        let re = RegExp(extraparamsPattern);
-        while (lineonMatch = re.exec(currentline.replace('\r', ''))) {  //think about windows... \r\n in mc2 files !
-          let parametername = lineonMatch[1];
-          let parametervalue = lineonMatch[2];
-          switch (parametername) {
-            case "endpoint":        //        // @endpoint http://mywarp10server/api/v0/exec
-              result.endpoint = parametervalue;   // overrides the Warp10URL configuration
+  public static extractSpecialComments(executedWarpScript: string): SpecialCommentCommands {
+    const result: SpecialCommentCommands = {};
+    const warpscriptLines = executedWarpScript.split('\n');
+    for (let l = 0; l < warpscriptLines.length; l++) {
+      const currentLine = warpscriptLines[l];
+      if (currentLine.startsWith('//')) {
+        // find and extract // @paramname parameters
+        const extraParamsPattern = /\/\/\s*@(\w*)\s*(.*)$/g;
+        let lineOnMatch: RegExpMatchArray | null;
+        const re = RegExp(extraParamsPattern);
+        // think about windows... \r\n in mc2 files !
+        // noinspection JSAssignmentUsedAsCondition
+        while (lineOnMatch = re.exec(currentLine.replace('\r', ''))) {
+          const parameterName = lineOnMatch[1];
+          const parameterValue = lineOnMatch[2];
+          switch (parameterName) {
+            case 'endpoint':        //      // @endpoint http://mywarp10server/api/v0/exec
+              result.endpoint = parameterValue;   // overrides the Warp10URL configuration
               break;
-            case "localmacrosubstitution":
-              result.localmacrosubstitution = ("true" === parametervalue.toLowerCase());   // overrides the substitutionWithLocalMacros
+            case 'localmacrosubstitution':
+              result.localMacroSubstitution = ('true' === parameterValue.toLowerCase());   // overrides the substitutionWithLocalMacros
               break;
-            case "timeunit":
-              if (['us', 'ms', 'ns'].indexOf(parametervalue.trim()) > -1) {
-                result.timeunit = parametervalue.trim();
+            case 'timeunit':
+              if (['us', 'ms', 'ns'].indexOf(parameterValue.trim()) > -1) {
+                result.timeUnit = parameterValue.trim();
               }
               break;
-            case "preview":
-              switch (parametervalue.toLowerCase().substr(0, 4)) {
-                case "none": result.displayPreviewOpt = 'X'; break;
-                case "gts": result.displayPreviewOpt = 'G'; break;
-                case "imag": result.displayPreviewOpt = 'I'; break;
-                default: result.displayPreviewOpt = ''; break;
+            case 'preview':
+              switch (parameterValue.toLowerCase().substr(0, 4)) {
+                case 'none':
+                  result.displayPreviewOpt = 'X';
+                  break;
+                case 'gts':
+                  result.displayPreviewOpt = 'G';
+                  break;
+                case 'imag':
+                  result.displayPreviewOpt = 'I';
+                  break;
+                default:
+                  result.displayPreviewOpt = '';
+                  break;
               }
               break;
             default:
               break;
           }
         }
-      }
-      else {
-        if (l > 0) { break; } //no more comments at the beginning of the file. two first lines could be empty
+      } else {
+        if (l > 0) {
+          break;
+        }
+        // no more comments at the beginning of the file. two first lines could be empty
       }
     }
     return result;

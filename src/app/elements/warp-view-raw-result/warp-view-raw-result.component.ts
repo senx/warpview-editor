@@ -57,8 +57,8 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
 
   @Input() set result(newValue: any[]) {
     this.loading = true;
-    // tslint:disable-next-line:no-console
     this._result = newValue;
+    // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of result is: ', newValue);
     this.buildEditor(JSON.stringify(this._result || ''));
     this.loading = false;

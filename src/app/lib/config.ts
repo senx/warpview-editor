@@ -29,10 +29,10 @@ export class Config {
     class: '',
     label: 'Visualize'
   };
-  hover: boolean = true;
-  readOnly: boolean = false;
-  messageClass: string = '';
-  errorClass: string = '';
+  hover = true;
+  readOnly = false;
+  messageClass = '';
+  errorClass = '';
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,

@@ -24,6 +24,7 @@ import {WarpViewEditorComponent} from './warp-view-editor/warp-view-editor.compo
 import {WarpViewImageResult} from './warp-view-image-result/warp-view-image-result';
 import {WarpViewRawResultComponent} from './warp-view-raw-result/warp-view-raw-result.component';
 import {WarpViewResult} from './warp-view-result/warp-view-result';
+import {GTSLib} from '../lib/gts.lib';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import {WarpViewResult} from './warp-view-result/warp-view-result';
     WarpViewResult,
     WarpViewRawResultComponent
   ],
-  providers: [],
+  providers: [GTSLib],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: []
 })

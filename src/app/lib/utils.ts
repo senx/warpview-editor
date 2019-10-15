@@ -15,15 +15,11 @@
  */
 
 export class Utils {
-  /**
-   *
-   * @param sources
-   * @returns {any}
-   */
+
   static mergeDeep(...sources: any[]): any {
     // Variables
-    let extended = {};
-    let deep = true;
+    const extended = {};
+    const deep = true;
     let i = 0;
     // Merge the object into the extended object
     // Loop through each object and conduct a merge
@@ -35,12 +31,6 @@ export class Utils {
     return extended;
   }
 
-  /**
-   *
-   * @param obj
-   * @param extended
-   * @param {boolean} deep
-   */
   static merge(obj: any, extended: any, deep: boolean) {
     for (const prop in obj) {
       if (obj.hasOwnProperty(prop)) {
@@ -52,18 +42,11 @@ export class Utils {
         }
       }
     }
-  };
+  }
 
-  /**
-   *
-   * @param obj
-   * @return {any[]}
-   */
   static toArray(obj: any): any[] {
     const arr = [];
     Object.keys(obj).forEach(k => arr.push(obj[k]));
     return arr;
   }
-
-
 }

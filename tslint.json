@@ -1,5 +1,13 @@
 {
   "extends": "tslint:recommended",
+  "linterOptions": {
+    "exclude": [
+      "src/app/lib/wsGlobals.ts",
+      "src/app/lib/ref.ts",
+      "src/app/lib/monarch.ts",
+      "src/polyfills.ts"
+    ]
+  },
   "rules": {
     "array-type": false,
     "arrow-parens": false,
@@ -83,7 +91,9 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "no-string-literal": false,
+    "no-conditional-assignment": false
   },
   "rulesDirectory": [
     "codelyzer"

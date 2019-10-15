@@ -13,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 // adapted from Canop's JSON,parseMore https://github.com/Canop/JSON.parseMore/
 export class JsonLib {
   at;	 // The index of the current character
@@ -91,7 +92,7 @@ export class JsonLib {
     return +string;
   }
 
-  private  string() {
+  private string() {
     let hex;
     let string = '';
     let uffff;
@@ -126,13 +127,13 @@ export class JsonLib {
     this.error('Bad string');
   }
 
-  private  white() { // Skip whitespace.
+  private white() { // Skip whitespace.
     while (this.ch && this.ch <= ' ') {
       this.next();
     }
   }
 
-  private   word() {
+  private word() {
     switch (this.ch) {
       case 't':
         this.check('t');
@@ -223,7 +224,7 @@ export class JsonLib {
       }
     }
     this.error('Bad object');
-  };
+  }
 
   private value() {
     this.white();
@@ -239,7 +240,7 @@ export class JsonLib {
       default:
         return this.ch >= '0' && this.ch <= '9' ? this.number() : this.word();
     }
-  };
+  }
 
   public parse(source, reviver) {
     let result;
@@ -253,7 +254,9 @@ export class JsonLib {
     }
     return typeof reviver === 'function'
       ? (function walk(holder, key) {
-        let k, v, value = holder[key];
+        let k;
+        let v;
+        const value = holder[key];
         if (value && typeof value === 'object') {
           for (k in value) {
             if (Object.prototype.hasOwnProperty.call(value, k)) {

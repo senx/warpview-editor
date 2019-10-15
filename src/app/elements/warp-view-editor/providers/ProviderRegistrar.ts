@@ -15,26 +15,27 @@
  */
 
 import {WSCompletionItemProvider} from './WSCompletionItemProvider';
-import {languages, Uri} from 'monaco-editor';
+import {languages} from 'monaco-editor';
 import {Monarch} from '../../../lib/monarch';
 import {WSLanguageConfiguration} from './WSLanguageConfiguration';
+import {WSHoverProvider} from './WSHoverProvider';
 import registerCompletionItemProvider = languages.registerCompletionItemProvider;
 import setMonarchTokensProvider = languages.setMonarchTokensProvider;
 import getLanguages = languages.getLanguages;
 import register = languages.register;
 import setLanguageConfiguration = languages.setLanguageConfiguration;
 import registerHoverProvider = languages.registerHoverProvider;
-import {WSHoverProvider} from './WSHoverProvider';
 
 export class ProviderRegistrar {
-  static WARPSCRIPT_LANGUAGE: string = 'warpscript';
+  static WARPSCRIPT_LANGUAGE = 'warpscript';
 
   static register() {
     if (!getLanguages().find(l => l.id === ProviderRegistrar.WARPSCRIPT_LANGUAGE)) {
       register({id: ProviderRegistrar.WARPSCRIPT_LANGUAGE});
-      setLanguageConfiguration(ProviderRegistrar.WARPSCRIPT_LANGUAGE, WSLanguageConfiguration.getConfiguration(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
+      setLanguageConfiguration(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSLanguageConfiguration().getConfiguration());
       setMonarchTokensProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, Monarch.rules);
-      registerCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
+      registerCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE,
+        new WSCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
       registerHoverProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSHoverProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
     }
   }
