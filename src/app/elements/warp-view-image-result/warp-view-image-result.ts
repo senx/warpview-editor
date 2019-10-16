@@ -82,7 +82,6 @@ export class WarpViewImageResult {
   }
 
   isArray(arr: any) {
-    this.LOG.debug(['isArray'], this.gtsLib.isArray(arr));
     return this.gtsLib.isArray(arr);
   }
 }

@@ -15,28 +15,38 @@
  */
 
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {ElementsModule} from './elements/elements.module';
+import {DemoComponent} from './demo/demo.component';
+import {MainComponent} from './main/main.component';
+import {DemoImageComponent} from './demo-image/demo-image.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
-import {PagesModule} from './pages/pages.module';
+import {ElementsModule} from '../elements/elements.module';
+import {AppRoutingModule} from '../app-routing.module';
+import { DocComponent } from './doc/doc.component';
+
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    DemoComponent,
+    DemoImageComponent,
+    MainComponent,
+    DocComponent
+  ],
   imports: [
     BrowserModule,
     CommonModule,
     ElementsModule,
-    AppRoutingModule,
-    PagesModule
+    AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [AppComponent]
+  bootstrap: [],
+  entryComponents: [
+    DemoComponent,
+    DemoImageComponent,
+    MainComponent,
+    DocComponent
+  ]
 })
-export class AppModule {
+export class PagesModule {
 }
 

@@ -16,14 +16,16 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DemoComponent} from './demoPages/demo/demo.component';
-import {MainComponent} from './demoPages/main/main.component';
-import {DemoImageComponent} from './demoPages/demo-image/demo-image.component';
+import {DemoComponent} from './pages/demo/demo.component';
+import {MainComponent} from './pages/main/main.component';
+import {DemoImageComponent} from './pages/demo-image/demo-image.component';
+import {DocComponent} from './pages/doc/doc.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'demo1', component: DemoComponent},
   {path: 'demo2', component: DemoImageComponent},
+  {path: 'demo3', component: DocComponent},
 ];
 
 @NgModule({

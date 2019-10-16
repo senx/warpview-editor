@@ -31,7 +31,7 @@ if (environment.production) {
   // empty
 }).catch(err => console.log('main.ts', err)));
 
-platformBrowserDynamic().bootstrapModule(AppModule).then(ref => {
+platformBrowserDynamic().bootstrapModule(AppModule, { preserveWhitespaces: true}).then(ref => {
   // Ensure Angular destroys itself on hot reloads.
   if (window['ngRef']) {
     window['ngRef'].destroy();

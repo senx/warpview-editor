@@ -25,17 +25,13 @@ import {WarpViewImageResult} from './warp-view-image-result/warp-view-image-resu
 import {WarpViewRawResultComponent} from './warp-view-raw-result/warp-view-raw-result.component';
 import {WarpViewResult} from './warp-view-result/warp-view-result';
 import {GTSLib} from '../lib/gts.lib';
-import { DemoImageComponent } from '../demoPages/demo-image/demo-image.component';
-import { MainComponent } from '../demoPages/main/main.component';
 
 @NgModule({
   declarations: [
     WarpViewEditorComponent,
     WarpViewImageResult,
     WarpViewResult,
-    WarpViewRawResultComponent,
-    DemoImageComponent,
-    MainComponent
+    WarpViewRawResultComponent
   ],
   imports: [
     CommonModule,
@@ -47,9 +43,7 @@ import { MainComponent } from '../demoPages/main/main.component';
     WarpViewEditorComponent,
     WarpViewImageResult,
     WarpViewResult,
-    WarpViewRawResultComponent,
-    DemoImageComponent,
-    MainComponent
+    WarpViewRawResultComponent
   ],
   providers: [GTSLib],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -57,9 +51,7 @@ import { MainComponent } from '../demoPages/main/main.component';
     WarpViewEditorComponent,
     WarpViewImageResult,
     WarpViewResult,
-    WarpViewRawResultComponent,
-    DemoImageComponent,
-    MainComponent
+    WarpViewRawResultComponent
   ]
 })
 export class ElementsModule {

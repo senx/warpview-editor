@@ -172,17 +172,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   // noinspection JSUnusedGlobalSymbols
   ngOnInit() {
     this.LOG.debug(['ngOnInit'], 'innerConfig: ', this.innerConfig);
-    //if(this.el) this.LOG.debug(['ngOnInit', 'el'], 'textContent: ', this.el.nativeElement.textContent);
-    if (this.contentWrapper) {
-      this.LOG.debug(['ngOnInit', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
-    }
-
     if ('dark' === this._theme) {
       this.monacoTheme = 'vs-dark';
     }
     this.LOG.debug(['ngOnInit'], 'ngOnInit theme is: ', this._theme);
-    this.LOG.debug(['ngOnInit'], 'innerCode: ', this.innerCode);
-
     (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
@@ -217,9 +210,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({height: editorH, width: editorW});
       this.editor.nativeElement.style.overflow = 'hidden';
-
-      /*  if(this.el) this.LOG.debug(['resizeWatcher', 'el'], 'textContent: ', this.el.nativeElement.textContent);
-        if(this.contentWrapper) this.LOG.debug(['resizeWatcher', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);*/
     }
   }
 
@@ -238,11 +228,12 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    this.LOG.debug(['ngAfterViewInit'], 'textContent: ', this.el.nativeElement.textContent, this.contentWrapper.nativeElement.textContent);
+    this.LOG.debug(['ngAfterViewInit'], 'height', this.heightPx);
     if (!!this.heightPx) {
       // if height-px is set, size is fixed.
       this.el.nativeElement.style.height = this.heightPx + 'px';
       this.wrapper.nativeElement.style.height = this.heightPx + 'px';
+      this.resize(true);
     } else {
       // compute the layout manually in a 200ms timer
       setInterval(this.resizeWatcher.bind(this), 200);
@@ -254,7 +245,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.innerCode += '\n';
       }
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
-      this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode);
+      this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
       const edOpts: IEditorConstructionOptions = this.setOptions();
       this.lastKnownWS = this._warpscript || this.innerCode;

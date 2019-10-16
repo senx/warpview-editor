@@ -1,0 +1,114 @@
+
+<!--
+  ~  Copyright 2019 SenX S.A.S.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<div class="card ">
+  <div class="card-body" *ngIf="visible">
+    <h3 class="card-title">Example 2</h3>
+    <p class="card-text">height-px fixed to 400 with the component height-px property</p>
+    <warpview-editor url="https://warp.senx.io/api/v0/exec"
+                     [showDataviz]="false"
+                     [horizontalLayout]="false" [debug]="true"
+                     heightPx="400"
+                     showExecute="true" heightLine="20"
+                     config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}"
+    >
+//advanced example : create a random star background with motion blur, with a well known spaceship over it.
+// @preview image
+
+250 'width' STORE
+100 'height' STORE
+$width $height '2D' PGraphics //create an image instance
+0xff000000 Pbackground //ARGB, black background
+0xffffffff Pstroke //white outline
+0xffffffff Pfill //white fill
+
+//draw some random stars in the black deep space
+1 40
+<%
+DROP //remove loop index from top of stack
+RAND $width * //random x
+RAND $height * //random y
+RAND 4 * 1 + //random radius from 1 to 5 px
+DUP //same x and y radius to draw circles
+Pellipse
+%> FOR
+
+
+//add a motion blur to the stars
+//define a one line convolution matrix
+[ [ 0.05 0.05 0.05 0.05 0.1 0.1 0.1 0.5 ] ] ->MAT 'simpleconvolutionmatrix' STORE
+
+
+//convert to a $width x $heigh list of value
+Ppixels 'imagepixels' STORE
+
+
+<%
+//This macro apply the motion blur on a list of pixels
+//it does not support rgb.
+'imagepixels' STORE //take the input on the top of the stack
+
+//create an empty list with 8 pixels black
+[ 0 6 <% DROP 0xff000000 %> FOR ] 'ConvolutedImage' STORE
+
+MARK
+$imagepixels
+<%
+//push every pixel value on the stack
+0xff & //keep blue component
+<% COUNTTOMARK 7 > %>
+<% //as soon as there is the 8 last pixels on the stack
+8 DUPN 8 ->LIST ->VEC //take 8 values on the stack to build a vector
+$simpleconvolutionmatrix SWAP * //vector * matrix
+VEC-> 0 GET TOLONG //get resulting pixel value
+0x00010101 *
+0xff000000 + //pixel value with alpha 100%
+$ConvolutedImage SWAP +! DROP //store it in output image
+8 ROLL DROP //remove the deepest one
+
+%>
+IFT
+%> FOREACH
+
+COUNTTOMARK DROPN //remove elts on the stack
+DROP //remove the mark.
+$ConvolutedImage //push the result on the stack
+%> 'MotionBlurMacro' STORE
+
+$imagepixels
+@MotionBlurMacro //one pass
+//@MotionBlurMacro //second pass will nearly double the operation count
+'ConvolutedImage' STORE
+
+$ConvolutedImage PupdatePixels //load the pixel list in the PIMAGE
+
+"BLUR" 1 Pfilter //apply a blur filter
+
+'spacebackground' STORE //store the instance for later use.
+
+
+$spacebackground
+
+//use a b64 encoded image (linux command : base64 -w 0 uss_small2.gif)
+"data:image/gif;base64,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"
+Pdecode 5 20 Pimage //decode the image, paste it with a 5 30 offset
+
+Pencode //render the image to have a b64 png on the top of the stack.
+    </warpview-editor>
+
+
+  </div>
+</div>
