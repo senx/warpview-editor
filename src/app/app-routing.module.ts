@@ -20,12 +20,14 @@ import {DemoComponent} from './pages/demo/demo.component';
 import {MainComponent} from './pages/main/main.component';
 import {DemoImageComponent} from './pages/demo-image/demo-image.component';
 import {DocComponent} from './pages/doc/doc.component';
+import {Sample3Component} from './pages/sample3/sample3.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'demo1', component: DemoComponent},
   {path: 'demo2', component: DemoImageComponent},
   {path: 'demo3', component: DocComponent},
+  {path: 'demo4', component: Sample3Component},
 ];
 
 @NgModule({

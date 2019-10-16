@@ -94,6 +94,8 @@
     font-size: 14px;
     line-height: 19px;
     letter-spacing: 0;
+    display: flex;
+    flex-flow: column;
 
     &.light {
       background-color: #fff !important;
@@ -151,14 +153,15 @@
       float: left;
       text-align: right;
       padding: 0.3em 0.5em 0.3em 0.3em;
+      margin: 0;
     }
 
     .line-content {
-      margin-left: 4em;
       display: block;
       border-left: #5a5a5a solid 1px;
       padding: 0.3em 0.3em 0.3em 1em;
       max-width: calc(100% - 4em);
+      margin: 0 0 0 5em;
     }
   }
 

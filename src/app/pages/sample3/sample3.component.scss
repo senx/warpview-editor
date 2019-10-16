@@ -16,18 +16,26 @@
 
 :host {
 
-  .wrapper-result {
-    padding: 10px;
+
+  --warpview-editor-breakpoint-color: deeppink;
+
+
+  .resizable {
+    resize: both;
+    overflow: hidden;
   }
 
-  img {
-    border-style: solid;
-    border-color: var(--warp-view-image-border-color, #404040);
-    border-width: 1.1px;
-    background-color: #fff;
-    background-image: linear-gradient(45deg, #efefef 25%, transparent 25%, transparent 75%, #efefef 75%, #efefef), linear-gradient(45deg, #efefef 25%, transparent 25%, transparent 75%, #efefef 75%, #efefef);
-    background-position: 0 0, 10px 10px;
-    background-size: 21px 21px;
+  .movehandle {
+    height: 20px;
+    width: 20px;
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-color: lightgray;
+    border: none;
+    cursor: move;
+    background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
+    background-size: 20px 20px;
   }
 
 }

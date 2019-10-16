@@ -23,6 +23,7 @@ import {CommonModule} from '@angular/common';
 import {ElementsModule} from '../elements/elements.module';
 import {AppRoutingModule} from '../app-routing.module';
 import { DocComponent } from './doc/doc.component';
+import { Sample3Component } from './sample3/sample3.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { DocComponent } from './doc/doc.component';
     DemoComponent,
     DemoImageComponent,
     MainComponent,
-    DocComponent
+    DocComponent,
+    Sample3Component
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,8 @@ import { DocComponent } from './doc/doc.component';
     DemoComponent,
     DemoImageComponent,
     MainComponent,
-    DocComponent
+    DocComponent,
+    Sample3Component
   ]
 })
 export class PagesModule {
