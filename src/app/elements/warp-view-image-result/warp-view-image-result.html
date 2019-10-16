@@ -13,10 +13,9 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <div [class]="'wrapper-result ' + _theme">
-  <div *ngIf="result && isArray(result)" [class]="_theme + ' image'">
-    <div *ngFor="let img of imageList; let i = $index" class="image"><h2>Image {{i + 1}}</h2>
+  <div *ngIf="_result && isArray(_result)" [class]="_theme + ' image'">
+    <div *ngFor="let img of imageList; let i = index" class="image"><h2>Image {{i + 1}}</h2>
       <img [src]="img" alt="Image"/>
     </div>
   </div>

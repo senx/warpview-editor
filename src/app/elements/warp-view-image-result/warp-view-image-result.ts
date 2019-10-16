@@ -16,6 +16,7 @@
 
 import {GTSLib} from '../../lib/gts.lib';
 import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Logger} from '../../lib/logger';
 
 @Component({
   selector: 'warpview-image-result',
@@ -25,11 +26,22 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
 })
 export class WarpViewImageResult {
 
+  @Input() set debug(debug: boolean | string) {
+    if (typeof debug === 'string') {
+      debug = 'true' === debug;
+    }
+    this._debug = debug;
+    this.LOG.setDebug(debug);
+  }
+
+  get debug() {
+    return this._debug;
+  }
+
   @Input() set result(newValue: any[]) {
     this._result = newValue;
     this.loading = true;
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - The new value of result is: ', newValue);
+    this.LOG.debug(['isArray'], 'The new value of result is: ', newValue);
     if (newValue && this.gtsLib.isArray(newValue)) {
       this.imageList = newValue.filter((v: any) => {
         return ((typeof (v) === 'string') && (String(v).startsWith('data:image/png;base64,')));
@@ -46,7 +58,6 @@ export class WarpViewImageResult {
 
   @Input() set theme(newValue: string) {
     this._theme = newValue;
-
   }
 
   get theme(): string {
@@ -60,15 +71,18 @@ export class WarpViewImageResult {
   _result: any[] = [];
   // tslint:disable-next-line:variable-name
   _theme = 'light';
-
+  // tslint:disable-next-line:variable-name
+  _debug = false;
   loading = false;
   imageList: string[] = [];
+  private LOG: Logger;
 
   constructor(private gtsLib: GTSLib) {
-
+    this.LOG = new Logger(WarpViewImageResult, this._debug);
   }
 
   isArray(arr: any) {
+    this.LOG.debug(['isArray'], this.gtsLib.isArray(arr));
     return this.gtsLib.isArray(arr);
   }
 }

@@ -13,6 +13,31 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-<main role="main" class="container flex-fill">
+
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/img/warpView_blanc.png" class="img-fluid" height="30" alt="Warp View" style="max-height: 40px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" >Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/demo1" routerLinkActive="active" >Demo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/demo2" routerLinkActive="active" >Image</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main role="main" class="container margin-top">
   <router-outlet></router-outlet>
 </main>

@@ -15,7 +15,7 @@
   -->
 
 
-<div [class]="'wrapper-main ' + _theme" #wrapper>
+<div [class]="'wrapper-main ' + _theme" #wrapper >
   <div class="warpscript" #content>
     <ng-content ngProjectAs="input"></ng-content>
   </div>
@@ -60,7 +60,7 @@
 
         <wc-tabs-content slot='content' name='tab3' *ngIf="imageTab">
           <div class="tab-wrapper">
-            <warpview-image-result [theme]="_theme" [result]="result" [config]="innerConfig"></warpview-image-result>
+            <warpview-image-result [theme]="_theme" [result]="result" [config]="innerConfig" [debug]="_debug"></warpview-image-result>
           </div>
         </wc-tabs-content>
 

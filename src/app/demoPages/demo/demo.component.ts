@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Config } from "../lib/config";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Config} from '../../lib/config';
 
 @Component({
   selector: 'warpview-demo',
@@ -23,12 +23,13 @@ import { Config } from "../lib/config";
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', {static:false}) editor: ElementRef<HTMLElement>;
+  @ViewChild('editor', {static: false}) editor: ElementRef<Element>;
+  visible = false;
   config = {
     messageClass: 'alert alert-info message',
     errorClass: 'alert alert-danger error',
-    execButton: { class: 'btn btn-success' },
-    datavizButton: { class: 'btn btn-success' },
+    execButton: {class: 'btn btn-success'},
+    datavizButton: {class: 'btn btn-success'},
     readOnly: false,
     hover: true,
     editor: {
@@ -57,11 +58,15 @@ SWAP // get timestamp list
 2 ->LIST // Put our GTS in a list
 ZIP // merge into a list of GTS`;
   ctrlClick: any;
+  breakpoint: any;
+  size: any;
+  warpscriptAttr: string;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.visible = true;
   }
 
   abort() {
@@ -76,5 +81,17 @@ ZIP // merge into a list of GTS`;
 
   warpViewEditorCtrlClick(event) {
     this.ctrlClick = event;
+  }
+
+  warpViewEditorBreakPoint(event) {
+    this.breakpoint = event;
+  }
+
+  warpViewEditorSize(event) {
+    this.size = event;
+  }
+
+  inject() {
+    this.warpscriptAttr = Math.random().toString(36);
   }
 }

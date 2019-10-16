@@ -16,7 +16,7 @@
   -->
 
 <div class="card ">
-  <div class="card-body resizable" style="height: 500px; width: 100%;">
+  <div class="card-body resizable" style="height: 500px; width: 100%;" *ngIf="visible">
 
     <warpview-editor url="https://warp.senx.io/api/v0/exec"
                      #editor
@@ -24,7 +24,6 @@
                      [showDataviz]="false" [showExecute]="true"
                      [heightLine]="20"
                      [horizontalLayout]="false" [debug]="true"
-                     (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
                      config='{
   "messageClass": "alert alert-info message",
   "errorClass": "alert alert-danger error",
@@ -40,13 +39,5 @@
 }'>{{warpscript}}</warpview-editor>
 
 
-  </div>
-  <div class="card-footer">
-    <div class="btn btn-primary" (click)="exec()">Exec</div>
-    <div class="btn btn-danger" (click)="abort()">Abort</div>
-    <div class="btn btn-warning">Inject Random WS</div>
-    <span id="size"></span>
-    <span id="breakpoints"></span>
-    <span id="ctrlclick">{{ctrlClick | json}}</span>
   </div>
 </div>

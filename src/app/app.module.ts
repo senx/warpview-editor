@@ -21,7 +21,7 @@ import {AppComponent} from './app.component';
 import {ElementsModule} from './elements/elements.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
-import { DemoComponent } from './demo/demo.component';
+import {DemoComponent} from './demoPages/demo/demo.component';
 
 @NgModule({
   declarations: [

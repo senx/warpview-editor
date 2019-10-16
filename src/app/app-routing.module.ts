@@ -16,11 +16,14 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DemoComponent} from './demo/demo.component';
+import {DemoComponent} from './demoPages/demo/demo.component';
+import {MainComponent} from './demoPages/main/main.component';
+import {DemoImageComponent} from './demoPages/demo-image/demo-image.component';
 
 const routes: Routes = [
-
-  {path: '', component: DemoComponent}
+  {path: '', component: MainComponent},
+  {path: 'demo1', component: DemoComponent},
+  {path: 'demo2', component: DemoImageComponent},
 ];
 
 @NgModule({
@@ -30,7 +33,8 @@ const routes: Routes = [
       scrollPositionRestoration: 'enabled',
       onSameUrlNavigation: 'reload',
       anchorScrolling: 'enabled',
-      useHash: true
+      useHash: true,
+
     }
   ),],
   exports: [RouterModule]

@@ -14,3 +14,34 @@
  *  limitations under the License.
  */
 
+body {
+  margin: 0;
+  padding: 3rem 0;
+  color: #5a5a5a;
+}
+
+.margin-top {
+  margin-top: 70px !important;
+}
+
+.container {
+  margin: 15px auto;
+}
+
+.message, .error {
+  position: absolute;
+  left: 5%;
+  width: 90%;
+  z-index: 99999;
+}
+
+.message {
+  bottom: 0;
+}
+
+.error {
+  bottom: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
