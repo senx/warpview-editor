@@ -36,7 +36,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "copy": "cp -r node_modules/monaco-editor/dev/vs src/assets/.",
-    "build:elements": "yarn copy && node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@angular/cli/bin/ng build elements --prod && node scripts/build-elements.js",
+    "build:elements2": "yarn copy && node --max_old_space_size=4096 --optimize_for_size --stack_size=4096 ./node_modules/@angular/cli/bin/ng build elements --prod && node scripts/build-elements.js",
+    "build:elements": "yarn copy && ng build elements --prod && node scripts/build-elements.js",
     "gen": "cd src/app/elements/ && ng g component --module=elements.module.ts --entryComponent=true --skipTests=true --style=scss --viewEncapsulation=ShadowDom --export=true"
   },
   "dependencies": {
@@ -52,7 +53,6 @@
     "@giwisoft/wc-split": "1.0.2",
     "@giwisoft/wc-tabs": "1.0.2",
     "@webcomponents/custom-elements": "^1.2.4",
-    "abortcontroller-polyfill": "^1.3.0",
     "core-js": "^2.5.4",
     "document-register-element": "^1.14.3",
     "monaco-editor": "^0.18.1",
@@ -60,7 +60,6 @@
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "vscode-languageserver-types": "^3.14.0",
-    "whatwg-fetch": "3.0.0",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
@@ -75,7 +74,6 @@
     "copy-webpack-plugin": "^5.0.4",
     "fs-extra": "^8.1.0",
     "jest": "^21.2.1",
-    "ngx-build-plus": "^8.1.4",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"

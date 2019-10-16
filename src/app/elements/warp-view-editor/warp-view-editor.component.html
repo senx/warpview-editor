@@ -16,6 +16,9 @@
 
 
 <div [class]="'wrapper-main ' + _theme" #wrapper>
+  <div class="warpscript" #content>
+    <ng-content ngProjectAs="input"></ng-content>
+  </div>
   <div class="loader" *ngIf="loading">
     <div class="spinner"></div>
   </div>
@@ -64,8 +67,4 @@
       </wc-tabs>
     </div>
   </wc-split>
-  <div class="warpscript" #content>
-    <ng-content></ng-content>
-  </div>
-  <slot></slot>
 </div>

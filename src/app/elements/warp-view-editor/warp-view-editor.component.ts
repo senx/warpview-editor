@@ -25,7 +25,7 @@ import WarpScriptParser, { DocGenerationParams, SpecialCommentCommands } from '.
 import {
   AfterContentChecked,
   AfterViewInit,
-  Component,
+  Component, ContentChildren,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -137,10 +137,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Output() warpViewEditorBreakPoint = new EventEmitter<any>();
   @Output() warpViewEditorCtrlClick = new EventEmitter<any>();
   @Output() warpViewEditorDatavizRequested = new EventEmitter<any>();
-  @ViewChild('wrapper', { static: true }) wrapper: ElementRef<HTMLDivElement>;
-  @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement>;
-  @ViewChild('buttons', { static: true }) buttons: ElementRef<HTMLDivElement>;
-  @ViewChild("content", { static: true }) contentWrapper: ElementRef;
+  @ViewChild('wrapper', {static:true}) wrapper: ElementRef<HTMLDivElement>;
+  @ViewChild('editor', {static:true}) editor: ElementRef<HTMLDivElement>;
+  @ViewChild('buttons', {static:true}) buttons: ElementRef<HTMLDivElement>;
+  @ViewChild("content", {static:true}) contentWrapper: ElementRef<HTMLDivElement>;
 
   result: any[];
   status: { message: string, ops: number, elapsed: number, fetched: number };
@@ -176,17 +176,14 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   // noinspection JSUnusedGlobalSymbols
   ngOnInit() {
     this.LOG.debug(['ngOnInit'], 'innerConfig: ', this.innerConfig);
-    if(this.el) this.LOG.debug(['ngOnInit', 'el'], 'textContent: ', this.el.nativeElement.textContent);
+    //if(this.el) this.LOG.debug(['ngOnInit', 'el'], 'textContent: ', this.el.nativeElement.textContent);
     if(this.contentWrapper) this.LOG.debug(['ngOnInit', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
-    this.innerCode = this.el.nativeElement.textContent;
-    // add blank lines when needed
-    for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
-      this.innerCode += '\n';
-    }
+
     if('dark' === this._theme) {
       this.monacoTheme = 'vs-dark';
     }
     this.LOG.debug(['ngOnInit'], 'ngOnInit theme is: ', this._theme);
+    this.LOG.debug(['ngOnInit'], 'innerCode: ', this.innerCode);
 
     (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
@@ -223,8 +220,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.ed.layout({ height: editorH, width: editorW });
       this.editor.nativeElement.style.overflow = 'hidden';
 
-      if(this.el) this.LOG.debug(['resizeWatcher', 'el'], 'textContent: ', this.el.nativeElement.textContent);
-      if(this.contentWrapper) this.LOG.debug(['resizeWatcher', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
+    /*  if(this.el) this.LOG.debug(['resizeWatcher', 'el'], 'textContent: ', this.el.nativeElement.textContent);
+      if(this.contentWrapper) this.LOG.debug(['resizeWatcher', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);*/
     }
   }
 
@@ -253,6 +250,11 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       setInterval(this.resizeWatcher.bind(this), 200);
     }
     try {
+      this.innerCode = this.contentWrapper.nativeElement.textContent;
+      // add blank lines when needed
+      for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
+        this.innerCode += '\n';
+      }
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode);
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
@@ -345,7 +347,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.request.unsubscribe();
     }
   }
-
+  @Input()
   public abort() {
     if(this.request) {
       this.request.unsubscribe();
@@ -358,7 +360,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.loading = false;
     }
   }
-
+  @Input()
   public highlight(line: number) {
     const currentKey = 'hl-' + line;
     Object.keys(this.breakpoints).forEach(k => {
@@ -407,7 +409,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       return of(result as T);
     };
   }
-
+  @Input()
   public execute() {
     this.result = undefined;
     this.status = undefined;
@@ -504,7 +506,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         (e as HTMLElement).classList.remove('mouseOver');
       });
   }
-
+  @Input()
   public resize(initial: boolean) {
     window.setTimeout(() => {
       if(initial && (!!this.heightPx)) {

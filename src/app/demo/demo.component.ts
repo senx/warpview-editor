@@ -23,7 +23,7 @@ import { Config } from "../lib/config";
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', { static: true }) editor: ElementRef<HTMLElement>;
+  @ViewChild('editor', {static:false}) editor: ElementRef<HTMLElement>;
   config = {
     messageClass: 'alert alert-info message',
     errorClass: 'alert alert-danger error',

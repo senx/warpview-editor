@@ -36,7 +36,7 @@ import create = editor.create;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor', {static: true}) editor: ElementRef;
+  @ViewChild('editor', {static:true}) editor: ElementRef;
   @Input() set theme(newValue: string) {
     // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue);

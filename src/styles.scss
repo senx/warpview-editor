@@ -19,3 +19,9 @@ span.mouseOver {
   cursor: pointer;
   text-decoration: underline;
 }
+warp-view-editor {
+  font-size: 0;
+  &>div {
+    font-size: initial;
+  }
+}
