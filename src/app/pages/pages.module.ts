@@ -24,6 +24,7 @@ import {ElementsModule} from '../elements/elements.module';
 import {AppRoutingModule} from '../app-routing.module';
 import { DocComponent } from './doc/doc.component';
 import { Sample3Component } from './sample3/sample3.component';
+import { Sample4Component } from './sample4/sample4.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { Sample3Component } from './sample3/sample3.component';
     DemoImageComponent,
     MainComponent,
     DocComponent,
-    Sample3Component
+    Sample3Component,
+    Sample4Component
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ import { Sample3Component } from './sample3/sample3.component';
     DemoImageComponent,
     MainComponent,
     DocComponent,
-    Sample3Component
+    Sample3Component,
+    Sample4Component
   ]
 })
 export class PagesModule {
