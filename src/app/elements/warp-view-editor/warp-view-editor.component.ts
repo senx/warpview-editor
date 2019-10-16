@@ -153,6 +153,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   // tslint:disable-next-line:variable-name
   _debug = false;
   lastKnownWS: string;
+  private static MIN_HEIGHT = 250;
   private LOG: Logger;
   private ed: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
@@ -192,10 +193,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       - parseInt(window.getComputedStyle(this.editor.nativeElement.parentElement).getPropertyValue('padding-top'), 10)
       - parseInt(window.getComputedStyle(this.editor.nativeElement.parentElement).getPropertyValue('padding-bottom'), 10);
 
-    const warpviewParentHeight = this.el.nativeElement.parentElement.getBoundingClientRect().height
+    let warpviewParentHeight = this.el.nativeElement.parentElement.getBoundingClientRect().height
       - parseInt(window.getComputedStyle(this.el.nativeElement.parentElement).getPropertyValue('padding-top'), 10)
       - parseInt(window.getComputedStyle(this.el.nativeElement.parentElement).getPropertyValue('padding-bottom'), 10);
-
+    warpviewParentHeight = Math.max(warpviewParentHeight, WarpViewEditorComponent.MIN_HEIGHT);
     // fix the 5px editor height in chrome by setting the wrapper height at element level
     if (Math.abs(this.wrapper.nativeElement.getBoundingClientRect().height - warpviewParentHeight) > 30) {
       this.LOG.debug(['resize'], 'resize wrapper to parent height ' + warpviewParentHeight);
@@ -205,7 +206,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     if (editorParentHeight !== this.previousParentHeight) {
       this.previousParentHeight = editorParentHeight;
       // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
-      const editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.getBoundingClientRect().height : 0);
+      const editorH =  Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.getBoundingClientRect().height : 0);
       const editorW = Math.floor(this.editor.nativeElement.parentElement.getBoundingClientRect().width);
       this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({height: editorH, width: editorW});

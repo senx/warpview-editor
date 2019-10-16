@@ -14,17 +14,10 @@
  *  limitations under the License.
  */
 
-import {Utils} from '../../lib/utils';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
-import {editor} from 'monaco-editor';
+import { Utils } from '../../lib/utils';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { editor } from 'monaco-editor';
+import { Logger } from "../../lib/logger";
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import setTheme = editor.setTheme;
 import create = editor.create;
@@ -36,11 +29,24 @@ import create = editor.create;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor', {static:true}) editor: ElementRef;
+  @ViewChild('editor', { static: true }) editor: ElementRef;
+
+  @Input() set debug(debug: boolean | string) {
+    if(typeof debug === 'string') {
+      debug = 'true' === debug;
+    }
+    this._debug = debug;
+    this.LOG.setDebug(debug);
+  }
+
+  get debug() {
+    return this._debug;
+  }
+
   @Input() set theme(newValue: string) {
     // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue);
-    if ('dark' === newValue) {
+    if('dark' === newValue) {
       this.monacoTheme = 'vs-dark';
     } else {
       this.monacoTheme = 'vs';
@@ -78,32 +84,39 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:variable-name
   _result: any[] = [];
   // tslint:disable-next-line:variable-name
-  private _config = {
+  _config = {
     messageClass: '',
     errorClass: ''
   };
+  // tslint:disable-next-line:variable-name
+  _debug = false;
+
+  private LOG: Logger;
+
   private LINE_HEIGHT = 18;
   private CONTAINER_GUTTER = 10;
   private resEd: IStandaloneCodeEditor;
   private monacoTheme = 'vs';
 
+  constructor() {
+    this.LOG = new Logger(WarpViewRawResultComponent, this._debug);
+  }
+
   ngOnInit() {
     this._config = Utils.mergeDeep(this._config, this.config);
-    if ('dark' === this.theme) {
+    if('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - componentWillLoad', this.result);
+    this.LOG.debug(['ngOnInit'], this.result);
   }
 
   buildEditor(json: string) {
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - buildEditor', json);
-    if (!this.resEd && json) {
+    this.LOG.debug(['buildEditor'], 'buildEditor', json);
+    if(!this.resEd && json) {
       this.resEd = create(this.editor.nativeElement, {
         value: '',
         language: 'json',
-        minimap: {enabled: true},
+        minimap: { enabled: true },
         automaticLayout: true,
         scrollBeyondLastLine: false,
         theme: this.monacoTheme,
@@ -118,12 +131,12 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   }
 
   adjustHeight() {
-    if (this.editor) {
+    if(this.editor) {
       const el = this.editor.nativeElement;
-      const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
+      const codeContainer = el.getElementsByClassName('view-lines')[ 0 ] as HTMLElement;
       const containerHeight = codeContainer.offsetHeight;
       let prevLineCount = 0;
-      if (!containerHeight) {
+      if(!containerHeight) {
         // dom hasn't finished settling down. wait a bit more.
         setTimeout(() => this.adjustHeight(), 0);
       } else {
@@ -142,9 +155,9 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - componentDidLoad', this.result);
+    this.LOG.debug(['ngAfterViewInit'], this._result);
     this.loading = true;
-    this.buildEditor(JSON.stringify(this.result));
+    this.buildEditor(JSON.stringify(this._result));
     this.loading = false;
   }
 }
