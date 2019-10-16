@@ -30,6 +30,7 @@ export class WSCompletionItemProvider implements CompletionItemProvider {
     this.languageId = languageId;
   }
 
+  // noinspection JSUnusedLocalSymbols
   provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken): Thenable<CompletionList> {
     const defs: CompletionList = {
       suggestions: [],

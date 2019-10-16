@@ -28,6 +28,7 @@ export class WSHoverProvider implements HoverProvider {
     this.languageId = languageId;
   }
 
+  // noinspection JSUnusedLocalSymbols
   provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): PromiseLike<languages.Hover | undefined | null> | languages.Hover | undefined | null {
     const word = model.getWordAtPosition(position);
     const range = new Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);

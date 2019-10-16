@@ -68,17 +68,8 @@
       transform: rotate(360deg);
     }
   }
-
-  .clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
-
   .wrapper {
 
-
-    //   max-width: calc(100% - 4em);
     &.dark {
       background-color: #1e1e1e !important;
       color: #fff;

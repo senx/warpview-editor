@@ -58,6 +58,7 @@ export class ElementsModule {
   constructor(private injector: Injector) {
   }
 
+  // noinspection JSUnusedGlobalSymbols
   ngDoBootstrap() {
     [
       {name: 'warp-view-editor', component: WarpViewEditorComponent},

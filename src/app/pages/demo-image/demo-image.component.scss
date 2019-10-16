@@ -16,26 +16,10 @@
 
 :host {
 
-
   --warpview-editor-breakpoint-color: deeppink;
-
 
   .resizable {
     resize: both;
     overflow: hidden;
   }
-
-  .movehandle {
-    height: 20px;
-    width: 20px;
-    top: 0;
-    right: 0;
-    position: absolute;
-    background-color: lightgray;
-    border: none;
-    cursor: move;
-    background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
-    background-size: 20px 20px;
-  }
-
 }

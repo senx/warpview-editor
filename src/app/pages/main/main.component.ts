@@ -37,7 +37,7 @@ bower install senx-warpview-editor --save
 ## Usage
 
 \`\`\`html
-<html>
+<html dir="ltr" lang="en">
 <head>
   <title>Test</title>
   <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/elements/warpview-editor.js"></script>

@@ -56,21 +56,6 @@
     height: 100%;
   }
 
-  .warpview-buttons {
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: auto;
-
-    .messages {
-      padding-left: 10px;
-      width: 100%;
-    }
-  }
-
-
   .messages {
     float: right;
   }
@@ -83,7 +68,6 @@
     bottom: 0;
     right: 0;
     margin: 10px;
-
 
     .loader {
       background-color: rgba(0, 0, 0, 0.3);
@@ -111,7 +95,6 @@
         left: calc(50% - 25px);
       }
     }
-
 
     &.dark {
       background-color: #1e1e1e;
