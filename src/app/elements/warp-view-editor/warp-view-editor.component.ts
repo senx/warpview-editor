@@ -169,13 +169,15 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);
+    if(this.el) this.LOG.debug(['constructor', 'el'], 'textContent: ', this.el.nativeElement.textContent);
+    if(this.contentWrapper) this.LOG.debug(['constructor', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
   }
 
   // noinspection JSUnusedGlobalSymbols
   ngOnInit() {
     this.LOG.debug(['ngOnInit'], 'innerConfig: ', this.innerConfig);
-    this.LOG.debug(['ngOnInit'], 'textContent: ', this.el.nativeElement.textContent, this.contentWrapper.nativeElement.innerText);
-    this.LOG.debug(['ngOnInit'], 'innerHTML: ', this.el.nativeElement.innerHTML, this.contentWrapper.nativeElement.innerHTML);
+    if(this.el) this.LOG.debug(['ngOnInit', 'el'], 'textContent: ', this.el.nativeElement.textContent);
+    if(this.contentWrapper) this.LOG.debug(['ngOnInit', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
     this.innerCode = this.el.nativeElement.textContent;
     // add blank lines when needed
     for(let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
@@ -220,6 +222,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({ height: editorH, width: editorW });
       this.editor.nativeElement.style.overflow = 'hidden';
+
+      if(this.el) this.LOG.debug(['resizeWatcher', 'el'], 'textContent: ', this.el.nativeElement.textContent);
+      if(this.contentWrapper) this.LOG.debug(['resizeWatcher', 'wrapper'], 'textContent: ', this.contentWrapper.nativeElement.textContent);
     }
   }
 
@@ -238,6 +243,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngAfterViewInit(): void {
+    this.LOG.debug(['ngAfterViewInit'], 'textContent: ', this.el.nativeElement.textContent, this.contentWrapper.nativeElement.textContent);
     if(!!this.heightPx) {
       // if height-px is set, size is fixed.
       this.el.nativeElement.style.height = this.heightPx + 'px';

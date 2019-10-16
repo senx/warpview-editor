@@ -19,7 +19,6 @@ const concat = require('concat');
 (async function build() {
   const files = [
     './dist/elements/runtime-es5.js',
-    './dist/elements/polyfills-es5.js',
     './dist/elements/polyfills-es2015.js',
     './dist/elements/common-es5.js',
     './dist/elements/0-es5.js',
