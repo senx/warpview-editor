@@ -38,22 +38,17 @@ bower install senx-warpview-editor --save
 
 \`\`\`html
 <html dir="ltr" lang="en">
-<head>
-  <title>Test</title>
-  <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/elements/warpview-editor.js"></script>
-</head>
-<body>
-<warp-view-editor url="https://warp.senx.io/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'
->
-  2 2 +
-</warp-view-editor>
-</body>
+  <head>
+    <title>Test</title>
+    <script src="https://unpkg.com/@senx/warpview-editor@x.x.x/elements/warpview-editor.js"></script>
+  </head>
+  <body>
+    <warp-view-editor url="https://warp.senx.io/api/v0/exec" height-line=18 width-px=600 theme="dark" id="editor" show-dataviz="true" horizontal-layout="false" config='{"quickSuggestionsDelay":3000, "suggestOnTriggerCharacters": false}'>
+      2 2 +
+    </warp-view-editor>
+  </body>
 </html>
 \`\`\`
-
-## Integrations
-
-[See here](https://stenciljs.com/docs/framework-integration)
 
 
 ## CSS vars
@@ -73,6 +68,7 @@ bower install senx-warpview-editor --save
 | widthPx | \`number\` | | Fixed width |
 | heightPx | \`number\` | | Fixed height |
 | heightLine | \`number\` | | Fixed number of lines |
+| imageTab | boolean | false | Display the tab for image results |
 
 ## Data format
 
@@ -80,20 +76,28 @@ bower install senx-warpview-editor --save
 
 \`\`\`json
 {
-  "execButton": {
+  "buttons" : {
+    "class": ""
+  },
+  "execButton" : {
     "class": "",
     "label": "Execute"
   },
-  "datavizButton": {
+  "datavizButton" : {
     "class": "",
     "label": "Visualize"
   },
+  "hover" : true,
+  "readOnly" : false,
+  "messageClass" : "",
+  "errorClass" : "",
   "editor": {
     "quickSuggestionsDelay": 10,
-      "quickSuggestions": true
-    },
-"readOnly": false,
-"hover": true
+    "quickSuggestions": true,
+    "tabSize": 2,
+    "minLineNumber": 10,
+    "enableDebug": false
+  }
 }
 \`\`\`
 
@@ -134,7 +138,13 @@ Json of the the WarpScript execution result triggered by a click on the dataViz 
       language = 'markdown';
     }
 
-    const result = highlightjs.highlight(language, code).value;
+    let result: string = highlightjs.highlight(language, code).value;
+    result = result.split('\n').map((s: string) => {
+       let nb = 0;
+       while (s[nb] === ' ') {nb++;}
+       return '&nbsp;'.repeat(nb) + s.substring(nb);
+      }).join('<br>');
+    console.log(result);
     return `<code class="hljs ${language}">${result}</code>`;
   }
 
