@@ -19,7 +19,7 @@ bower install senx-warpview-editor --save
 
 ## Usage
 
-\`\`\`html
+```html
 <html dir="ltr" lang="en">
   <head>
     <title>Test</title>
@@ -31,7 +31,7 @@ bower install senx-warpview-editor --save
     </warp-view-editor>
   </body>
 </html>
-\`\`\`
+```
 
 
 ## CSS vars
@@ -40,24 +40,24 @@ bower install senx-warpview-editor --save
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| url | \`string\` | | Warp 10 url, eg: \`https://warp.senx.io/api/v0/exec\` |
-| theme | \`string\` | 'light' | Editor theme (\`light\` or \`dark\`) |
-| warpscript | \`string\` | '' | WarpScript to edit (optional, could be inside HTML tag) |
-| showDataviz | \`boolean\` | false | Display the "Show dataviz" button  |
-| showExecute | \`boolean\` | true | Display the "Execute" button  |
-| horizontalLayout | \`boolean\` | false | Horizontal or vertical layout  |
-| config | \`object\` | default config | Configuration |
-| displayMessages | \`boolean\` | true | Displays messages from WarpScript execution |
-| widthPx | \`number\` | | Fixed width |
-| heightPx | \`number\` | | Fixed height |
-| heightLine | \`number\` | | Fixed number of lines |
+| url | `string` | | Warp 10 url, eg: `https://warp.senx.io/api/v0/exec` |
+| theme | `string` | 'light' | Editor theme (`light` or `dark`) |
+| warpscript | `string` | '' | WarpScript to edit (optional, could be inside HTML tag) |
+| showDataviz | `boolean` | false | Display the "Show dataviz" button  |
+| showExecute | `boolean` | true | Display the "Execute" button  |
+| horizontalLayout | `boolean` | false | Horizontal or vertical layout  |
+| config | `object` | default config | Configuration |
+| displayMessages | `boolean` | true | Displays messages from WarpScript execution |
+| widthPx | `number` | | Fixed width |
+| heightPx | `number` | | Fixed height |
+| heightLine | `number` | | Fixed number of lines |
 | imageTab | boolean | false | Display the tab for image results |
 
 ## Data format
 
 ### Default config
 
-\`\`\`json
+```json
 {
   "buttons" : {
     "class": ""
@@ -82,7 +82,7 @@ bower install senx-warpview-editor --save
     "enableDebug": false
   }
 }
-\`\`\`
+```
 
 ## Events
 
@@ -90,17 +90,17 @@ bower install senx-warpview-editor --save
 
 String execution status :
 
-\`\`\`text
+```text
 Your script execution took 527.749 ms serverside, fetched 138156 datapoints and performed 21 WarpScript operations.
-\`\`\`
+```
 
 ### warpViewEditorErrorEvent
 
 String execution error :
 
-\`\`\`text
+```text
 ERROR line #4 in section '[TOP]': Unknown symbol 'TOKEN2'
-\`\`\`
+```
 
 ### warpViewEditorWarpscriptChanged
 
