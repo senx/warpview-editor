@@ -17,9 +17,9 @@
   <div class="card-body" *ngIf="visible" >
     <h3 class="card-title">Example 3</h3>
     <p class="card-text">min height 400, height 1000, one line script</p>
-    <div style="min-height: 400px; height: 1000px;">
+    <div class="resizable" style="min-height: 400px; height: 1000px;">
     <warpview-editor url="https://warp.senx.io/api/v0/exec" imageTab="true" showExecute="true"
-                     heightLine="20"
+                     heightLine="20" imageTab="true"
                      config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}"
                      class="hydrated">{{ '1 100 <% { SWAP DUP TOSTRING SWAP } %> FOR' }}</warpview-editor>
     </div>

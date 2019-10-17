@@ -16,15 +16,16 @@
   -->
 
 <div class="card ">
-  <div class="card-body resizable" *ngIf="visible">
+  <div class="card-body " *ngIf="visible">
     <h3 class="card-title">Example 1</h3>
     <p class="card-text">min height 400 + height 400 on parent div</p>
-    <div style="min-height: 400px;height: 400px;">
+    <div class="resizable" style="min-height: 400px;height: 400px;">
     <warpview-editor url="https://warp.senx.io/api/v0/exec"
                      [theme]="'dark'" id="editor"
                      [showDataviz]="false" [showExecute]="true"
                      [heightLine]="20"
                      [horizontalLayout]="false" [debug]="true"
+                     imageTab="true"
                      config="{&quot;messageClass&quot;:&quot;alert alert-info&quot;,&quot;errorClass&quot;:&quot;alert alert-danger&quot;,&quot;execButton&quot;:{&quot;class&quot;:&quot;btn btn-success mt-1&quot;},&quot;readOnly&quot;:false,&quot;hover&quot;:true}">{{warpscript}}</warpview-editor>
     </div>
   </div>
