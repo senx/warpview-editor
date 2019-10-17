@@ -129,7 +129,9 @@ Json of the the WarpScript execution result triggered by a click on the execute 
 
 ### warpViewEditorDatavizRequested
 
-Json of the the WarpScript execution result triggered by a click on the dataViz button`;
+Json of the the WarpScript execution result triggered by a click on the dataViz button
+
+`;
   data: SafeHtml;
 
   static highlightCode(code: string, language: string): string {
