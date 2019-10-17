@@ -124,7 +124,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() heightLine: number;
   @Input() heightPx: number;
   @Input() tabbed = false;
-  @Input() imageTab = true;
+  @Input() imageTab = false;
   @Input() initialSize: { w?: number, h?: number, name?: string, p?: number };
 
   @Output() warpViewEditorStatusEvent = new EventEmitter<any>();
@@ -245,6 +245,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
         this.innerCode += '\n';
       }
+      // trim spaces and line breaks at the beginning (side effect of angular)
+      let firstIndex = 0;
+      while (this.innerCode[firstIndex] === ' ' || this.innerCode[firstIndex] === '\n') { firstIndex++; }
+      this.innerCode = this.innerCode.substring(firstIndex);
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
