@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
     "build:elements": "yarn copy && ng build elements --prod && node scripts/build-elements.js",
     "gen": "cd src/app/elements/ && ng g component --module=elements.module.ts --entryComponent=true --skipTests=true --style=scss --viewEncapsulation=ShadowDom --export=true",
     "genp": "cd src/app/pages && ng g component --module=pages.module.ts --entryComponent=true --skipTests=true --style=scss",
-    "gh" : "yarn copy && ng build --prod --base-href /warpview-editor/ && npx ngh --dir=dist/warpview-editor --repo=git@github.com:senx/warpview-editor.git"
+    "gh": "yarn copy && ng build --prod --base-href /warpview-editor/ && npx ngh --dir=dist/warpview-editor --repo=git@github.com:senx/warpview-editor.git"
   },
   "dependencies": {
     "@angular/animations": "~8.2.9",
