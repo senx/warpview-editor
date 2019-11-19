@@ -161,6 +161,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private breakpoints = {};
   private decoration = [];
   private previousParentHeight = -1;
+  private previousParentWidth = -1;
   private request: Subscription;
   headers = this.getItems();
   innerConfig = new Config();
@@ -189,25 +190,27 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   resizeWatcher() {
-    const editorParentHeight = this.editor.nativeElement.parentElement.getBoundingClientRect().height
+    const editorParentWidth = this.editor.nativeElement.parentElement.clientWidth;
+    const editorParentHeight = this.editor.nativeElement.parentElement.clientHeight
       - parseInt(window.getComputedStyle(this.editor.nativeElement.parentElement).getPropertyValue('padding-top'), 10)
       - parseInt(window.getComputedStyle(this.editor.nativeElement.parentElement).getPropertyValue('padding-bottom'), 10);
 
-    let warpviewParentHeight = this.el.nativeElement.parentElement.getBoundingClientRect().height
+    let warpviewParentHeight = this.el.nativeElement.parentElement.clientHeight
       - parseInt(window.getComputedStyle(this.el.nativeElement.parentElement).getPropertyValue('padding-top'), 10)
       - parseInt(window.getComputedStyle(this.el.nativeElement.parentElement).getPropertyValue('padding-bottom'), 10);
     warpviewParentHeight = Math.max(warpviewParentHeight, WarpViewEditorComponent.MIN_HEIGHT);
     // fix the 5px editor height in chrome by setting the wrapper height at element level
-    if (Math.abs(this.wrapper.nativeElement.getBoundingClientRect().height - warpviewParentHeight) > 30) {
+    if (Math.abs(this.wrapper.nativeElement.clientHeight - warpviewParentHeight) > 30) {
       this.LOG.debug(['resize'], 'resize wrapper to parent height ' + warpviewParentHeight);
       this.wrapper.nativeElement.style.height = warpviewParentHeight + 'px';
     }
     // watch for editor parent' size change
-    if (editorParentHeight !== this.previousParentHeight) {
+    if (editorParentHeight !== this.previousParentHeight || editorParentWidth !== this.previousParentWidth) {
       this.previousParentHeight = editorParentHeight;
+      this.previousParentWidth = editorParentWidth;
       // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
-      const editorH =  Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.getBoundingClientRect().height : 0);
-      const editorW = Math.floor(this.editor.nativeElement.parentElement.getBoundingClientRect().width);
+      const editorH =  Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
+      const editorW = Math.floor(this.editor.nativeElement.parentElement.clientWidth);
       this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({height: editorH, width: editorW});
       this.editor.nativeElement.style.overflow = 'hidden';
@@ -492,7 +495,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     window.setTimeout(() => {
       if (initial && (!!this.heightPx)) {
         this.editor.nativeElement.style.height = `calc(100% - ${this.buttons ?
-          this.buttons.nativeElement.getBoundingClientRect().height
+          this.buttons.nativeElement.clientHeight
           : 100}px )`;
       }
       if (initial) {
