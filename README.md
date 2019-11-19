@@ -1,6 +1,6 @@
 # Warp View Editor
 
-[![npm version](https://badge.fury.io/js/%40senx%2Fwarpview-editor.svg)](https://badge.fury.io/js/%40senx%2Fwarpview-editor) [![Bower version](https://badge.fury.io/bo/senx-warpview-editor.svg)](https://badge.fury.io/bo/senx-warpview-editor)
+[![npm version](https://badge.fury.io/js/%40senx%2Fwarpview-editor.svg)](https://badge.fury.io/js/%40senx%2Fwarpview-editor) 
 
 This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a WarpScript editor dedicated to [Warp 10™](https://www.warp10.io).
 
@@ -9,13 +9,13 @@ This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a Warp
 - [licence Apache 2](./LICENSE.md)
 - [Contribute](./CONTRIBUTING.md)
 
+Demo: https://senx.github.io/warpview-editor
+
 ## Getting started
 
-npm i @senx/warpview-editor --save
+    npm i @senx/warpview-editor --save
 
-yarn add @senx/warpview-editor
-
-bower install senx-warpview-editor --save
+    yarn add @senx/warpview-editor
 
 ## Usage
 
