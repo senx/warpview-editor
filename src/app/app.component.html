@@ -1,0 +1,56 @@
+<!--
+  ~  Copyright 2019 SenX S.A.S.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" routerLink="/">
+      <img src="/assets/img/warpView_blanc.png" class="img-fluid" height="30" alt="Warp View" style="max-height: 40px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" >Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/demo1" routerLinkActive="active" >Sample</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/demo2" routerLinkActive="active" >Image sample</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            More samples
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" routerLink="/demo3" routerLinkActive="active" >Image sample 2</a>
+            <a class="dropdown-item" routerLink="/demo4" routerLinkActive="active" >Sample 3</a>
+            <a class="dropdown-item" routerLink="/demo5" routerLinkActive="active" >Sample 4</a>
+            <a class="dropdown-item" routerLink="/demo6" routerLinkActive="active" >Sample 5</a>
+            <a class="dropdown-item" routerLink="/demo7" routerLinkActive="active" >Sample 6</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main role="main" class="container margin-top">
+  <router-outlet></router-outlet>
+</main>

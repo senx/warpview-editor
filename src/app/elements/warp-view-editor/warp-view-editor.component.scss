@@ -1,0 +1,139 @@
+/*!
+ *  Copyright 2019 SenX S.A.S.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+:host {
+  height: 100%;
+  width: 100%;
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+
+  .warpscript {
+    display: none;
+  }
+
+  .editor-wrapper {
+    overflow: auto;
+  }
+
+  .wctabs {
+    height: 100%;
+  }
+
+  .editor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100% !important;
+    margin: 0;
+    padding: 0;
+    //  overflow: hidden;
+  }
+
+
+  div[slot] {
+    height: 100%;
+  }
+
+  .tab-wrapper {
+    height: 100%;
+  }
+
+  .messages {
+    float: right;
+  }
+
+  .wrapper-main {
+    width: calc(100% - 20px);
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+
+    .loader {
+      background-color: rgba(0, 0, 0, 0.3);
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      .spinner {
+        // border: 5px solid var(--warp-view-spinner-color,#f3f3f3) transparent transparent transparent;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite;
+        border-color: var(--warp-view-spinner-color, #5899DA) transparent transparent transparent;
+        border-style: solid;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        overflow: visible;
+        z-index: 999;
+        margin: auto;
+        top: calc(50% - 25px);
+        left: calc(50% - 25px);
+      }
+    }
+
+    &.dark {
+      background-color: #1e1e1e;
+      color: #f8f9fa;
+      --wc-tab-header-border-color: #343a40;
+      --wc-tab-header-selected-border-color: #343a40;
+      --wc-tab-header-bg-color: transparent;
+      --wc-tab-header-color: #f8f9fa;
+      --wc-tab-header-selected-color: #1e1e1e;
+      --wc-tab-header-selected-bg-color: #f8f9fa;
+      --wc-tab-header-disabled-color: rgba(255, 255, 255, .5);
+      --wc-tab-header-disabled-bg-color: rgba(0, 0, 0, .5);
+      --wc-split-gutter-color: #343a40;
+      --warp-view-spinner-color: #f3f3f3;
+      --warp-view-image-border-color: #a0a0a0;
+    }
+
+    &.light {
+      background-color: #fff !important;
+      color: #000;
+    }
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

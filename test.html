@@ -1,0 +1,158 @@
+<!--
+  ~  Copyright 2019 SenX S.A.S.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTarget -->
+<html dir="ltr" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Warp-View Editor</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      margin: 15px auto;
+    }
+
+    .message, .error {
+      position: absolute;
+      left: 5%;
+      width: 90%;
+      z-index: 99999;
+    }
+    .message {
+      bottom: 0;
+    }
+    .error {
+      bottom: 60px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .resizable {
+      resize: both;
+      overflow: hidden;
+    }
+
+    .movehandle {
+      height: 20px;
+      width: 20px;
+      top:0;
+      right: 0;
+      position: absolute;
+      background-color: lightgray;
+      border: none;
+      cursor:move;
+      background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
+      background-size: 20px 20px ;
+    }
+
+
+  </style>
+</head>
+
+<body class="d-flex flex-column vh-100 align-items-stretch">
+<a href="indexdoc.html">doc test</a>
+<main role="main" class="container flex-fill">
+  <h1>WarpView Editor</h1>
+  <div class="card ">
+    <div class="card-body resizable" style="height: 500px; width: 100%;">
+
+      <warp-view-editor url="https://warp.senx.io/api/v0/exec" theme="dark" id="editor"
+                        show-dataviz="false" show-execute="true"
+                        height-line="20"
+                        horizontal-layout="false" debug="true"
+                        config='{
+
+                         "messageClass": "alert alert-info message",
+                         "errorClass": "alert alert-danger error",
+                         "execButton" : { "class" : "btn btn-success" },
+                         "datavizButton" : { "class" : "btn btn-success" },
+                          "readOnly": false,
+                          "hover": true, "editor": {"enableDebug": true,   "quickSuggestionsDelay":3000,
+                          "suggestOnTriggerCharacters": false}
+                          }'
+      >@training/dataset0
+// warp.store.hbase.puts.committed is the number of datapoints committed to
+// HBase since the restart of the Store daemon
+[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
+[ SWAP mapper.rate 1 0 0 ] MAP
+
+// Keep only 1000 datapoints per GTS
+1000 LTTB
+DUP
+// Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
+5 false ESDTEST
+// Convert the ticks identified by ESDTEST into an annotation GTS
+<%
+DROP 		// excude element index
+NEWGTS 	// create a new GTS
+SWAP 		// get timestamp list
+<% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
+%> LMAP
+2 ->LIST // Put our GTS in a list
+ZIP // merge into a list of GTS</warp-view-editor>
+
+
+
+    </div>
+    <div class="card-footer">
+      <div class="btn btn-danger" id="abort">Abort</div>
+      <div class="btn btn-warning" id="inject">Inject Random WS</div>
+      <span id="size"></span>
+      <span id="breakpoints"></span>
+      <span id="ctrlclick"></span>
+    </div>
+  </div>
+</main>
+
+<script src="./elements/warpview-editor.js" defer></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script >
+  $(document).ready(() => {
+    $('#inject').click(function () {
+      $('#editor').attr('warpscript', Math.random().toString(36));
+    });
+    $('#abort').click(function () {
+      document.getElementById('editor').abort();
+    });
+    document.addEventListener('warpViewEditorSize', function (e) {
+      $('#size').text(JSON.stringify(e.detail));
+    });
+    document.addEventListener('warpViewEditorBreakPoint', function (e) {
+      $('#breakpoints').text(JSON.stringify(e.detail));
+    });
+    document.addEventListener('warpViewEditorCtrlClick', function (e) {
+      $('#ctrlclick').text(JSON.stringify(e.detail));
+    });
+  });
+
+</script>
+
+</body>
+
+</html>
