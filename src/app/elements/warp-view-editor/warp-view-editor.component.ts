@@ -36,7 +36,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
@@ -86,7 +86,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this._theme;
   }
 
-  @Input()
+  @Input('warpscript')
   set warpscript(newValue: string) {
     this.LOG.debug(['warpscriptHandler'], 'The new value of warpscript is: ', newValue);
     if (this.ed) {
@@ -100,12 +100,37 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this._warpscript;
   }
 
-  @Input() showDataviz = false;
-  @Input() showExecute = true;
-  @Input() showResult = true;
-  @Input() horizontalLayout = false;
+  _showDataviz = false;
+  @Input('showDataviz')
+  get showDataviz(): boolean {
+    return this._showDataviz;
+  }
 
-  @Input() set config(config: Config | string) {
+  set showDataviz(value: boolean) {
+    this._showDataviz = '' + value !== 'false';
+  }
+
+  private _showExecute = true;
+  @Input('showExecute')
+  get showExecute(): boolean {
+    return this._showExecute;
+  }
+
+  set showExecute(value: boolean) {
+    this._showExecute = '' + value !== 'false';
+  }
+
+  private _showResult = true;
+  @Input('showResult')
+  get showResult(): boolean {
+    return this._showResult;
+  }
+
+  set showResult(value: boolean) {
+    this._showResult = '' + value !== 'false';
+  }
+
+  @Input('config') set config(config: Config | string) {
     let conf = (typeof config === 'string') ? JSON.parse(config || '{}') : config || {};
     this.innerConfig = Utils.mergeDeep(this.innerConfig, conf);
     this.LOG.debug(['config'], this.innerConfig, conf);
@@ -119,13 +144,66 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this.innerConfig;
   }
 
-  @Input() displayMessages = true;
-  @Input() widthPx: number;
-  @Input() heightLine: number;
-  @Input() heightPx: number;
-  @Input() tabbed = false;
-  @Input() imageTab = false;
-  @Input() initialSize: { w?: number, h?: number, name?: string, p?: number };
+  private _displayMessages = true;
+  @Input('displayMessages')
+  get displayMessages(): boolean {
+    return this._displayMessages;
+  }
+
+  set displayMessages(value: boolean) {
+    this._displayMessages = '' + value !== 'false';
+  }
+
+
+  private _widthPx: number;
+  @Input('widthPx')
+  get widthPx(): number {
+    return this._widthPx;
+  }
+
+  set widthPx(value: number) {
+    this._widthPx = parseInt('' + value, 10);
+  }
+
+  private _heightLine: number;
+  @Input('heightLine')
+  get heightLine(): number {
+    return this._heightLine;
+  }
+
+  set heightLine(value: number) {
+    this._heightLine = parseInt('' + value, 10);
+  }
+
+  private _heightPx: number;
+  @Input('heightPx')
+  get heightPx(): number {
+    return this._heightPx;
+  }
+
+  set heightPx(value: number) {
+    this._heightPx = parseInt('' + value, 10);
+  }
+
+  private _imageTab = false;
+  @Input('imageTab')
+  get imageTab(): boolean {
+    return this._imageTab;
+  }
+
+  set imageTab(value: boolean) {
+    this._imageTab = '' + value !== 'false';
+  }
+
+  private _initialSize: { w?: number, h?: number, name?: string, p?: number };
+  @Input('initialSize')
+  get initialSize(): { w?: number, h?: number, name?: string, p?: number } | string {
+    return this._initialSize;
+  }
+
+  set initialSize(value: { w?: number, h?: number, name?: string, p?: number } | string) {
+    this._initialSize = typeof value === 'string' ? JSON.parse(value) : value;
+  }
 
   @Output() warpViewEditorStatusEvent = new EventEmitter<any>();
   @Output() warpViewEditorErrorEvent = new EventEmitter<any>();
@@ -209,7 +287,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.previousParentHeight = editorParentHeight;
       this.previousParentWidth = editorParentWidth;
       // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
-      const editorH =  Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
+      const editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
       const editorW = Math.floor(this.editor.nativeElement.parentElement.clientWidth);
       this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({height: editorH, width: editorW});
@@ -222,7 +300,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       quickSuggestionsDelay: this.innerConfig.editor.quickSuggestionsDelay,
       quickSuggestions: this.innerConfig.editor.quickSuggestions,
       suggestOnTriggerCharacters: this.innerConfig.editor.quickSuggestions,
-      automaticLayout: (!!this.heightPx), // monaco auto layout is ok if parent has a fixed size, not 100% or a calc ( % px ) formula.
+      automaticLayout: !!this._heightPx, // monaco auto layout is ok if parent has a fixed size, not 100% or a calc ( % px ) formula.
       hover: {enabled: this.innerConfig.hover},
       readOnly: this.innerConfig.readOnly,
       fixedOverflowWidgets: true,
@@ -233,10 +311,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngAfterViewInit(): void {
     this.LOG.debug(['ngAfterViewInit'], 'height', this.heightPx);
-    if (!!this.heightPx) {
+    if (!!this._heightPx) {
       // if height-px is set, size is fixed.
-      this.el.nativeElement.style.height = this.heightPx + 'px';
-      this.wrapper.nativeElement.style.height = this.heightPx + 'px';
+      this.el.nativeElement.style.height = this._heightPx + 'px';
+      this.wrapper.nativeElement.style.height = this._heightPx + 'px';
       this.resize(true);
     } else {
       // compute the layout manually in a 200ms timer
@@ -250,7 +328,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
       // trim spaces and line breaks at the beginning (side effect of angular)
       let firstIndex = 0;
-      while (this.innerCode[firstIndex] === ' ' || this.innerCode[firstIndex] === '\n') { firstIndex++; }
+      while (this.innerCode[firstIndex] === ' ' || this.innerCode[firstIndex] === '\n') {
+        firstIndex++;
+      }
       this.innerCode = this.innerCode.substring(firstIndex);
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
@@ -418,9 +498,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         responseType: 'text'
       })
         .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-        .pipe(tap(res => {
-          console.log(res);
-        }))
         .subscribe(res => {
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
@@ -493,7 +570,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input()
   public resize(initial: boolean) {
     window.setTimeout(() => {
-      if (initial && (!!this.heightPx)) {
+      if (initial && (!!this._heightPx)) {
         this.editor.nativeElement.style.height = `calc(100% - ${this.buttons ?
           this.buttons.nativeElement.clientHeight
           : 100}px )`;
@@ -506,9 +583,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   getItems() {
     const headers = [];
-    if (this.showResult) {
-      headers.push({name: 'editor', size: this.initialSize ? this.initialSize.p || 50 : 50});
-      headers.push({name: 'result', size: this.initialSize ? 100 - this.initialSize.p || 50 : 50});
+    if (this._showResult) {
+      headers.push({name: 'editor', size: this._initialSize ? this._initialSize.p || 50 : 50});
+      headers.push({name: 'result', size: this._initialSize ? 100 - this._initialSize.p || 50 : 50});
     } else {
       headers.push({name: 'editor', size: 100});
     }

@@ -27,6 +27,7 @@ import { Sample3Component } from './sample3/sample3.component';
 import { Sample4Component } from './sample4/sample4.component';
 import { Sample5Component } from './sample5/sample5.component';
 import { Sample6Component } from './sample6/sample6.component';
+import {Sample7Component} from './sample7/sample7.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { Sample6Component } from './sample6/sample6.component';
     Sample3Component,
     Sample4Component,
     Sample5Component,
-    Sample6Component
+    Sample6Component,
+    Sample7Component,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,8 @@ import { Sample6Component } from './sample6/sample6.component';
     Sample3Component,
     Sample4Component,
     Sample5Component,
-    Sample6Component
+    Sample6Component,
+    Sample7Component
   ]
 })
 export class PagesModule {

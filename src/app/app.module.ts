@@ -22,6 +22,7 @@ import {ElementsModule} from './elements/elements.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {PagesModule} from './pages/pages.module';
+import { Sample7Component } from './pages/sample7/sample7.component';
 
 @NgModule({
   declarations: [AppComponent],

@@ -25,7 +25,8 @@
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "elements/"
+    "elements/",
+    "dist/"
   ],
   "scripts": {
     "prepublishOnly": "npm run build:elements",

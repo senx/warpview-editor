@@ -21,9 +21,8 @@
     <warpview-editor url="https://warp.senx.io/api/v0/exec"
                      #editor
                      [theme]="'dark'" id="editor"
-                     [showDataviz]="false" [showExecute]="true"
-                     [heightLine]="20"
-                     [horizontalLayout]="false" [debug]="true"
+                     [showDataviz]="false" [showExecute]="false"
+                     [heightLine]="20" [debug]="true"
                      (warpViewEditorBreakPoint)="warpViewEditorBreakPoint($event)"
                      (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
                      (warpViewEditorSize)="warpViewEditorSize($event)"
