@@ -25,7 +25,7 @@ export class BubblingEvents {
    * This class allow to create events that can bubble up outside angular element webcomponents
    */
   static emitBubblingEvent(el:ElementRef,eventname:string,eventdetail?:any) {
-    el.nativeElement.dispatchEvent(new CustomEvent(eventname, {bubbles: true, detail: eventdetail}));
+    el.nativeElement.dispatchEvent(new CustomEvent(eventname, {bubbles: true, detail: eventdetail, composed: true}));
   }
 
 }

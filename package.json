@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.0.3",
+  "version": "2.0.6",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -25,13 +25,14 @@
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "elements/"
+    "elements/",
+    "dist"
   ],
   "scripts": {
     "prepublishOnly": "npm run build:elements",
     "ng": "ng",
     "dev": "yarn copy && ng serve",
-    "build": "yarn copy && ng build",
+    "build": "yarn build:elements",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
