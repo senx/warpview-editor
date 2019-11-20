@@ -205,15 +205,15 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._initialSize = typeof value === 'string' ? JSON.parse(value) : value;
   }
 
-  @Output() warpViewEditorStatusEvent = new EventEmitter<any>();
-  @Output() warpViewEditorErrorEvent = new EventEmitter<any>();
-  @Output() warpViewEditorWarpscriptChanged = new EventEmitter<any>();
-  @Output() warpViewEditorWarpscriptResult = new EventEmitter<any>();
-  @Output() warpViewEditorLoaded = new EventEmitter<any>();
-  @Output() warpViewEditorSize = new EventEmitter<any>();
-  @Output() warpViewEditorBreakPoint = new EventEmitter<any>();
-  @Output() warpViewEditorCtrlClick = new EventEmitter<any>();
-  @Output() warpViewEditorDatavizRequested = new EventEmitter<any>();
+  @Output('warpViewEditorStatusEvent') warpViewEditorStatusEvent = new EventEmitter<any>();
+  @Output('warpViewEditorErrorEvent') warpViewEditorErrorEvent = new EventEmitter<any>();
+  @Output('warpViewEditorWarpscriptChanged') warpViewEditorWarpscriptChanged = new EventEmitter<any>();
+  @Output('warpViewEditorWarpscriptResult') warpViewEditorWarpscriptResult = new EventEmitter<any>();
+  @Output('warpViewEditorLoaded') warpViewEditorLoaded = new EventEmitter<any>();
+  @Output('warpViewEditorSize') warpViewEditorSize = new EventEmitter<any>();
+  @Output('warpViewEditorBreakPoint') warpViewEditorBreakPoint = new EventEmitter<any>();
+  @Output('warpViewEditorCtrlClick') warpViewEditorCtrlClick = new EventEmitter<any>();
+  @Output('warpViewEditorDatavizRequested') warpViewEditorDatavizRequested = new EventEmitter<any>();
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
   @ViewChild('buttons', {static: true}) buttons: ElementRef<HTMLDivElement>;
