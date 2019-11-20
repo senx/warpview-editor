@@ -275,6 +275,13 @@
             ],
             "scripts": [
               {
+                "input": "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js",
+                "bundleName": "custom-elements-es5-adapter"
+              },
+              {
+                "input": "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"
+              },
+              {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
             ],
