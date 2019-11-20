@@ -21,6 +21,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../lib/config';
 import {Logger} from '../../lib/logger';
 import {JsonLib} from '../../lib/jsonLib';
+import {BubblingEvents} from '../../lib/bubblingEvent';
 import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
 import {
   AfterViewInit,
@@ -354,10 +355,14 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
       if (this.ed) {
         this.warpViewEditorLoaded.emit('loaded');
+        //angular events does not bubble up outside angular component.
+        BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorLoaded");
+        
         this.ed.getModel().onDidChangeContent((event) => {
           if (this.lastKnownWS !== this.ed.getValue()) {
             this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
             this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+            BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorWarpscriptChanged",this.ed.getValue());
           }
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
@@ -388,6 +393,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               wfRepos: repos
             };
             this.warpViewEditorCtrlClick.emit(docParams);
+            BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorCtrlClick",docParams);
           }
         });
       }
@@ -416,6 +422,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.loading = false;
       this.error = 'Aborted';
       this.warpViewEditorErrorEvent.emit(this.error);
+      BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorErrorEvent",this.error);
       delete this.request;
       delete this.result;
       delete this.status;
@@ -455,6 +462,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       };
     }
     this.warpViewEditorBreakPoint.emit(this.breakpoints);
+    BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorBreakPoint",this.breakpoints);
     this.decoration = this.ed.deltaDecorations(this.decoration, Utils.toArray(this.breakpoints));
   }
 
@@ -467,6 +475,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.error = error.statusText;
       }
       this.warpViewEditorErrorEvent.emit(this.error);
+      BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorErrorEvent",this.error);
       this.loading = false;
       this.loading = false;
       return of(result as T);
@@ -503,6 +512,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
             this.warpViewEditorWarpscriptResult.emit(res.body);
+            BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorWarpscriptResult",res.body);
             this.status = {
               message: `Your script execution took
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
@@ -514,6 +524,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               fetched: parseInt(res.headers.get('x-warp10-fetched'), 10)
             };
             this.warpViewEditorStatusEvent.emit(this.status);
+            BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorStatusEvent",this.status);
             try {
               this.result = new JsonLib().parse(res.body, undefined);
             } catch (e) {
@@ -525,6 +536,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               this.result = res.body as any[];
               this.LOG.error(['execute 1'], this.error);
               this.warpViewEditorErrorEvent.emit(this.error);
+              BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorErrorEvent",this.error);
             }
           }
           this.loading = false;
@@ -537,6 +549,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   requestDataviz() {
     this.warpViewEditorDatavizRequested.emit(this.result);
+    BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorDatavizRequested",this.result);
   }
 
   @HostListener('document:resize', ['$event'])
@@ -578,6 +591,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
       if (initial) {
         this.warpViewEditorLoaded.emit();
+        BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorLoaded");
       }
     }, initial ? 500 : 100);
   }
