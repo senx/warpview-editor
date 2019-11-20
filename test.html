@@ -78,7 +78,11 @@
   <h1>WarpView Editor</h1>
   <div class="card ">
     <div class="card-body resizable" style="height: 500px; width: 100%;">
-      <warp-view-editor url="https://warp.senx.io/api/v0/exec" show-dataviz="false" show-execute="false" height-px="400"  id="editor" horizontal-layout="false" show-result="true" config="{&quot;editor&quot;: {&quot;minLineNumber&quot;: 2}}">//
+      <warp-view-editor url="https://warp.senx.io/api/v0/exec"
+                        show-dataviz="false" show-execute="true"
+                        height-line="20"
+                        horizontal-layout="false" debug="true"
+                        height-px="400"  id="editor" show-result config="{&quot;editor&quot;: {&quot;minLineNumber&quot;: 2}}">//
         // please turn me now in a regular html block to edit (convert to regular block in the contextual block menu)
       </warp-view-editor>
      <!-- <warp-view-editor url="https://warp.senx.io/api/v0/exec" theme="dark" id="editor"
@@ -129,7 +133,6 @@ ZIP // merge into a list of GTS</warp-view-editor>-->
   </div>
 </main>
 
-<script src="./elements/warpview-editor.js" defer></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -154,6 +157,7 @@ ZIP // merge into a list of GTS</warp-view-editor>-->
   });
 
 </script>
+<script src="./elements/warpview-editor.js" defer></script>
 
 </body>
 
