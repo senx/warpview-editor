@@ -26,6 +26,7 @@
                      (warpViewEditorBreakPoint)="warpViewEditorBreakPoint($event)"
                      (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
                      (warpViewEditorSize)="warpViewEditorSize($event)"
+                     (warpViewEditorLoaded)="warpViewEditorLoaded($event)"
                      [warpscript]="warpscriptAttr"
                      config='{
   "messageClass": "alert alert-info message",
@@ -48,9 +49,10 @@
     <div class="btn btn-danger" (click)="abort()">Abort</div>
     <div class="btn btn-warning" (click)="inject()">Inject Random WS</div>
     <ul>
-    <li id="size">Size: {{ size | json }}</li>
-    <li id="breakpoints">Breakpoints: {{breakpoint | json }}</li>
-    <li id="ctrlclick">CtrlClick: {{ctrlClick | json}}</li>
+    <li>Size: {{ size | json }}</li>
+    <li>Breakpoints: {{breakpoint | json }}</li>
+    <li>CtrlClick: {{ctrlClick | json}}</li>
+    <li>editorLoaded: {{editorLoaded | json}}</li>
     </ul>
   </div>
 </div>

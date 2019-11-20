@@ -16,6 +16,7 @@
 
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Config} from '../../lib/config';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'warpview-demo',
@@ -61,6 +62,7 @@ ZIP // merge into a list of GTS`;
   breakpoint: any;
   size: any;
   warpscriptAttr: string;
+  editorLoaded: any;
 
   constructor() {
   }
@@ -93,5 +95,9 @@ ZIP // merge into a list of GTS`;
 
   inject() {
     this.warpscriptAttr = Math.random().toString(36);
+  }
+
+  warpViewEditorLoaded($event: any) {
+    this.editorLoaded = {'editorLoaded' : $event};
   }
 }

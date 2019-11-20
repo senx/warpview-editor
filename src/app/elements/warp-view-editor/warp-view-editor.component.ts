@@ -353,6 +353,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
       this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
       if (this.ed) {
+        this.warpViewEditorLoaded.emit('loaded');
         this.ed.getModel().onDidChangeContent((event) => {
           if (this.lastKnownWS !== this.ed.getValue()) {
             this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
