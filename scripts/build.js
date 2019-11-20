@@ -25,11 +25,14 @@ const concat = require('concat');
     './dist/elements/common.js',
     './dist/elements/jsonMode-js.js',
     './dist/elements/main.js',
-    './scripts/loader.js',
   ];
 
   await fs.ensureDir('elements');
-  await concat(files, 'elements/warpview-editor.js');
+  await concat(files, 'elements/warpview-editor-ng.js');
+  await concat([
+    'elements/warpview-editor-ng.js',
+    './scripts/loader.js'
+  ], 'elements/warpview-editor.js');
   await fs.copyFile('./dist/elements/styles.css', 'elements/warpview-editor.css');
   await fs.copyFile('./dist/elements/0.js', 'elements/0.js');
   await fs.copyFile('./dist/elements/1.js', 'elements/1.js');

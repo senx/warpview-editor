@@ -26,14 +26,12 @@ window.addEventListener('load', function () {
       }
     }
   }
-  console.log('script path', path);
-/*  ['0', '1', 'warpview-editor'].forEach(s => {
+  ['0', '1'].forEach(s => {
     const script = document.createElement('script');
     script.src = path + '/' + s + '.js';
     script.setAttribute('defer', 'true');
     document.body.appendChild(script);
-  });*/
-
+  });
   const css = document.createElement('link');
   css.setAttribute('rel', 'stylesheet');
   css.setAttribute('href', path + '/warpview-editor.css');
