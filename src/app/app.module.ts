@@ -18,18 +18,17 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ElementsModule} from './elements/elements.module';
+import {WarpViewEditorModule} from './elements/warp-view-editor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {PagesModule} from './pages/pages.module';
-import { Sample7Component } from './pages/sample7/sample7.component';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     CommonModule,
-    ElementsModule,
+    WarpViewEditorModule,
     AppRoutingModule,
     PagesModule
   ],

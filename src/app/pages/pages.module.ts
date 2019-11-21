@@ -20,7 +20,7 @@ import { MainComponent } from './main/main.component';
 import { DemoImageComponent } from './demo-image/demo-image.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { ElementsModule } from '../elements/elements.module';
+import { WarpViewEditorModule } from '../elements/warp-view-editor.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { DocComponent } from './doc/doc.component';
 import { Sample3Component } from './sample3/sample3.component';
@@ -44,7 +44,7 @@ import {Sample7Component} from './sample7/sample7.component';
   imports: [
     BrowserModule,
     CommonModule,
-    ElementsModule,
+    WarpViewEditorModule,
     AppRoutingModule
   ],
   providers: [],

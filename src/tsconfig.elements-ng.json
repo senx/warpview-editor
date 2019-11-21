@@ -1,0 +1,34 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "sourceRoot": "./app/elements",
+    "outDir": "../dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": [],
+    "declaration": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableResourceInlining": true
+  },
+  "files": [
+    "../index.ts"
+  ],
+  "lib": [
+    "es2018",
+    "dom"
+  ],
+  "include": [
+    "./*.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

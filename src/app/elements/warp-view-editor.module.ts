@@ -52,9 +52,10 @@ import {GTSLib} from '../lib/gts.lib';
     WarpViewImageResult,
     WarpViewResult,
     WarpViewRawResultComponent
-  ]
+  ],
+  bootstrap: [WarpViewEditorComponent]
 })
-export class ElementsModule {
+export class WarpViewEditorModule {
   constructor(private injector: Injector) {
   }
 

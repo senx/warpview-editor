@@ -37,11 +37,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "tsc:elements": "tsc -p src/tsconfig.elements.json",
-    "ngc:elements": "ngc -p src/tsconfig.elements.json",
+    "ngc:elements": "ngc -p src/tsconfig.elements-ng.json",
     "copy": "cp -r node_modules/monaco-editor/dev/vs src/assets/.",
     "build:elements": "yarn copy && ng build elements --prod  --output-hashing=none  && node scripts/build.js",
-    "build:lib": "yarn copy && ng build lib --prod  --output-hashing=none  && node scripts/build.js",
     "gen": "cd src/app/elements/ && ng g component --module=elements.module.ts --entryComponent=true --skipTests=true --style=scss --viewEncapsulation=ShadowDom --export=true",
     "genp": "cd src/app/pages && ng g component --module=pages.module.ts --entryComponent=true --skipTests=true --style=scss",
     "gh": "yarn copy && ng build --prod --base-href /warpview-editor/ && npx ngh --dir=dist/warpview-editor --repo=git@github.com:senx/warpview-editor.git"

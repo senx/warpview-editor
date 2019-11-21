@@ -1,8 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "sourceRoot": "./app/elements",
-    "outDir": "../dist/elements-tsc/",
+    "outDir": "../out-tsc/app",
     "module": "es2015",
     "target": "es5",
     "types": [],
@@ -11,9 +10,6 @@
       "node_modules/@types"
     ]
   },
-  "files": [
-    "./app/elements/index.ts"
-  ],
   "lib": [
     "es2018",
     "dom"
