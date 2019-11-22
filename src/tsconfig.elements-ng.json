@@ -2,7 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "sourceRoot": "./app/elements",
-    "outDir": "../dist",
+    "outDir": "../dist/warpview-editor-ng",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
@@ -25,7 +25,7 @@
     "dom"
   ],
   "include": [
-    "./*.ts"
+    "./app/elements/*"
   ],
   "exclude": [
     "test.ts",

@@ -25,6 +25,7 @@ import {BubblingEvents} from '../../lib/bubblingEvent';
 import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -48,6 +49,7 @@ import IEditorOptions = editor.IEditorOptions;
 
 @Component({
   selector: 'warpview-editor',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './warp-view-editor.component.html',
   styleUrls: ['./warp-view-editor.component.scss'],
   encapsulation: ViewEncapsulation.Emulated

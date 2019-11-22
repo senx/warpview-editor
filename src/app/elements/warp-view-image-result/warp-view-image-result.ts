@@ -22,7 +22,7 @@ import {Logger} from '../../lib/logger';
   selector: 'warpview-image-result',
   templateUrl: './warp-view-image-result.html',
   styleUrls: ['./warp-view-image-result.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewImageResult {
 
