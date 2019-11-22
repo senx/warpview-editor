@@ -26,7 +26,7 @@
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist/elements-tsc",
+    "dist/warpview-editor-ng",
     "elements/"
   ],
   "scripts": {
