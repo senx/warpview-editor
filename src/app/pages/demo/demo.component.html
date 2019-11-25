@@ -18,7 +18,7 @@
 <div class="card ">
   <div class="card-body resizable" style="height: 500px; width: 100%;" *ngIf="visible">
 
-    <warp-view-editor url="https://warp.senx.io/api/v0/exec"
+    <warpview-editor url="https://warp.senx.io/api/v0/exec"
                      #editor
                      [theme]="'dark'" id="editor"
                      [showDataviz]="false" [showExecute]="false"
@@ -40,7 +40,7 @@
     "quickSuggestionsDelay":3000,
     "suggestOnTriggerCharacters": false
   }
-}'>{{warpscript}}</warp-view-editor>
+}'>{{warpscript}}</warpview-editor>
 
 
   </div>

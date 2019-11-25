@@ -19,9 +19,10 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {Logger} from '../../lib/logger';
 
 @Component({
-  selector: 'warp-view-image-result',
+  selector: 'warpview-image-result',
   templateUrl: './warp-view-image-result.html',
   styleUrls: ['./warp-view-image-result.scss'],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class WarpViewImageResult {
 

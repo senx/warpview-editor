@@ -23,9 +23,10 @@ import setTheme = editor.setTheme;
 import create = editor.create;
 
 @Component({
-  selector: 'warp-view-raw-result',
+  selector: 'warpview-raw-result',
   templateUrl: './warp-view-raw-result.component.html',
   styleUrls: ['./warp-view-raw-result.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   @ViewChild('editor', { static: true }) editor: ElementRef;

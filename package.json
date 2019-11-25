@@ -30,18 +30,18 @@
     "elements/"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build:elements",
+    "prepublishOnly": "yarn clean && yarn build",
     "ng": "ng",
     "dev": "yarn copy && ng serve",
-    "build": "rm -fr ./elements && rm -fr ./dist && yarn copy && yarn build:lib && yarn build:elements",
+    "clean": "rm -fr ./elements && rm -fr ./dist",
+    "build": "yarn clean && yarn build:lib && yarn build:elements",
     "build:demo": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:lib": "yarn ngc:elements",
-    "ngc:elements": "rm -fr ./dist/warpview-editor-ng && ngc -p src/tsconfig.elements-ng.json && sass ./src/styles.scss ./dist/warpview-editor-ng/style.css",
+    "build:lib": "yarn copy && ngc -p src/tsconfig.elements-ng.json && sass ./src/styles.scss ./dist/warpview-editor-ng/style.css",
     "copy": "cp -r node_modules/monaco-editor/dev/vs src/assets/.",
-    "build:elements": "ng build elements --prod  --output-hashing=none  && node scripts/build.js",
+    "build:elements": "yarn copy && ng build elements --prod && node scripts/build.js",
     "gen": "cd src/app/elements/ && ng g component --module=elements.module.ts --entryComponent=true --skipTests=true --style=scss --viewEncapsulation=ShadowDom --export=true",
     "genp": "cd src/app/pages && ng g component --module=pages.module.ts --entryComponent=true --skipTests=true --style=scss",
     "gh": "yarn copy && ng build --prod --base-href /warpview-editor/ && npx ngh --dir=dist/warpview-editor --repo=git@github.com:senx/warpview-editor.git"

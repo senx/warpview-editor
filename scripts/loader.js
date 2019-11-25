@@ -14,8 +14,26 @@
  *  limitations under the License.
  */
 
-
 window.addEventListener('load', function () {
+  console.log(scriptPath());
+  const es5 = document.createElement('script');
+  es5.src = scriptPath() + '/warpview-editor-es5.js';
+  es5.setAttribute('nomodule', 'true');
+  es5.setAttribute('defer', 'true');
+  document.body.appendChild(es5);
+
+  const es2015 = document.createElement('script');
+  es2015.src = scriptPath() + '/warpview-editor-es2015.js';
+  es2015.setAttribute('type', 'module');
+  document.body.appendChild(es2015);
+
+  const css = document.createElement('link');
+  css.setAttribute('rel', 'stylesheet');
+  css.setAttribute('href', scriptPath() + '/warpview-editor.css');
+  document.head.appendChild(css);
+
+});
+const scriptPath = function () {
   let scripts = document.getElementsByTagName('SCRIPT');
   let path = '';
   if (scripts && scripts.length > 0) {
@@ -26,15 +44,5 @@ window.addEventListener('load', function () {
       }
     }
   }
-  ['0', '1'].forEach(s => {
-    const script = document.createElement('script');
-    script.src = path + '/' + s + '.js';
-    script.setAttribute('defer', 'true');
-    document.body.appendChild(script);
-  });
-  const css = document.createElement('link');
-  css.setAttribute('rel', 'stylesheet');
-  css.setAttribute('href', path + '/warpview-editor.css');
-  document.head.appendChild(css);
-
-});
+  return path;
+};

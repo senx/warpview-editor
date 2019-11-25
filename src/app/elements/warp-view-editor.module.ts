@@ -53,7 +53,6 @@ import {GTSLib} from '../lib/gts.lib';
     WarpViewResult,
     WarpViewRawResultComponent
   ],
-  bootstrap: [WarpViewEditorComponent] // , WarpViewResult, WarpViewImageResult, WarpViewRawResultComponent]
 })
 export class WarpViewEditorModule {
   constructor(private injector: Injector) {
@@ -64,7 +63,6 @@ export class WarpViewEditorModule {
       {name: 'warp-view-raw-result', component: WarpViewRawResultComponent},
     ].forEach(wc => {
       if (!customElements.get(wc.name)) {
-        console.log('Register', wc.name)
         customElements.define(wc.name, createCustomElement(wc.component, {injector: this.injector}));
       }
     });
