@@ -57,7 +57,7 @@
     "@angular/platform-browser-dynamic": "~8.2.9",
     "@angular/router": "~8.2.9",
     "@giwisoft/wc-split": "1.0.3",
-    "@giwisoft/wc-tabs": "1.0.4",
+    "@giwisoft/wc-tabs": "1.0.5",
     "@webcomponents/custom-elements": "^1.2.4",
     "@webcomponents/webcomponentsjs": "^2.4.0",
     "core-js": "^2.5.4",

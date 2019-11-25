@@ -21,7 +21,7 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
   selector: 'warpview-result',
   templateUrl: './warp-view-result.html',
   styleUrls: ['./warp-view-result.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewResult {
 
