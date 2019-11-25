@@ -27,7 +27,7 @@ if (environment.production) {
 }
 [wcSplit, wcTabs].forEach(wc => wc.defineCustomElements(window).then(() => {
   // empty
-}).catch(err => console.log('main.ts', err)));
+}).catch(err => console.log('elements.main.ts', err)));
 platformBrowserDynamic().bootstrapModule(WarpViewEditorModule).then(ref => {
   // Ensure Angular destroys itself on hot reloads.
   if (window['ngRef']) {
@@ -36,4 +36,4 @@ platformBrowserDynamic().bootstrapModule(WarpViewEditorModule).then(ref => {
   window['ngRef'] = ref;
 
   // Otherise, log the boot error
-}).catch(err => console.error(err));
+}).catch(err => console.error('elements.main.ts 2 ', err));

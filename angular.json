@@ -263,7 +263,7 @@
     "elements": {
       "root": "",
       "sourceRoot": "src",
-      "projectType": "library",
+      "projectType": "application",
       "prefix": "warpview-editor",
       "schematics": {},
       "architect": {

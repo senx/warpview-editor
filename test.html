@@ -41,15 +41,18 @@
       width: 90%;
       z-index: 99999;
     }
+
     .message {
       bottom: 0;
     }
+
     .error {
       bottom: 60px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .resizable {
       resize: both;
       overflow: hidden;
@@ -58,14 +61,14 @@
     .movehandle {
       height: 20px;
       width: 20px;
-      top:0;
+      top: 0;
       right: 0;
       position: absolute;
       background-color: lightgray;
       border: none;
-      cursor:move;
+      cursor: move;
       background-image: url("https://image.flaticon.com/icons/svg/50/50685.svg");
-      background-size: 20px 20px ;
+      background-size: 20px 20px;
     }
 
 
@@ -73,12 +76,12 @@
 </head>
 
 <body class="d-flex flex-column vh-100 align-items-stretch">
-<a href="indexdoc.html">doc test</a>
 <main role="main" class="container flex-fill">
   <h1>WarpView Editor</h1>
   <div class="card " style="height: 500px; width: 100%;">
     <div class="card-body" style="width: 100%; height: 100vh">
-      <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="true" theme="dark" show-dataviz="false" show-execute="true" show-result="true" config='{
+      <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="true" theme="dark" show-dataviz="false"
+                        show-execute="false" show-result="true" config='{
 
                          "messageClass": "alert alert-info message",
                          "errorClass": "alert alert-danger error",
@@ -87,63 +90,28 @@
                           "readOnly": false,
                           "hover": true, "editor": {"enableDebug": true,   "quickSuggestionsDelay":3000,
                           "suggestOnTriggerCharacters": false}
-                          }' display-messages="false" initial-size="274.5">
-@training/dataset0
-// warp.store.hbase.puts.committed is the number of datapoints committed to
-// HBase since the restart of the Store daemon
-[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
-[ SWAP mapper.rate 1 0 0 ] MAP
+                          }' display-messages="false" initial-size="400">
+        @training/dataset0
+        // warp.store.hbase.puts.committed is the number of datapoints committed to
+        // HBase since the restart of the Store daemon
+        [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
+        [ SWAP mapper.rate 1 0 0 ] MAP
 
-// Keep only 1000 datapoints per GTS
-1000 LTTB
-DUP
-// Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
-5 false ESDTEST
-// Convert the ticks identified by ESDTEST into an annotation GTS
-<%
-DROP 		// excude element index
-NEWGTS 	// create a new GTS
-SWAP 		// get timestamp list
-<% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
-%> LMAP
-2 ->LIST // Put our GTS in a list
-ZIP // merge into a list of GTS
+        // Keep only 1000 datapoints per GTS
+        1000 LTTB
+        DUP
+        // Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
+        5 false ESDTEST
+        // Convert the ticks identified by ESDTEST into an annotation GTS
+        <%
+        DROP // excude element index
+        NEWGTS // create a new GTS
+        SWAP // get timestamp list
+        <% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
+        %> LMAP
+        2 ->LIST // Put our GTS in a list
+        ZIP // merge into a list of GTS
       </warp-view-editor>
-     <!-- <warp-view-editor url="https://warp.senx.io/api/v0/exec" theme="dark" id="editor"
-                        show-dataviz="false" show-execute="true"
-                        height-line="20"
-                        horizontal-layout="false" debug="true"
-                        config='{
-
-                         "messageClass": "alert alert-info message",
-                         "errorClass": "alert alert-danger error",
-                         "execButton" : { "class" : "btn btn-success" },
-                         "datavizButton" : { "class" : "btn btn-success" },
-                          "readOnly": false,
-                          "hover": true, "editor": {"enableDebug": true,   "quickSuggestionsDelay":3000,
-                          "suggestOnTriggerCharacters": false}
-                          }'
-      >@training/dataset0
-// warp.store.hbase.puts.committed is the number of datapoints committed to
-// HBase since the restart of the Store daemon
-[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
-[ SWAP mapper.rate 1 0 0 ] MAP
-
-// Keep only 1000 datapoints per GTS
-1000 LTTB
-DUP
-// Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
-5 false ESDTEST
-// Convert the ticks identified by ESDTEST into an annotation GTS
-<%
-DROP 		// excude element index
-NEWGTS 	// create a new GTS
-SWAP 		// get timestamp list
-<% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
-%> LMAP
-2 ->LIST // Put our GTS in a list
-ZIP // merge into a list of GTS</warp-view-editor>-->
-
 
 
     </div>
@@ -161,7 +129,7 @@ ZIP // merge into a list of GTS</warp-view-editor>-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script >
+<script>
   $(document).ready(() => {
     $('#inject').click(function () {
       $('#editor').attr('warpscript', Math.random().toString(36));

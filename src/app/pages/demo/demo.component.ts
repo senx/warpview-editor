@@ -38,6 +38,7 @@ export class DemoComponent implements OnInit {
       suggestOnTriggerCharacters: false
     }
   } as Config;
+  warpscript2 = '2 2 +';
   warpscript = `@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
 // HBase since the restart of the Store daemon

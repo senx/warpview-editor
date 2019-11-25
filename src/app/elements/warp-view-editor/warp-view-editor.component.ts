@@ -48,7 +48,7 @@ import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
 
 @Component({
-  selector: 'warpview-editor',
+  selector: 'warp-view-editor',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './warp-view-editor.component.html',
   styleUrls: ['./warp-view-editor.component.scss'],
@@ -218,7 +218,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Output('warpViewEditorCtrlClick') warpViewEditorCtrlClick = new EventEmitter<any>();
   @Output('warpViewEditorDatavizRequested') warpViewEditorDatavizRequested = new EventEmitter<any>();
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
-  @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
+  @ViewChild('warpscriptEditor', {static: true}) editor: ElementRef<HTMLDivElement>;
   @ViewChild('buttons', {static: true}) buttons: ElementRef<HTMLDivElement>;
   @ViewChild('content', {static: true}) contentWrapper: ElementRef<HTMLDivElement>;
 
@@ -244,6 +244,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentHeight = -1;
   private previousParentWidth = -1;
   private request: Subscription;
+  private resizeWatcherInt: number;
   headers = this.getItems();
   innerConfig = new Config();
   ro: ResizeObserver;
@@ -282,7 +283,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     warpviewParentHeight = Math.max(warpviewParentHeight, WarpViewEditorComponent.MIN_HEIGHT);
     // fix the 5px editor height in chrome by setting the wrapper height at element level
     if (Math.abs(this.wrapper.nativeElement.clientHeight - warpviewParentHeight) > 30) {
-      this.LOG.debug(['resize'], 'resize wrapper to parent height ' + warpviewParentHeight);
       this.wrapper.nativeElement.style.height = warpviewParentHeight + 'px';
     }
     // watch for editor parent' size change
@@ -292,7 +292,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
       const editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
       const editorW = Math.floor(this.editor.nativeElement.parentElement.clientWidth);
-      this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
+      // this.LOG.debug(['resize'], 'resized editor to ', editorW, editorH);
       this.ed.layout({height: editorH, width: editorW});
       this.editor.nativeElement.style.overflow = 'hidden';
     }
@@ -313,7 +313,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    this.LOG.debug(['ngAfterViewInit'], 'height', this.heightPx);
+    this.LOG.debug(['ngAfterViewInit'], 'height', this._heightPx);
     if (!!this._heightPx) {
       // if height-px is set, size is fixed.
       this.el.nativeElement.style.height = this._heightPx + 'px';
@@ -321,30 +321,34 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.resize(true);
     } else {
       // compute the layout manually in a 200ms timer
-      setInterval(this.resizeWatcher.bind(this), 200);
+      this.resizeWatcherInt = setInterval(this.resizeWatcher.bind(this), 200);
     }
     try {
       this.innerCode = this.contentWrapper.nativeElement.textContent;
+      this.lastKnownWS = this._warpscript || this.innerCode;
       // add blank lines when needed
-      for (let i = this.innerCode.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
-        this.innerCode += '\n';
+      for (let i = this.lastKnownWS.split('\n').length; i < this.innerConfig.editor.minLineNumber; i++) {
+        this.lastKnownWS += '\n';
       }
       // trim spaces and line breaks at the beginning (side effect of angular)
       let firstIndex = 0;
-      while (this.innerCode[firstIndex] === ' ' || this.innerCode[firstIndex] === '\n') {
+      while (this.lastKnownWS[firstIndex] === ' ' || this.lastKnownWS[firstIndex] === '\n') {
         firstIndex++;
       }
-      this.innerCode = this.innerCode.substring(firstIndex);
+      this.lastKnownWS = this.lastKnownWS.trim(); //.substring(firstIndex);
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
       const edOpts: IEditorConstructionOptions = this.setOptions();
-      this.lastKnownWS = this._warpscript || this.innerCode;
-      edOpts.value = this.lastKnownWS;
+      edOpts.value = ''+this.lastKnownWS;
       edOpts.theme = this.monacoTheme;
       edOpts.language = ProviderRegistrar.WARPSCRIPT_LANGUAGE;
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
+      this.LOG.debug(['ngAfterViewInit'], 'this.lastKnownWS: ', '' + this.lastKnownWS);
+      this.LOG.debug(['ngAfterViewInit'], 'this.ed.value: ', '' + this.ed.getValue());
+      this.ed.setValue('a'+ this.lastKnownWS + 'b');
+      this.LOG.debug(['ngAfterViewInit'], 'this.ed.value 2: ', '' + this.ed.getValue());
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
           if (e.event.leftButton) {
@@ -354,24 +358,26 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           }
         });
       }
-      this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize});
+      this.ed.getModel().updateOptions({tabSize: this.innerConfig.editor.tabSize,});
       if (this.ed) {
+        this.LOG.debug(['ngAfterViewInit'], 'loaded');
         this.warpViewEditorLoaded.emit('loaded');
-        //angular events does not bubble up outside angular component.
-        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded');
+        // angular events does not bubble up outside angular component.
+        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded', 'loaded');
 
         this.ed.getModel().onDidChangeContent((event) => {
+          this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
           if (this.lastKnownWS !== this.ed.getValue()) {
             this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
-            this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
-            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
+            //    this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+            // BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
           }
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
         this.ed.onMouseDown(e => {
           if (e.event.ctrlKey) {
             // ctrl click on which word ?
-            const name: string = this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()).word;
+            const name: string = (this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()) || {word: undefined}).word;
             // parse the warpscript
             const ws: string = this.ed.getValue();
             const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
@@ -406,6 +412,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnDestroy() {
     this.LOG.debug(['ngOnDestroy'], 'Component removed from the DOM');
+    if (this.resizeWatcherInt) {
+      clearInterval(this.resizeWatcherInt);
+    }
     if (this.ed) {
       this.ed.dispose();
     }
@@ -489,6 +498,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this.result = undefined;
     this.status = undefined;
     this.error = undefined;
+    this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed);
     if (this.ed) {
       this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
       this.loading = true;

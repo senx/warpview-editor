@@ -53,14 +53,10 @@ import {GTSLib} from '../lib/gts.lib';
     WarpViewResult,
     WarpViewRawResultComponent
   ],
-  bootstrap: [WarpViewEditorComponent, WarpViewResult, WarpViewImageResult, WarpViewRawResultComponent]
+  bootstrap: [WarpViewEditorComponent] // , WarpViewResult, WarpViewImageResult, WarpViewRawResultComponent]
 })
 export class WarpViewEditorModule {
   constructor(private injector: Injector) {
-  }
-
-  // noinspection JSUnusedGlobalSymbols
-  ngDoBootstrap() {
     [
       {name: 'warp-view-editor', component: WarpViewEditorComponent},
       {name: 'warp-view-image-result', component: WarpViewImageResult},
@@ -68,8 +64,14 @@ export class WarpViewEditorModule {
       {name: 'warp-view-raw-result', component: WarpViewRawResultComponent},
     ].forEach(wc => {
       if (!customElements.get(wc.name)) {
+        console.log('Register', wc.name)
         customElements.define(wc.name, createCustomElement(wc.component, {injector: this.injector}));
       }
     });
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  ngDoBootstrap() {
+
   }
 }

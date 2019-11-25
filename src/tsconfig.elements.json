@@ -4,11 +4,7 @@
     "outDir": "../out-tsc/app",
     "module": "es2015",
     "target": "es5",
-    "types": [],
-    "declaration": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "types": []
   },
   "lib": [
     "es2018",

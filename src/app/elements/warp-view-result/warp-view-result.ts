@@ -18,10 +18,9 @@ import {GTSLib} from '../../lib/gts.lib';
 import {Component, Input, ViewEncapsulation} from '@angular/core';
 
 @Component({
-  selector: 'warpview-result',
+  selector: 'warp-view-result',
   templateUrl: './warp-view-result.html',
   styleUrls: ['./warp-view-result.scss'],
-  encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewResult {
 

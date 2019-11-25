@@ -146,7 +146,6 @@ Json of the the WarpScript execution result triggered by a click on the dataViz 
        while (s[nb] === ' ') {nb++;}
        return '&nbsp;'.repeat(nb) + s.substring(nb);
       }).join('<br>');
-    console.log(result);
     return `<code class="hljs ${language}">${result}</code>`;
   }
 

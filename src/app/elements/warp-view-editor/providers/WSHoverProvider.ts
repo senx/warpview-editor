@@ -31,17 +31,19 @@ export class WSHoverProvider implements HoverProvider {
   // noinspection JSUnusedLocalSymbols
   provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): PromiseLike<languages.Hover | undefined | null> | languages.Hover | undefined | null {
     const word = model.getWordAtPosition(position);
-    const range = new Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
-    const name = word.word;
-    const entry = wsGlobals[name];
-    if (entry && entry.description) {
-      const signature = (entry.signature || '').split('\n').map(s => '+ ' + s).join('\n');
-      const contents: MarkedString[] = [
-        '### ' + name,
-        signature,
-        entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)
-      ];
-      return {range, contents: this.toMarkedStringArray(contents)} as Hover;
+    if(!!word) {
+      const range = new Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
+      const name = word.word;
+      const entry = wsGlobals[name];
+      if (entry && entry.description) {
+        const signature = (entry.signature || '').split('\n').map(s => '+ ' + s).join('\n');
+        const contents: MarkedString[] = [
+          '### ' + name,
+          signature,
+          entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)
+        ];
+        return {range, contents: this.toMarkedStringArray(contents)} as Hover;
+      }
     }
     return undefined;
   }

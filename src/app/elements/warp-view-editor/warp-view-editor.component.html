@@ -24,7 +24,7 @@
   </div>
   <wc-split [items]="getItems()">
     <div slot="editor" class="editor-wrapper">
-      <div #editor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
+      <div #warpscriptEditor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
       <div [class]="'warpview-buttons ' + innerConfig.buttons.class" #buttons>
         <button type='button' [class]="innerConfig.datavizButton.class"
                 *ngIf="showDataviz && result"
@@ -48,19 +48,19 @@
 
         <wc-tabs-content slot='content' name='tab1'>
           <div class="tab-wrapper">
-            <warpview-result [theme]="_theme" [result]="result" [config]='innerConfig'></warpview-result>
+            <warp-view-result [theme]="_theme" [result]="result" [config]='innerConfig'></warp-view-result>
           </div>
         </wc-tabs-content>
 
         <wc-tabs-content slot='content' name='tab2' [responsive]="true">
           <div class="tab-wrapper" [ngStyle]="responsiveStyle()">
-            <warpview-raw-result [theme]="_theme" [result]="result" [config]="innerConfig" [debug]="_debug"></warpview-raw-result>
+            <warp-view-raw-result [theme]="_theme" [result]="result" [config]="innerConfig" [debug]="_debug"></warp-view-raw-result>
           </div>
         </wc-tabs-content>
 
         <wc-tabs-content slot='content' name='tab3' *ngIf="imageTab">
           <div class="tab-wrapper">
-            <warpview-image-result [theme]="_theme" [result]="result" [config]="innerConfig" [debug]="_debug"></warpview-image-result>
+            <warp-view-image-result [theme]="_theme" [result]="result" [config]="innerConfig" [debug]="_debug"></warp-view-image-result>
           </div>
         </wc-tabs-content>
 
