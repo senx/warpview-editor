@@ -16,6 +16,7 @@
 
 import {GTSLib} from '../../lib/gts.lib';
 import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {stringify} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'warpview-result',
@@ -25,10 +26,21 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
 })
 export class WarpViewResult {
 
-  @Input() result: any[] = [];
+  @Input()
+  get result(): any[] {
+    return this._result;
+  };
+
+  set result(res: any[]) {
+    this._result = res;
+    this._resultStr = (res || []).map(l=>JSON.stringify(l));
+  }
+
   @Input() theme = 'light';
   @Input() config: object = {};
   @Input() loading = false;
+  _result: any[];
+  _resultStr: string[];
 
   constructor(private gtsLib: GTSLib) {
 
@@ -37,6 +49,7 @@ export class WarpViewResult {
   isArray(arr: any) {
     return this.gtsLib.isArray(arr);
   }
+
   stingify(str) {
     return JSON.stringify(str);
   }
