@@ -38,6 +38,7 @@ export class Config {
     quickSuggestions: true,
     tabSize: 2,
     minLineNumber: 10,
-    enableDebug: false
+    enableDebug: false,
+    rawResultsReadOnly: true
   };
 }
