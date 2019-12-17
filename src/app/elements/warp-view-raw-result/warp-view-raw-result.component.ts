@@ -14,13 +14,16 @@
  *  limitations under the License.
  */
 
-import { Utils } from '../../lib/utils';
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { editor } from 'monaco-editor';
-import { Logger } from "../../lib/logger";
+import {Utils} from '../../lib/utils';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {editor} from 'monaco-editor';
+import {Logger} from "../../lib/logger";
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import setTheme = editor.setTheme;
 import create = editor.create;
+import {Config} from "../../lib/config";
+import {EditorConfig} from "../../lib/editorConfig";
+import IEditorOptions = editor.IEditorOptions;
 
 @Component({
   selector: 'warpview-raw-result',
@@ -29,10 +32,10 @@ import create = editor.create;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor', { static: true }) editor: ElementRef;
+  @ViewChild('editor', {static: true}) editor: ElementRef;
 
   @Input() set debug(debug: boolean | string) {
-    if(typeof debug === 'string') {
+    if (typeof debug === 'string') {
       debug = 'true' === debug;
     }
     this._debug = debug;
@@ -46,7 +49,7 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   @Input() set theme(newValue: string) {
     // tslint:disable-next-line:no-console
     console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue);
-    if('dark' === newValue) {
+    if ('dark' === newValue) {
       this.monacoTheme = 'vs-dark';
     } else {
       this.monacoTheme = 'vs';
@@ -74,7 +77,20 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     return this._result;
   }
 
-  @Input() config: object = {};
+  @Input('config') set config(config: Config | string) {
+    let conf = (typeof config === 'string') ? JSON.parse(config || '{}') : config || {};
+    this._config = Utils.mergeDeep(this._config, conf);
+    this.LOG.debug(['config'], this._config, conf);
+    if (this.resEd) {
+      this.LOG.debug(['config'], this._config);
+      this.resEd.updateOptions(this.setOptions());
+    }
+  }
+
+  get config(): Config | string {
+    return this._config;
+  }
+
   @Input() heightLine: number;
   @Input() heightPx: number;
 
@@ -84,7 +100,8 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:variable-name
   _result: any[] = [];
   // tslint:disable-next-line:variable-name
-  _config = {
+  _config: Config = {
+    editor: new EditorConfig(),
     messageClass: '',
     errorClass: ''
   };
@@ -104,39 +121,28 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this._config = Utils.mergeDeep(this._config, this.config);
-    if('dark' === this.theme) {
+    if ('dark' === this.theme) {
       this.monacoTheme = 'vs-dark';
     }
     this.LOG.debug(['ngOnInit'], this.result);
   }
 
   buildEditor(json: string) {
-    this.LOG.debug(['buildEditor'], 'buildEditor', json);
-    if(!this.resEd && json) {
-      this.resEd = create(this.editor.nativeElement, {
-        value: '',
-        language: 'json',
-        minimap: { enabled: true },
-        automaticLayout: true,
-        scrollBeyondLastLine: false,
-        theme: this.monacoTheme,
-        readOnly: true,
-        fixedOverflowWidgets: true,
-        lineNumbers: 'on',
-        wordWrap: 'on'
-      });
+    this.LOG.debug(['buildEditor'], 'buildEditor', json, this._config);
+    if (!this.resEd && json) {
+      this.resEd = create(this.editor.nativeElement, this.setOptions());
     }
     this.resEd.setValue(json || '');
     this.loading = false;
   }
 
   adjustHeight() {
-    if(this.editor) {
+    if (this.editor) {
       const el = this.editor.nativeElement;
-      const codeContainer = el.getElementsByClassName('view-lines')[ 0 ] as HTMLElement;
+      const codeContainer = el.getElementsByClassName('view-lines')[0] as HTMLElement;
       const containerHeight = codeContainer.offsetHeight;
       let prevLineCount = 0;
-      if(!containerHeight) {
+      if (!containerHeight) {
         // dom hasn't finished settling down. wait a bit more.
         setTimeout(() => this.adjustHeight(), 0);
       } else {
@@ -159,5 +165,21 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.buildEditor(JSON.stringify(this._result));
     this.loading = false;
+  }
+
+  private setOptions(): IEditorOptions {
+    console.log(this._config.editor.rawResultsReadOnly)
+    return {
+      value: '',
+      language: 'json',
+      minimap: {enabled: true},
+      automaticLayout: true,
+      scrollBeyondLastLine: false,
+      theme: this.monacoTheme,
+      readOnly: !!this._config.editor.rawResultsReadOnly,
+      fixedOverflowWidgets: true,
+      lineNumbers: 'on',
+      wordWrap: 'on'
+    } as IEditorOptions;
   }
 }

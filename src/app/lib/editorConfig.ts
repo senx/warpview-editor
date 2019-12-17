@@ -20,4 +20,5 @@ export class EditorConfig {
   tabSize? = 2;
   minLineNumber? = 10;
   enableDebug? = false;
+  rawResultsReadOnly? = true;
 }
