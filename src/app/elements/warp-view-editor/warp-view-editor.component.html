@@ -23,7 +23,7 @@
     <div class="spinner"></div>
   </div>
   <wc-split [items]="getItems()">
-    <div slot="editor" class="editor-wrapper">
+    <div slot="editor" class="editor-wrapper" style="height: 100%">
       <div #editor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
       <div [class]="'warpview-buttons ' + innerConfig.buttons.class" #buttons>
         <button type='button' [class]="innerConfig.datavizButton.class"
