@@ -42,6 +42,12 @@ export class DemoComponent implements OnInit {
   warpscript = `@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
 // HBase since the restart of the Store daemon
+[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 90 d ] FETCH
+[ SWAP mapper.rate 1 0 0 ] MAP
+STOP
+@training/dataset0
+// warp.store.hbase.puts.committed is the number of datapoints committed to
+// HBase since the restart of the Store daemon
 [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
 [ SWAP mapper.rate 1 0 0 ] MAP
 
@@ -83,15 +89,15 @@ ZIP // merge into a list of GTS`;
   }
 
   warpViewEditorCtrlClick(event) {
-    this.ctrlClick = event;
+    this.ctrlClick = event.detail;
   }
 
   warpViewEditorBreakPoint(event) {
-    this.breakpoint = event;
+    this.breakpoint = event.detail;
   }
 
   warpViewEditorSize(event) {
-    this.size = event;
+    this.size = event.detail;
   }
 
   inject() {

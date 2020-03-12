@@ -356,18 +356,18 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.ed) {
         this.warpViewEditorLoaded.emit('loaded');
         // angular events does not bubble up outside angular component.
-        BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorLoaded");
+        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded');
 
         this.ed.getModel().onDidChangeContent((event) => {
           if (this.lastKnownWS !== this.ed.getValue()) {
             this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
             this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
-            BubblingEvents.emitBubblingEvent(this.el,"warpViewEditorWarpscriptChanged",this.ed.getValue());
+            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
           }
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
         this.ed.onMouseDown(e => {
-          if (e.event.ctrlKey) {
+          if ((!this.isMac() && !!e.event.ctrlKey) || (this.isMac() && !!e.event.metaKey)) {
             // ctrl click on which word ?
             const name: string = (this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()) || {word: undefined}).word;
             // parse the warpscript
@@ -562,26 +562,30 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this.warpViewEditorSize.emit($event.detail.editor);
   }
 
+  isMac() {
+    return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  }
+
   onKeyDown($event) {
     this.LOG.debug(['onKeyDown'], $event);
-    Array.from(this.editor.nativeElement.getElementsByClassName('mtk8'))
-      .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk22')))
-      .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk23')))
-      .forEach(e => {
-        if (!e.textContent.startsWith('$')) {
-          (e as HTMLElement).classList.add('mouseOver');
-        }
-      });
+    if ((!this.isMac() && !!$event.ctrlKey) || (this.isMac() && !!$event.metaKey)) {
+      Array.from(this.editor.nativeElement.getElementsByClassName('mtk8'))
+        .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk22')))
+        .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk23')))
+        .forEach(e => {
+          if (!e.textContent.startsWith('$')) {
+            (e as HTMLElement).classList.add('mouseOver');
+          }
+        });
+    }
   }
 
   onKeyUp($event) {
-    this.LOG.debug(['onKeyDown'], $event);
+    this.LOG.debug(['onKeyUp'], $event);
     Array.from(this.editor.nativeElement.getElementsByClassName('mtk8'))
       .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk22')))
       .concat(Array.from(this.editor.nativeElement.getElementsByClassName('mtk23')))
-      .forEach(e => {
-        (e as HTMLElement).classList.remove('mouseOver');
-      });
+      .forEach(e => (e as HTMLElement).classList.remove('mouseOver'));
   }
 
   @Input()

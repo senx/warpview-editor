@@ -24,7 +24,7 @@
   </div>
   <wc-split [items]="getItems()">
     <div slot="editor" class="editor-wrapper" style="height: 100%">
-      <div #editor (keydown.control)="onKeyDown($event)" (keyup.control)="onKeyUp($event)"></div>
+      <div #editor (keydown)="onKeyDown($event)" (keyup)="onKeyUp($event)"></div>
       <div [class]="'warpview-buttons ' + innerConfig.buttons.class" #buttons>
         <button type='button' [class]="innerConfig.datavizButton.class"
                 *ngIf="showDataviz && result"

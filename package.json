@@ -32,7 +32,7 @@
   "scripts": {
     "prepublishOnly": "yarn clean && yarn build",
     "ng": "ng",
-    "dev": "yarn copy && ng serve",
+    "dev": "yarn copy && ng serve --host 0.0.0.0",
     "clean": "rm -fr ./elements && rm -fr ./dist",
     "build": "yarn clean && yarn build:lib && yarn build:elements",
     "build:demo": "ng build --prod",
