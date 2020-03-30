@@ -41,6 +41,7 @@ import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
+import {UUID} from 'angular2-uuid';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import IEditorConstructionOptions = editor.IEditorConstructionOptions;
 import create = editor.create;
@@ -419,17 +420,63 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public abort() {
+  public abort(session?: string) {
     if (this.request) {
-      this.request.unsubscribe();
-      this.loading = false;
-      this.error = 'Aborted';
-      this.warpViewEditorErrorEvent.emit(this.error);
-      BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-      delete this.request;
-      delete this.result;
-      delete this.status;
-      this.loading = false;
+      // BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+      if (!!session) {
+        const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
+        const executionUrl = specialHeaders.endpoint || this.url;
+        this.http.post<HttpResponse<string>>(executionUrl, `<% '${session}' 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`, {
+          // @ts-ignore
+          observe: 'response',
+          // @ts-ignore
+          responseType: 'text',
+          'Accept': 'application/json',
+        })
+          .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
+          .subscribe(res => {
+            if (!!res) {
+              this.LOG.debug(['abort'], 'response', res.body);
+              const r = JSON.parse(res.body);
+              this.LOG.debug(['abort'], 'response', r);
+              if (!!r[0]) {
+                if (r[0] === 0) {
+                  this.error = 'It appears that your Warp 10 is running on multiple backend';
+                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+                  this.warpViewEditorErrorEvent.emit(this.error);
+                } else if (r[0] === -1) {
+                  this.error = `Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`;
+                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+                  this.warpViewEditorErrorEvent.emit(this.error);
+                }
+                this.status = {
+                  message: `WarpScript aborted. Your script execution took
+ ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
+ serverside, fetched
+ ${res.headers.get('x-warp10-fetched')} datapoints and performed
+ ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
+                  ops: parseInt(res.headers.get('x-warp10-ops'), 10),
+                  elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
+                  fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
+                };
+                BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
+                this.warpViewEditorStatusEvent.emit(this.status);
+              } else {
+                this.error = `An error occurs for session: ${session}`;
+                BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+                this.warpViewEditorErrorEvent.emit(this.error);
+              }
+            }
+            if (this.request) {
+              this.request.unsubscribe();
+            }
+            delete this.request;
+            delete this.result;
+            delete this.status;
+            this.loading = false;
+          });
+      }
+      //
     }
   }
 
@@ -486,12 +533,12 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute() {
+  public execute(session = UUID.UUID()) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
       this.error = undefined;
-      this.LOG.debug(['execute'], 'this.ed.getValue()', this.ed.getValue());
+      this.LOG.debug(['execute'], 'this.ed.getValue()', session, this.ed.getValue());
       this.loading = true;
       // parse comments to look for inline url or preview modifiers
       const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
@@ -502,13 +549,12 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.selectedResultTab = 0; // on next execution, select results tab.
       }
       const executionUrl = specialHeaders.endpoint || this.url;
-      const headers = new Headers();
-      headers.append('Accept', 'application/json');
       this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
         // @ts-ignore
         observe: 'response',
         // @ts-ignore
-        responseType: 'text'
+        responseType: 'text',
+        headers: {'X-Warp10-WarpScriptSession': session}
       })
         .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
         .subscribe(res => {
@@ -524,7 +570,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
  ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
               ops: parseInt(res.headers.get('x-warp10-ops'), 10),
               elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
-              fetched: parseInt(res.headers.get('x-warp10-fetched'), 10)
+              fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
             };
             this.warpViewEditorStatusEvent.emit(this.status);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
