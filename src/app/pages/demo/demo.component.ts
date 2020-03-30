@@ -40,8 +40,7 @@ export class DemoComponent implements OnInit {
       rawResultsReadOnly: false
     }
   } as Config;
-  warpscript= '0 10 <% 1000 SLEEP %> FOR';
-  warpscript2 = `@training/dataset0
+  warpscript = `@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
 // HBase since the restart of the Store daemon
 [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 9 d ] FETCH
