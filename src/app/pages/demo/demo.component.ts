@@ -25,7 +25,7 @@ import {UUID} from 'angular2-uuid';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor') editor: ElementRef<Element>;
+  @ViewChild('editor', {static: true}) editor: ElementRef<Element>;
   visible = false;
   config = {
     messageClass: 'alert alert-info message',

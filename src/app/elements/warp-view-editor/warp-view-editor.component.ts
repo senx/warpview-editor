@@ -552,8 +552,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             if (!!v[0]) {
               headers = {'X-Warp10-WarpScriptSession': session};
             }
-            // @ts-ignore
             this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
+              // @ts-ignore
               observe: 'response',
               // @ts-ignore
               responseType: 'text',

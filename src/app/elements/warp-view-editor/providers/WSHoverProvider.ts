@@ -17,9 +17,9 @@
 
 import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
 import {globalfunctions as wsGlobals} from '../../../lib/wsGlobals';
-import {MarkedString, MarkupContent} from 'vscode-languageserver-types';
 import HoverProvider = languages.HoverProvider;
 import Hover = languages.Hover;
+import ProviderResult = languages.ProviderResult;
 
 export class WSHoverProvider implements HoverProvider {
   languageId: string;
@@ -29,18 +29,18 @@ export class WSHoverProvider implements HoverProvider {
   }
 
   // noinspection JSUnusedLocalSymbols
-  provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): PromiseLike<languages.Hover | undefined | null> | languages.Hover | undefined | null {
+  provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): ProviderResult<Hover> {
     const word = model.getWordAtPosition(position);
-    if(!!word) {
+    if (!!word) {
       const range = new Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
       const name = word.word;
       const entry = wsGlobals[name];
       if (entry && entry.description) {
         const signature = (entry.signature || '').split('\n').map(s => '+ ' + s).join('\n');
-        const contents: MarkedString[] = [
-          '### ' + name,
-          signature,
-          entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)
+        const contents: IMarkdownString[] = [
+          {value: '### ' + name},
+          {value: signature},
+          {value: entry.description.replace(/(\/doc\/\w+)/g, x => `https://www.warp10.io${x}`)}
         ];
         return {range, contents: this.toMarkedStringArray(contents)} as Hover;
       }
@@ -48,24 +48,7 @@ export class WSHoverProvider implements HoverProvider {
     return undefined;
   }
 
-  isMarkupContent(thing: any): thing is MarkupContent {
-    return thing && typeof thing === 'object' && typeof (thing as MarkupContent).kind === 'string';
-  }
-
-  toMarkdownString(entry: MarkupContent | MarkedString): IMarkdownString {
-    if (typeof entry === 'string') {
-      return {value: entry};
-    }
-    if (this.isMarkupContent(entry)) {
-      if (entry.kind === 'plaintext') {
-        return {value: entry.value.replace(/[\\`*_{}[\]()#+\-.!]/g, '\\$&')};
-      }
-      return {value: entry.value};
-    }
-    return {value: '```' + entry.language + '\n' + entry.value + '\n```\n'};
-  }
-
-  toMarkedStringArray(contents: MarkupContent | MarkedString | MarkedString[]): IMarkdownString[] {
+  toMarkedStringArray(contents: IMarkdownString[]): IMarkdownString[] {
     if (!contents) {
       return void 0;
     }
@@ -74,4 +57,12 @@ export class WSHoverProvider implements HoverProvider {
     }
     return [this.toMarkdownString(contents)];
   }
+
+  toMarkdownString(entry: IMarkdownString): IMarkdownString {
+    if (typeof entry === 'string') {
+      return {value: entry};
+    }
+    return {value: entry.value};
+  }
+
 }
