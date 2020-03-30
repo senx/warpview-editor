@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 SenX S.A.S.
+ *  Copyright 2020 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
 import {UUID} from 'angular2-uuid';
+import * as semver from 'semver';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
-import IEditorConstructionOptions = editor.IEditorConstructionOptions;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
 
@@ -337,13 +337,14 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
-      const edOpts: IEditorConstructionOptions = this.setOptions();
+      const edOpts: IEditorOptions = this.setOptions();
       this.lastKnownWS = this._warpscript || this.innerCode;
-      edOpts.value = this.lastKnownWS;
-      edOpts.theme = this.monacoTheme;
-      edOpts.language = ProviderRegistrar.WARPSCRIPT_LANGUAGE;
+      editor.setTheme(this.monacoTheme);
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
+      this.ed.setValue(this.lastKnownWS);
+      editor.setModelLanguage(this.ed.getModel(), ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
           if (e.event.leftButton) {
@@ -435,48 +436,41 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         })
           .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
           .subscribe(res => {
+
             if (!!res) {
               this.LOG.debug(['abort'], 'response', res.body);
               const r = JSON.parse(res.body);
-              this.LOG.debug(['abort'], 'response', r);
               if (!!r[0]) {
                 if (r[0] === 0) {
-                  this.error = 'It appears that your Warp 10 is running on multiple backend';
-                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-                  this.warpViewEditorErrorEvent.emit(this.error);
+                  this.sendError('It appears that your Warp 10 is running on multiple backend');
                 } else if (r[0] === -1) {
-                  this.error = `Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`;
-                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-                  this.warpViewEditorErrorEvent.emit(this.error);
+                  this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
-                this.status = {
-                  message: `WarpScript aborted. Your script execution took
- ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
- serverside, fetched
- ${res.headers.get('x-warp10-fetched')} datapoints and performed
- ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
+                this.sendStatus({
+                  message: `WarpScript aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
-                };
-                BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
-                this.warpViewEditorStatusEvent.emit(this.status);
+                });
               } else {
-                this.error = `An error occurs for session: ${session}`;
-                BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-                this.warpViewEditorErrorEvent.emit(this.error);
+                this.sendError(`An error occurs for session: ${session}`);
               }
             }
-            if (this.request) {
-              this.request.unsubscribe();
-            }
+            this.request.unsubscribe();
             delete this.request;
-            delete this.result;
-            delete this.status;
             this.loading = false;
           });
+      } else {
+        this.sendStatus({
+          message: `WarpScript aborted.`,
+          ops: 0,
+          elapsed: 0,
+          fetched: 0,
+        });
+        this.request.unsubscribe();
+        delete this.request;
+        this.loading = false;
       }
-      //
     }
   }
 
@@ -549,46 +543,56 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.selectedResultTab = 0; // on next execution, select results tab.
       }
       const executionUrl = specialHeaders.endpoint || this.url;
-      this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
-        // @ts-ignore
-        observe: 'response',
-        // @ts-ignore
-        responseType: 'text',
-        headers: {'X-Warp10-WarpScriptSession': session}
-      })
+      // Get Warp10 version
+      // @ts-ignore
+      this.http.post<HttpResponse<string>>(executionUrl, 'REV', {responseType: 'text'})
         .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-        .subscribe(res => {
-          if (!!res) {
-            this.LOG.debug(['execute'], 'response', res.body);
-            this.warpViewEditorWarpscriptResult.emit(res.body);
-            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
-            this.status = {
-              message: `Your script execution took
+        .subscribe(version => {
+          let headers = {};
+          if (!!version) {
+            const v = JSON.parse(version);
+            if (!!v[0] && semver.gte(v[0], '2.5.0')) {
+              headers = {'X-Warp10-WarpScriptSession': session};
+            }
+            this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
+              // @ts-ignore
+              observe: 'response',
+              // @ts-ignore
+              responseType: 'text',
+              headers
+            })
+              .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
+              .subscribe(res => {
+                if (!!res) {
+                  this.LOG.debug(['execute'], 'response', res.body);
+                  this.warpViewEditorWarpscriptResult.emit(res.body);
+                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
+                  this.sendStatus({
+                    message: `Your script execution took
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
  ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
-              ops: parseInt(res.headers.get('x-warp10-ops'), 10),
-              elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
-              fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
-            };
-            this.warpViewEditorStatusEvent.emit(this.status);
-            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
-            try {
-              this.result = new JsonLib().parse(res.body, undefined);
-            } catch (e) {
-              if (e.name && e.message && e.at && e.text) {
-                this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
-              } else {
-                this.error = e.toString();
-              }
-              this.result = res.body as any[];
-              this.LOG.error(['execute 1'], this.error);
-              this.warpViewEditorErrorEvent.emit(this.error);
-              BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-            }
+                    ops: parseInt(res.headers.get('x-warp10-ops'), 10),
+                    elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
+                    fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
+                  });
+                  try {
+                    this.result = new JsonLib().parse(res.body, undefined);
+                  } catch (e) {
+                    if (e.name && e.message && e.at && e.text) {
+                      this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
+                    } else {
+                      this.error = e.toString();
+                    }
+                    this.result = res.body as any[];
+                    this.LOG.error(['execute 1'], this.error);
+                    this.sendError(this.error);
+                  }
+                }
+                this.loading = false;
+              });
           }
-          this.loading = false;
         });
     } else {
       this.loading = false;
@@ -662,5 +666,17 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   responsiveStyle() {
     return {height: 'calc( 100% - 22px )', width: '100%', overflow: 'hidden'};
+  }
+
+  private sendError(error: string) {
+    this.error = error;
+    BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+    this.warpViewEditorErrorEvent.emit(this.error);
+  }
+
+  private sendStatus(status: { elapsed: number; ops: number; message: string; fetched: number }) {
+    this.status = {...status};
+    BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
+    this.warpViewEditorStatusEvent.emit(this.status);
   }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 SenX S.A.S.
+ *  Copyright 2020 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 import {Utils} from '../../lib/utils';
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {editor} from 'monaco-editor';
-import {Logger} from "../../lib/logger";
+import {Logger} from '../../lib/logger';
+import {Config} from '../../lib/config';
+import {EditorConfig} from '../../lib/editorConfig';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import setTheme = editor.setTheme;
 import create = editor.create;
-import {Config} from "../../lib/config";
-import {EditorConfig} from "../../lib/editorConfig";
 import IEditorOptions = editor.IEditorOptions;
 
 @Component({
@@ -47,15 +47,13 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   }
 
   @Input() set theme(newValue: string) {
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - The new value of theme is: ', newValue);
+    this.LOG.debug(['WarpViewRawResult'], 'The new value of theme is: ', newValue);
     if ('dark' === newValue) {
       this.monacoTheme = 'vs-dark';
     } else {
       this.monacoTheme = 'vs';
     }
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - The new value of theme is: ', this.monacoTheme);
+    this.LOG.debug(['WarpViewRawResult'], 'The new value of theme is: ', this.monacoTheme);
     this._theme = newValue;
     setTheme(this.monacoTheme);
   }
@@ -67,8 +65,7 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   @Input() set result(newValue: any[]) {
     this.loading = true;
     this._result = newValue;
-    // tslint:disable-next-line:no-console
-    console.debug('[WarpViewRawResult] - The new value of result is: ', newValue);
+    this.LOG.debug(['WarpViewRawResult'], 'The new value of result is: ', newValue);
     this.buildEditor(JSON.stringify(this._result || ''));
     this.loading = false;
   }
@@ -160,7 +157,6 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // tslint:disable-next-line:no-console
     this.LOG.debug(['ngAfterViewInit'], this._result);
     this.loading = true;
     this.buildEditor(JSON.stringify(this._result));
@@ -168,7 +164,6 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   }
 
   private setOptions(): IEditorOptions {
-    console.log(this._config.editor.rawResultsReadOnly)
     return {
       value: '',
       language: 'json',

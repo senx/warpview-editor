@@ -1,5 +1,5 @@
 <!--
-  ~  Copyright 2019 SenX S.A.S.
+  ~  Copyright 2020 SenX S.A.S.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -13,8 +13,6 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
-
 <div [class]="'wrapper-main ' + _theme" #wrapper >
   <div class="warpscript" #content>
     <ng-content ngProjectAs="input"></ng-content>
@@ -33,9 +31,9 @@
         <button type='button' [class]="innerConfig.execButton.class"
                 *ngIf="showExecute"
                 (click)="execute()" [innerHTML]="innerConfig.execButton.label"></button>
-        <div class='messages' *ngIf="error || result">
-          <div *ngIf="status && displayMessages" [class]="innerConfig.messageClass" [innerHTML]="status.message"></div>
-          <div *ngIf="error && displayMessages" [class]="innerConfig.errorClass" [innerHTML]="error"></div>
+        <div class='messages' *ngIf="error || result || status">
+          <div *ngIf="status && _displayMessages" [class]="innerConfig.messageClass" [innerHTML]="status.message"></div>
+          <div *ngIf="error && _displayMessages" [class]="innerConfig.errorClass" [innerHTML]="error"></div>
         </div>
       </div>
     </div>
