@@ -17,7 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/warpview-editor",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -61,10 +60,6 @@
                   "type": "initial",
                   "maximumWarning": "20mb",
                   "maximumError": "50mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -137,7 +132,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/warpview-editor-ng",
             "index": "src/elements-index.html",
             "main": "src/elements.main.ts",
@@ -180,10 +174,6 @@
                   "type": "initial",
                   "maximumWarning": "20mb",
                   "maximumError": "50mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -280,7 +270,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/elements",
             "index": "src/elements-index.html",
             "main": "src/elements.main.ts",
@@ -322,10 +311,6 @@
                   "type": "initial",
                   "maximumWarning": "10mb",
                   "maximumError": "50mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
                 }
               ]
             }

@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.2.13",
+  "version": "2.2.15",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -75,10 +75,11 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.9",
+    "@angular-devkit/build-angular": "0.803.26",
     "@angular/cli": "~8.3.9",
     "@angular/compiler-cli": "~8.2.9",
     "@angular/language-service": "~8.2.9",
+    "@babel/compat-data": "7.8.0",
     "@types/jest": "^21.1.1",
     "@types/node": "~8.9.4",
     "angular-cli-ghpages": "^0.6.0",
