@@ -42,7 +42,6 @@ import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
 import {UUID} from 'angular2-uuid';
-import * as semver from 'semver';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
@@ -521,7 +520,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.warpViewEditorErrorEvent.emit(this.error);
       BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
       this.loading = false;
-      this.loading = false;
       return of(result as T);
     };
   }
@@ -545,17 +543,17 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       const executionUrl = specialHeaders.endpoint || this.url;
       // Get Warp10 version
       // @ts-ignore
-      this.http.post<HttpResponse<string>>(executionUrl, 'REV', {responseType: 'text'})
-        .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
+      this.http.post<HttpResponse<any>>(executionUrl, ' "2.5.0" MINREV ', {observe: 'body', responseType: 'text'})
+        .pipe(catchError(this.handleError<HttpResponse<any>>(undefined)))
         .subscribe(version => {
           let headers = {};
           if (!!version) {
             const v = JSON.parse(version);
-            if (!!v[0] && semver.gte(v[0], '2.5.0')) {
+            if (!!v[0]) {
               headers = {'X-Warp10-WarpScriptSession': session};
             }
+            // @ts-ignore
             this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
-              // @ts-ignore
               observe: 'response',
               // @ts-ignore
               responseType: 'text',
