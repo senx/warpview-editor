@@ -15,6 +15,8 @@
  */
 
 // adapted from Canop's JSON,parseMore https://github.com/Canop/JSON.parseMore/
+import BigNumber from 'bignumber.js';
+
 export class JsonLib {
   at;	 // The index of the current character
   ch;	 // The current character
@@ -89,7 +91,15 @@ export class JsonLib {
         this.next();
       }
     }
-    return +string;
+    return this.testBigInt(string);
+  }
+
+  private testBigInt(str: string) {
+    if(str.replace('-', '').split('.')[0].length > 16) {
+      return new BigNumber(str);
+    }else {
+      return +str;
+    }
   }
 
   private string() {

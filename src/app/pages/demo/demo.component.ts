@@ -25,7 +25,7 @@ import {UUID} from 'angular2-uuid';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', {static: true}) editor: ElementRef<Element>;
+  @ViewChild('editor', {static: false}) editor: ElementRef<Element>;
   visible = false;
   config = {
     messageClass: 'alert alert-info message',
@@ -40,32 +40,13 @@ export class DemoComponent implements OnInit {
       rawResultsReadOnly: false
     }
   } as Config;
+  warpscript2 = '-5372520086604731500';
   warpscript = `@training/dataset0
 // warp.store.hbase.puts.committed is the number of datapoints committed to
 // HBase since the restart of the Store daemon
 [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 9 d ] FETCH
 [ SWAP mapper.rate 1 0 0 ] MAP
-STOP
-@training/dataset0
-// warp.store.hbase.puts.committed is the number of datapoints committed to
-// HBase since the restart of the Store daemon
-[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
-[ SWAP mapper.rate 1 0 0 ] MAP
-
-// Keep only 1000 datapoints per GTS
-1000 LTTB
-DUP
-// Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
-5 false ESDTEST
-// Convert the ticks identified by ESDTEST into an annotation GTS
-<%
-DROP // excude element index
-NEWGTS // create a new GTS
-SWAP // get timestamp list
-<% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
-%> LMAP
-2 ->LIST // Put our GTS in a list
-ZIP // merge into a list of GTS`;
+MINLONG MAXLONG`;
   ctrlClick: any;
   breakpoint: any;
   size: any;

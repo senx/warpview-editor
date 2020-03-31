@@ -18,7 +18,7 @@
   <div *ngIf="_result && isArray(_result)" [class]="theme + ' raw'">
     <span *ngFor="let line of _resultStr; let index= index; let isFirst = first;" class="line">
       <pre class="line-num">{{isFirst? '[TOP]' : index + 1}}</pre>
-      <pre class="line-content">{{line}}</pre>
+      <pre class="line-content" [innerHTML]="line"></pre>
     </span>
   </div>
 </div>

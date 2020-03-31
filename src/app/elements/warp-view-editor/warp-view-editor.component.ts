@@ -576,7 +576,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                     fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
                   });
                   try {
-                    this.result = new JsonLib().parse(res.body, undefined);
+                    this.result = res.body;
                   } catch (e) {
                     if (e.name && e.message && e.at && e.text) {
                       this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;

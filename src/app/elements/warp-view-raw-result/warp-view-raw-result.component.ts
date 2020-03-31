@@ -62,15 +62,15 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     return this._theme;
   }
 
-  @Input() set result(newValue: any[]) {
+  @Input() set result(newValue: string) {
     this.loading = true;
     this._result = newValue;
     this.LOG.debug(['WarpViewRawResult'], 'The new value of result is: ', newValue);
-    this.buildEditor(JSON.stringify(this._result || ''));
+    this.buildEditor(this._result || '');
     this.loading = false;
   }
 
-  get result(): any[] {
+  get result(): string {
     return this._result;
   }
 
@@ -95,7 +95,7 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:variable-name
   _theme = 'light';
   // tslint:disable-next-line:variable-name
-  _result: any[] = [];
+  _result: string;
   // tslint:disable-next-line:variable-name
   _config: Config = {
     editor: new EditorConfig(),
@@ -129,7 +129,9 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     if (!this.resEd && json) {
       this.resEd = create(this.editor.nativeElement, this.setOptions());
     }
-    this.resEd.setValue(json || '');
+    if(!!this.resEd) {
+      this.resEd.setValue(json || '');
+    }
     this.loading = false;
   }
 
