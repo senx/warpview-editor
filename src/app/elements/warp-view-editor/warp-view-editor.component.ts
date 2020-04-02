@@ -20,7 +20,6 @@ import {Utils} from '../../lib/utils';
 import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../lib/config';
 import {Logger} from '../../lib/logger';
-import {JsonLib} from '../../lib/jsonLib';
 import {BubblingEvents} from '../../lib/bubblingEvent';
 import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
 import {
@@ -41,7 +40,6 @@ import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
-import {UUID} from 'angular2-uuid';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
@@ -525,7 +523,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session = UUID.UUID()) {
+  public execute(session) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
@@ -543,54 +541,48 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       const executionUrl = specialHeaders.endpoint || this.url;
       // Get Warp10 version
       // @ts-ignore
-      this.http.post<HttpResponse<any>>(executionUrl, ' "2.5.0" MINREV ', {observe: 'body', responseType: 'text'})
-        .pipe(catchError(this.handleError<HttpResponse<any>>(undefined)))
-        .subscribe(version => {
-          let headers = {};
-          if (!!version) {
-            const v = JSON.parse(version);
-            if (!!v[0]) {
-              headers = {'X-Warp10-WarpScriptSession': session};
-            }
-            this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
-              // @ts-ignore
-              observe: 'response',
-              // @ts-ignore
-              responseType: 'text',
-              headers
-            })
-              .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-              .subscribe(res => {
-                if (!!res) {
-                  this.LOG.debug(['execute'], 'response', res.body);
-                  this.warpViewEditorWarpscriptResult.emit(res.body);
-                  BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
-                  this.sendStatus({
-                    message: `Your script execution took
+
+      let headers = {};
+      if (!!session) {
+        headers = {'X-Warp10-WarpScriptSession': session};
+      }
+      this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
+        // @ts-ignore
+        observe: 'response',
+        // @ts-ignore
+        responseType: 'text',
+        headers
+      })
+        .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
+        .subscribe(res => {
+          if (!!res) {
+            this.LOG.debug(['execute'], 'response', res.body);
+            this.warpViewEditorWarpscriptResult.emit(res.body);
+            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
+            this.sendStatus({
+              message: `Your script execution took
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
  ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
-                    ops: parseInt(res.headers.get('x-warp10-ops'), 10),
-                    elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
-                    fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
-                  });
-                  try {
-                    this.result = res.body;
-                  } catch (e) {
-                    if (e.name && e.message && e.at && e.text) {
-                      this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
-                    } else {
-                      this.error = e.toString();
-                    }
-                    this.result = res.body as any[];
-                    this.LOG.error(['execute 1'], this.error);
-                    this.sendError(this.error);
-                  }
-                }
-                this.loading = false;
-              });
+              ops: parseInt(res.headers.get('x-warp10-ops'), 10),
+              elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
+              fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
+            });
+            try {
+              this.result = res.body;
+            } catch (e) {
+              if (e.name && e.message && e.at && e.text) {
+                this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
+              } else {
+                this.error = e.toString();
+              }
+              this.result = res.body as any[];
+              this.LOG.error(['execute 1'], this.error);
+              this.sendError(this.error);
+            }
           }
+          this.loading = false;
         });
     } else {
       this.loading = false;

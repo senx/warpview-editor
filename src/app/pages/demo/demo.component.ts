@@ -63,13 +63,12 @@ MINLONG MAXLONG`;
 
   abort() {
     // @ts-ignore
-    this.editor.abort(this.sessionId);
+    this.editor.abort();
   }
 
   exec() {
-    this.sessionId = UUID.UUID();
     // @ts-ignore
-    this.editor.execute(this.sessionId);
+    this.editor.execute();
   }
 
   warpViewEditorCtrlClick(event) {
