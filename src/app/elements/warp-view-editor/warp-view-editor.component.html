@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div slot="result" *ngIf="showResult">
+    <div slot="result" *ngIf="showResult" style="height: 100%">
       <wc-tabs class='wctabs' [selection]="selectedResultTab" style="height: 100%">
         <wc-tabs-header slot='header' name='tab1'>Results</wc-tabs-header>
         <wc-tabs-header slot='header' name='tab2'>Raw JSON</wc-tabs-header>

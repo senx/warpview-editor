@@ -26,19 +26,20 @@ import {JsonLib} from '../../lib/jsonLib';
 })
 export class WarpViewResult {
 
-
   @Input() theme = 'light';
   @Input() config: object = {};
   @Input() loading = false;
+  _res: string;
   _result: any[];
   _resultStr: any[];
 
   @Input()
-  get result(): any[] {
-    return this._result;
+  get result(): string {
+    return this._res;
   };
 
-  set result(res: any[]) {
+  set result(res: string) {
+    this._res = res;
     this._result = new JsonLib().parse(res || '[]', undefined);
     this._resultStr = (this._result || []).map(l => {
       console.log(typeof l);
@@ -52,7 +53,6 @@ export class WarpViewResult {
   }
 
   constructor(private gtsLib: GTSLib) {
-
   }
 
   isArray(arr: any) {

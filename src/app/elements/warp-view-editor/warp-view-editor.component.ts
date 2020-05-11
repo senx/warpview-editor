@@ -99,7 +99,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this._warpscript;
   }
 
-  _showDataviz = false;
   @Input('showDataviz')
   get showDataviz(): boolean {
     return this._showDataviz;
@@ -119,7 +118,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._showExecute = '' + value !== 'false';
   }
 
-  private _showResult = true;
   @Input('showResult')
   get showResult(): boolean {
     return this._showResult;
@@ -143,7 +141,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this.innerConfig;
   }
 
-  _displayMessages = true;
   @Input('displayMessages')
   get displayMessages(): boolean {
     return this._displayMessages;
@@ -153,8 +150,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._displayMessages = '' + value !== 'false';
   }
 
-
-  private _widthPx: number;
   @Input('widthPx')
   get widthPx(): number {
     return this._widthPx;
@@ -164,7 +159,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._widthPx = parseInt('' + value, 10);
   }
 
-  private _heightLine: number;
   @Input('heightLine')
   get heightLine(): number {
     return this._heightLine;
@@ -174,7 +168,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._heightLine = parseInt('' + value, 10);
   }
 
-  private _heightPx: number;
   @Input('heightPx')
   get heightPx(): number {
     return this._heightPx;
@@ -184,7 +177,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._heightPx = parseInt('' + value, 10);
   }
 
-  private _imageTab = false;
   @Input('imageTab')
   get imageTab(): boolean {
     return this._imageTab;
@@ -194,7 +186,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this._imageTab = '' + value !== 'false';
   }
 
-  private _initialSize: { w?: number, h?: number, name?: string, p?: number };
   @Input('initialSize')
   get initialSize(): { w?: number, h?: number, name?: string, p?: number } | string {
     return this._initialSize;
@@ -213,6 +204,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Output('warpViewEditorBreakPoint') warpViewEditorBreakPoint = new EventEmitter<any>();
   @Output('warpViewEditorCtrlClick') warpViewEditorCtrlClick = new EventEmitter<any>();
   @Output('warpViewEditorDatavizRequested') warpViewEditorDatavizRequested = new EventEmitter<any>();
+
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
   @ViewChild('buttons', {static: true}) buttons: ElementRef<HTMLDivElement>;
@@ -223,13 +215,24 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   error: string;
   loading = false;
   selectedResultTab = -1;
+  lastKnownWS: string;
+  headers = this.getItems();
+  innerConfig = new Config();
+  ro: ResizeObserver;
   // tslint:disable-next-line:variable-name
   _theme = 'light';
   // tslint:disable-next-line:variable-name
   _warpscript: string;
   // tslint:disable-next-line:variable-name
   _debug = false;
-  lastKnownWS: string;
+  _displayMessages = true;
+  _showDataviz = false;
+  private _heightPx: number;
+  private _heightLine: number;
+  private _showResult = true;
+  private _imageTab = false;
+  private _widthPx: number;
+  private _initialSize: { w?: number, h?: number, name?: string, p?: number };
   private static MIN_HEIGHT = 250;
   private LOG: Logger;
   private ed: IStandaloneCodeEditor;
@@ -241,9 +244,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentWidth = -1;
   private request: Subscription;
   private resizeWatcherInt: number;
-  headers = this.getItems();
-  innerConfig = new Config();
-  ro: ResizeObserver;
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);
@@ -285,7 +285,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     if (editorParentHeight !== this.previousParentHeight || editorParentWidth !== this.previousParentWidth) {
       this.previousParentHeight = editorParentHeight;
       this.previousParentWidth = editorParentWidth;
-      // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
       const editorH = Math.floor(editorParentHeight) - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
       const editorW = Math.floor(this.editor.nativeElement.parentElement.clientWidth);
       this.ed.layout({height: editorH, width: editorW});

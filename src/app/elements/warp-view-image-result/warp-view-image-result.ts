@@ -17,6 +17,7 @@
 import {GTSLib} from '../../lib/gts.lib';
 import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {Logger} from '../../lib/logger';
+import {JsonLib} from '../../lib/jsonLib';
 
 @Component({
   selector: 'warpview-image-result',
@@ -38,12 +39,13 @@ export class WarpViewImageResult {
     return this._debug;
   }
 
-  @Input() set result(newValue: any[]) {
-    this._result = newValue;
+  @Input() set result(res: string) {
+    this._res = res;
+    this._result = new JsonLib().parse(res || '[]', undefined);
     this.loading = true;
-    this.LOG.debug(['isArray'], 'The new value of result is: ', newValue);
-    if (newValue && this.gtsLib.isArray(newValue)) {
-      this.imageList = newValue.filter((v: any) => {
+    this.LOG.debug(['isArray'], 'The new value of result is: ', res);
+    if (res && this.gtsLib.isArray(this._result)) {
+      this.imageList = this._result.filter((v: any) => {
         return ((typeof (v) === 'string') && (String(v).startsWith('data:image/png;base64,')));
       });
     } else {
@@ -52,8 +54,8 @@ export class WarpViewImageResult {
     this.loading = false;
   }
 
-  get result(): any[] {
-    return this._result;
+  get result(): string {
+    return this._res;
   }
 
   @Input() set theme(newValue: string) {
@@ -68,7 +70,8 @@ export class WarpViewImageResult {
 
 
   // tslint:disable-next-line:variable-name
-  _result: any[] = [];
+  _result: any[];
+  _res: string;
   // tslint:disable-next-line:variable-name
   _theme = 'light';
   // tslint:disable-next-line:variable-name
