@@ -50,7 +50,6 @@
     max-height: 100% !important;
     margin: 0;
     padding: 0;
-    //  overflow: hidden;
   }
 
 
@@ -63,7 +62,13 @@
   }
 
   .messages {
-    float: right;
+    width: 100%;
+    font-size: 0.7em;
+    margin: 0 5px;
+
+    &>* {
+      margin: 0;
+    }
   }
 
   .wrapper-main {

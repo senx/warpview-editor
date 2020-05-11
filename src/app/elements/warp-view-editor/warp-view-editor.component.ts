@@ -143,7 +143,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     return this.innerConfig;
   }
 
-  private _displayMessages = true;
+  _displayMessages = true;
   @Input('displayMessages')
   get displayMessages(): boolean {
     return this._displayMessages;
@@ -218,7 +218,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild('buttons', {static: true}) buttons: ElementRef<HTMLDivElement>;
   @ViewChild('content', {static: true}) contentWrapper: ElementRef<HTMLDivElement>;
 
-  result: any[];
+  result: string;
   status: { message: string, ops: number, elapsed: number, fetched: number };
   error: string;
   loading = false;
@@ -286,7 +286,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.previousParentHeight = editorParentHeight;
       this.previousParentWidth = editorParentWidth;
       // TODO: the 20 px offset in firefox might be a bug around flex countainers. Can't figure out.
-      const editorH = Math.floor(editorParentHeight) - 20 - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
+      const editorH = Math.floor(editorParentHeight) - (this.buttons ? this.buttons.nativeElement.clientHeight : 0);
       const editorW = Math.floor(this.editor.nativeElement.parentElement.clientWidth);
       this.ed.layout({height: editorH, width: editorW});
       this.editor.nativeElement.style.overflow = 'hidden';
@@ -523,7 +523,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session) {
+  public execute(session?) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
@@ -577,7 +577,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               } else {
                 this.error = e.toString();
               }
-              this.result = res.body as any[];
+              this.result = res.body;
               this.LOG.error(['execute 1'], this.error);
               this.sendError(this.error);
             }
