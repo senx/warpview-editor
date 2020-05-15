@@ -654,7 +654,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   responsiveStyle() {
-    return {height: 'calc( 100% - 22px )', width: '100%', overflow: 'hidden'};
+    return {height: '100%', width: '100%', overflow: 'hidden'};
   }
 
   private sendError(error: string) {
