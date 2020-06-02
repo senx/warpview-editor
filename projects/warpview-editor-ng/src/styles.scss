@@ -13,18 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import "~monaco-editor/min/vs/editor/editor.main.css";
 
 span.mouseOver {
   cursor: pointer;
   text-decoration: underline;
 }
+
 warp-view-editor {
+  @import "../../../node_modules/monaco-editor/min/vs/editor/editor.main.css";
   font-size: 0;
-  &>div {
+
+  & > div {
     font-size: initial;
   }
 }
+
 .warpviewGlyphMarginClass:after {
   color: var(--warpview-editor-breakpoint-color, #ff0000);
   font-size: 20px;

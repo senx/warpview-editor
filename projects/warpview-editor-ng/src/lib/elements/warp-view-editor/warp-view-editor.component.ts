@@ -16,12 +16,12 @@
 
 /* tslint:disable:no-string-literal */
 import {editor, Range} from 'monaco-editor';
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../model/utils';
 import ResizeObserver from 'resize-observer-polyfill';
-import {Config} from '../../lib/config';
-import {Logger} from '../../lib/logger';
-import {BubblingEvents} from '../../lib/bubblingEvent';
-import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../lib/warpScriptParser';
+import {Config} from '../../model/config';
+import {Logger} from '../../model/logger';
+import {BubblingEvents} from '../../model/bubblingEvent';
+import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../model/warpScriptParser';
 import {
   AfterViewInit,
   Component,
@@ -243,7 +243,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentHeight = -1;
   private previousParentWidth = -1;
   private request: Subscription;
-  private resizeWatcherInt: number;
+  private resizeWatcherInt: any;
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 SenX S.A.S.
+ *  Copyright 2020  SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -12,40 +12,35 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
+ *
  */
-
+const sass = require('node-sass');
 const fs = require('fs-extra');
 const concat = require('concat');
 (async function build() {
-  await fs.ensureDir('elements');
-  const es2015 = [
-    './dist/elements/runtime-es2015.js',
-    './dist/elements/polyfills-es2015.js',
-    './dist/elements/common-es2015.js',
-    './dist/elements/0-es2015.js',
-    './dist/elements/1-es2015.js',
-    './dist/elements/jsonMode-js-es2015.js',
-    './dist/elements/main-es2015.js',
-  ];
-  const es5 = [
-    './dist/elements/runtime-es5.js',
-    './dist/elements/polyfills-es5.js',
-    './dist/elements/common-es5.js',
-    './dist/elements/0-es5.js',
-    './dist/elements/1-es5.js',
-    './dist/elements/jsonMode-js-es5.js',
-    './dist/elements/main-es5.js',
-  ];
-  await concat(es2015, 'elements/warpview-editor-es2015.js');
-  await concat(es5, 'elements/warpview-editor-es5.js');
-  await concat([
+  const files = [
+    './dist/warpview-editor/elements/0.js',
+    './dist/warpview-editor/elements/1.js',
+    './dist/warpview-editor/elements/main.js',
     './scripts/loader.js',
-    './dist/elements/scripts.js'
-  ], 'elements/warpview-editor.js');
-  await fs.copyFile('./dist/elements/styles.css', 'elements/warpview-editor.css');
-  try {
-    await fs.copy('./dist/elements/assets/', 'elements/assets/')
-  } catch (e) {
-    // nothing
-  }
+  ];
+  const css = [
+    './dist/warpview-editor/elements/warpview-editor-elements.css',
+    './node_modules/monaco-editor/min/vs/editor/editor.main.css'
+  ];
+
+  await concat(files, './dist/warpview-editor/elements/warpview-editor-elements.js');
+  sass.render({
+    file: './projects/warpview-editor-ng/src/styles.scss',
+    outFile: './dist/warpview-editor/elements/warpview-editor-elements.css',
+    outputStyle: 'compressed'
+  }, function (err, result) {
+    if (!err) {
+      let compiledScssCode = result.css.toString();
+      // remove comments from the css output
+      compiledScssCode = compiledScssCode.replace(/\/\*[^*]*\*+([^\/][^*]*\*+)*\//gi, '');
+      fs.writeFileSync('./dist/warpview-editor/elements/warpview-editor-elements.css', compiledScssCode);
+      concat(css, './dist/warpview-editor/elements/warpview-editor-elements.css');
+    }
+  });
 })();

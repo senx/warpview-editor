@@ -20,7 +20,6 @@ import { MainComponent } from './main/main.component';
 import { DemoImageComponent } from './demo-image/demo-image.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { WarpViewEditorModule } from '../elements/warp-view-editor.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { DocComponent } from './doc/doc.component';
 import { Sample3Component } from './sample3/sample3.component';
@@ -28,6 +27,7 @@ import { Sample4Component } from './sample4/sample4.component';
 import { Sample5Component } from './sample5/sample5.component';
 import { Sample6Component } from './sample6/sample6.component';
 import {Sample7Component} from './sample7/sample7.component';
+import {WarpViewEditorAngularModule} from '../../../projects/warpview-editor-ng/src/lib/warp-view-editor-angular.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import {Sample7Component} from './sample7/sample7.component';
   imports: [
     BrowserModule,
     CommonModule,
-    WarpViewEditorModule,
+    WarpViewEditorAngularModule,
     AppRoutingModule
   ],
   providers: [],

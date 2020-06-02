@@ -15,9 +15,8 @@
  */
 
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Config} from '../../lib/config';
-import {$e} from 'codelyzer/angular/styles/chars';
-import {UUID} from 'angular2-uuid';
+import {Config} from '../../../../projects/warpview-editor-ng/src/lib/model/config';
+import {WarpViewEditorComponent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';
 
 @Component({
   selector: 'warpview-demo',
@@ -25,7 +24,7 @@ import {UUID} from 'angular2-uuid';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: ElementRef<Element>;
+  @ViewChild('editor', {static: false}) editor: WarpViewEditorComponent;
   visible = false;
   config = {
     messageClass: 'alert alert-info message',
@@ -52,7 +51,6 @@ MINLONG MAXLONG`;
   size: any;
   warpscriptAttr: string;
   editorLoaded: any;
-  private sessionId: string;
 
   constructor() {
   }
@@ -62,12 +60,10 @@ MINLONG MAXLONG`;
   }
 
   abort() {
-    // @ts-ignore
     this.editor.abort();
   }
 
   exec() {
-    // @ts-ignore
     this.editor.execute();
   }
 
@@ -88,6 +84,6 @@ MINLONG MAXLONG`;
   }
 
   warpViewEditorLoaded($event: any) {
-    this.editorLoaded = {'editorLoaded' : $event};
+    this.editorLoaded = {'editorLoaded': $event};
   }
 }

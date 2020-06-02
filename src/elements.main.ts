@@ -16,24 +16,34 @@
 
 import {enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-
-import {WarpViewEditorModule} from './app/elements/warp-view-editor.module';
 import {environment} from './environments/environment';
+import {WarpViewEditorElementsModule} from '../projects/warpview-editor-ng/src/lib/warp-view-editor-elements.module';
 import * as wcSplit from '@giwisoft/wc-split/loader';
 import * as wcTabs from '@giwisoft/wc-tabs/loader';
+import 'zone.js/dist/zone';
+import {WarpViewEditorComponent} from '../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';
+import {WarpViewImageResult} from '../projects/warpview-editor-ng/src/lib/elements/warp-view-image-result/warp-view-image-result';
+import {WarpViewRawResultComponent} from '../projects/warpview-editor-ng/src/lib/elements/warp-view-raw-result/warp-view-raw-result.component';
+import {WarpViewResult} from '../projects/warpview-editor-ng/src/lib/elements/warp-view-result/warp-view-result';
+import {createCustomElement} from '@angular/elements';
 
 if (environment.production) {
   enableProdMode();
 }
 [wcSplit, wcTabs].forEach(wc => wc.defineCustomElements(window).then(() => {
   // empty
-}).catch(err => console.log('elements.main.ts', err)));
-platformBrowserDynamic().bootstrapModule(WarpViewEditorModule).then(ref => {
-  // Ensure Angular destroys itself on hot reloads.
-  if (window['ngRef']) {
-    window['ngRef'].destroy();
-  }
-  window['ngRef'] = ref;
+}).catch(err => console.log('main.ts', err)));
 
-  // Otherise, log the boot error
-}).catch(err => console.error(err));
+platformBrowserDynamic().bootstrapModule(WarpViewEditorElementsModule)
+  .then(({injector}) => {
+    [
+      {name: 'warp-view-editor', component: WarpViewEditorComponent},
+      {name: 'warp-view-image-result', component: WarpViewImageResult},
+      {name: 'warp-view-raw-result', component: WarpViewRawResultComponent},
+      {name: 'warp-view-result', component: WarpViewResult},
+    ].forEach(wc => {
+      if (!customElements.get(wc.name)) {
+        customElements.define(wc.name, createCustomElement(wc.component, {injector}));
+      }
+    });
+  });
