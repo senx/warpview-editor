@@ -21,11 +21,8 @@ const concat = require('concat');
   const files = [
     './dist/warpview-editor/elements/0.js',
     './dist/warpview-editor/elements/1.js',
-    './dist/warpview-editor/elements/runtime.js',
-    './dist/warpview-editor/elements/polyfills.js',
-    './dist/warpview-editor/elements/scripts.js',
     './dist/warpview-editor/elements/main.js',
-    './scripts/loader.js'
+    './scripts/loader.js',
   ];
   const css = [
     './dist/warpview-editor/elements/warpview-editor-elements.css',

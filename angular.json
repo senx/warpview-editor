@@ -147,7 +147,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:browser",
           "options": {
             "outputPath": "dist/warpview-editor/elements",
             "index": "src/elements-index.html",
@@ -157,6 +157,14 @@
             "scripts": [
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp-es5",
+                "input": "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp",
+                "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
             ],
             "es5BrowserSupport": true
@@ -189,7 +197,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "options": {
             "browserTarget": "elements:build"
           },
@@ -206,7 +214,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "ngx-build-plus:karma",
           "options": {
             "main": "projects/elements/src/test.ts",
             "polyfills": "projects/elements/src/polyfills.ts",
@@ -283,6 +291,17 @@
             "project": "projects/warpview-editor-ng/ng-package.json"
           },
           "es5BrowserSupport": true
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "elements:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "elements:build:production"
+            }
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

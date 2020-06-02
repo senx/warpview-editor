@@ -25,6 +25,7 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
   <style>
     body {
       padding: 0;
@@ -77,10 +78,22 @@
 
 <body class="d-flex flex-column vh-100 align-items-stretch">
 <main role="main" class="container flex-fill">
+  <div class="card " style="height: 500px; width: 100%;">
+    <div class="card-body" style="width: 100%; height: 100%">
+      <warp-view-tile
+        url="https://warp.senx.io/api/v0"
+        responsive="true" debug="true"
+        type="plot">
+        NEWGTS 'g' STORE
+        0 100 <% 'ts' STORE $g $ts RAND RAND RAND RAND ADDVALUE DROP %> FOR
+        $g
+      </warp-view-tile>
+    </div>
+  </div>
   <h1>WarpView Editor</h1>
   <div class="card " style="height: 500px; width: 100%;">
-    <div class="card-body" style="width: 100%; height: 100vh">
-      <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="true" theme="dark" show-dataviz="false"
+    <div class="card-body" style="width: 100%; height: 100%">
+      <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="false" show-dataviz="false"
                         show-execute="true" show-result="true" config='{
 
                          "messageClass": "alert alert-info message",
@@ -150,7 +163,7 @@
 
 </script>
 <script src="./dist/warpview-editor/elements/warpview-editor-elements.js" defer></script>
-
+<script src="../warp-view/dist/warpview/elements/warpview-elements.js" defer></script>
 </body>
 
 </html>

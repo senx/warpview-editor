@@ -29,14 +29,6 @@ window.addEventListener('load', function() {
     }
     return path;
   };
-  console.log(scriptPath());
-  const script = document.createElement('script');
-  script.src = scriptPath() + '/warpview-editor-elements.js';
-  script.setAttribute('nomodule', 'true');
-  script.setAttribute('defer', 'true');
-  document.body.appendChild(script);
-
-
   const css = document.createElement('link');
   css.setAttribute('rel', 'stylesheet');
   css.setAttribute('href', scriptPath() + '/warpview-editor-elements.css');

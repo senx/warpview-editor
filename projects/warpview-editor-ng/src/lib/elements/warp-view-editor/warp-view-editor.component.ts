@@ -243,7 +243,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentHeight = -1;
   private previousParentWidth = -1;
   private request: Subscription;
-  private resizeWatcherInt: number;
+  private resizeWatcherInt: any;
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);

@@ -23,8 +23,6 @@ import {WarpViewEditorComponent} from './elements/warp-view-editor/warp-view-edi
 import {WarpViewImageResult} from './elements/warp-view-image-result/warp-view-image-result';
 import {WarpViewRawResultComponent} from './elements/warp-view-raw-result/warp-view-raw-result.component';
 import {WarpViewResult} from './elements/warp-view-result/warp-view-result';
-import * as split from '@giwisoft/wc-split';
-import * as tabs from '@giwisoft/wc-tabs';
 
 @NgModule({
   declarations: [],
@@ -42,16 +40,7 @@ import * as tabs from '@giwisoft/wc-tabs';
 })
 export class WarpViewEditorElementsModule {
   constructor(private injector: Injector) {
-    [
-      {name: 'warp-view-editor', component: WarpViewEditorComponent},
-      {name: 'warp-view-image-result', component: WarpViewImageResult},
-      {name: 'warp-view-raw-result', component: WarpViewRawResultComponent},
-      {name: 'warp-view-result', component: WarpViewResult},
-    ].forEach(wc => {
-      if (!customElements.get(wc.name)) {
-        customElements.define(wc.name, createCustomElement(wc.component, {injector: this.injector}));
-      }
-    });
+
   }
 
   ngDoBootstrap() {
