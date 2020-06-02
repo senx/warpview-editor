@@ -27,6 +27,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
               "projects/warpview-editor-ng/src/styles.scss"
             ],
             "scripts": [
