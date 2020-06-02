@@ -2,21 +2,30 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "module": "esnext",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "module": "es2015",
+    "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2017",
+      "es2018",
       "dom"
-    ]
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "warpview-editor-ng": [
+        "dist/warpview-editor-ng"
+      ],
+      "warpview-editor-ng/*": [
+        "dist/warpview-editor-ng/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules"

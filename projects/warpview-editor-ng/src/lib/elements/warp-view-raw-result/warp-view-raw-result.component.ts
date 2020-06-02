@@ -14,12 +14,12 @@
  *  limitations under the License.
  */
 
-import {Utils} from '../../lib/utils';
+import {Utils} from '../../model/utils';
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {editor} from 'monaco-editor';
-import {Logger} from '../../lib/logger';
-import {Config} from '../../lib/config';
-import {EditorConfig} from '../../lib/editorConfig';
+import {Logger} from '../../model/logger';
+import {Config} from '../../model/config';
+import {EditorConfig} from '../../model/editorConfig';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import setTheme = editor.setTheme;
 import create = editor.create;

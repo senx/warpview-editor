@@ -16,7 +16,7 @@
 
 import {WSCompletionItemProvider} from './WSCompletionItemProvider';
 import {languages} from 'monaco-editor';
-import {Monarch} from '../../../lib/monarch';
+import {Monarch} from '../../../model/monarch';
 import {WSLanguageConfiguration} from './WSLanguageConfiguration';
 import {WSHoverProvider} from './WSHoverProvider';
 import registerCompletionItemProvider = languages.registerCompletionItemProvider;

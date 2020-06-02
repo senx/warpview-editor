@@ -1,0 +1,31 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/warpview-editor",
+  "whitelistedNonPeerDependencies": [
+    "monaco-editor",
+    "marked",
+    "@giwisoft/wc-split",
+    "@giwisoft/wc-tabs",
+    "angular2-uuid",
+    "bignumber.js",
+    "highlight.js",
+    "resize-observer-polyfill"
+  ],
+  "lib": {
+    "flatModuleFile": "warpview-editor",
+    "umdId": "warpview-editor",
+    "amdId": "warpview-editor",
+    "entryFile": "./public-api.ts",
+    "umdModuleIds": {
+      "monaco-editor": "monaco-editor",
+      "marked": "marked",
+      "@giwisoft/wc-split": "@giwisoft/wc-split",
+      "@giwisoft/wc-tabs": "@giwisoft/wc-tabs",
+      "angular2-uuid": "angular2-uuid",
+      "bignumber.js": "bignumber.js",
+      "resize-observer-polyfill": "resize-observer-polyfill"
+    },
+    "styleIncludePaths": [
+    ]
+  }
+}

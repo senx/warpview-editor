@@ -2,13 +2,14 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "types": []
+    "types": [],
+    "inlineSources": true
   },
-  "files": [
-    "elements.main.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
+  "angularCompilerOptions": {
+
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
   ]
 }

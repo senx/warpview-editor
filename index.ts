@@ -14,5 +14,5 @@
  *  limitations under the License.
  */
 
-export {WarpViewEditorModule} from './src/app/elements/warp-view-editor.module';
-export {WarpViewEditorComponent} from './src/app/elements/warp-view-editor/warp-view-editor.component';
+export {WarpViewEditorModule} from './projects/warpview-editor-ng/src/lib/elements/warp-view-editor.module';
+export {WarpViewEditorComponent} from './projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';

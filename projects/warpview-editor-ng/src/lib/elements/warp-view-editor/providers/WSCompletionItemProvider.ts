@@ -15,7 +15,7 @@
  */
 
 import {CancellationToken, editor, languages, Position, Thenable} from 'monaco-editor';
-import {WarpScript} from '../../../lib/ref';
+import {WarpScript} from '../../../model/ref';
 import CompletionList = languages.CompletionList;
 import CompletionItemKind = languages.CompletionItemKind;
 import CompletionItemProvider = languages.CompletionItemProvider;

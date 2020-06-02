@@ -16,7 +16,7 @@
 
 
 import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
-import {globalfunctions as wsGlobals} from '../../../lib/wsGlobals';
+import {globalfunctions as wsGlobals} from '../../../model/wsGlobals';
 import HoverProvider = languages.HoverProvider;
 import Hover = languages.Hover;
 import ProviderResult = languages.ProviderResult;

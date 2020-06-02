@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import {GTSLib} from '../../lib/gts.lib';
+import {GTSLib} from '../../model/gts.lib';
 import {Component, Input, ViewEncapsulation} from '@angular/core';
-import {JsonLib} from '../../lib/jsonLib';
+import {JsonLib} from '../../model/jsonLib';
 
 @Component({
   selector: 'warpview-result',

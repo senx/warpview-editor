@@ -16,9 +16,8 @@
 
 import {enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-
-import {WarpViewEditorModule} from './app/elements/warp-view-editor.module';
 import {environment} from './environments/environment';
+import {WarpViewEditorElementsModule} from '../projects/warpview-editor-ng/src/lib/warp-view-editor-elements.module';
 import * as wcSplit from '@giwisoft/wc-split/loader';
 import * as wcTabs from '@giwisoft/wc-tabs/loader';
 
@@ -27,8 +26,9 @@ if (environment.production) {
 }
 [wcSplit, wcTabs].forEach(wc => wc.defineCustomElements(window).then(() => {
   // empty
-}).catch(err => console.log('elements.main.ts', err)));
-platformBrowserDynamic().bootstrapModule(WarpViewEditorModule).then(ref => {
+}).catch(err => console.log('main.ts', err)));
+
+platformBrowserDynamic().bootstrapModule(WarpViewEditorElementsModule).then(ref => {
   // Ensure Angular destroys itself on hot reloads.
   if (window['ngRef']) {
     window['ngRef'].destroy();

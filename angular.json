@@ -7,121 +7,6 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "warpview",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/warpview-editor",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
-              "src/styles.scss",
-              "./node_modules/highlight.js/styles/dracula.css"
-            ],
-            "scripts": [
-              {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
-              }
-            ],
-            "es5BrowserSupport": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "20mb",
-                  "maximumError": "50mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "warpview-editor:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "warpview-editor:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "warpview-editor:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {}
-        }
-      }
-    },
-    "warpview-editor-lib": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "library",
       "prefix": "warpview-editor",
       "schematics": {
         "@schematics/angular:component": {
@@ -132,18 +17,17 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/warpview-editor-ng",
-            "index": "src/elements-index.html",
-            "main": "src/elements.main.ts",
+            "outputPath": "dist/warpview-editor-elements",
+            "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.elements-ng.json",
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
-              "src/styles.scss"
+              "projects/warpview-editor-ng/src/styles.scss"
             ],
             "scripts": [
               {
@@ -172,8 +56,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "20mb",
-                  "maximumError": "50mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ]
             }
@@ -204,8 +88,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
-              "src/styles.scss"
+              "projects/warpview-editor-ng/src/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -225,14 +108,10 @@
               "**/node_modules/**"
             ]
           }
-        },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {}
         }
       }
     },
-    "warpview-editor-e2e": {
+    "warpview-editor-elements-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -241,11 +120,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "warpview-editor:serve"
+            "devServerTarget": "warpview-editor-elements:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "warpview-editor:serve:production"
+              "devServerTarget": "warpview-editor-elements:serve:production"
             }
           }
         },
@@ -261,8 +140,8 @@
       }
     },
     "elements": {
-      "root": "",
-      "sourceRoot": "src",
+      "root": "projects/warpview-editor-ng",
+      "sourceRoot": "projects/warpview-editor-ng",
       "projectType": "application",
       "prefix": "warpview-editor",
       "schematics": {},
@@ -270,24 +149,17 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/elements",
+            "outputPath": "dist/warpview-editor/elements",
             "index": "src/elements-index.html",
             "main": "src/elements.main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.elements.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
             "scripts": [
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
             ],
-            "es5BrowserSupport": false
+            "es5BrowserSupport": true
           },
           "configurations": {
             "production": {
@@ -341,7 +213,7 @@
             "tsConfig": "projects/elements/tsconfig.spec.json",
             "karmaConfig": "projects/elements/karma.conf.js",
             "styles": [
-              "projects/elements/src/styles.css"
+              "projects/warpview-editor-ng/src/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -363,7 +235,80 @@
           }
         }
       }
+    },
+    "elements-e2e": {
+      "root": "projects/elements-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/elements-e2e/protractor.conf.js",
+            "devServerTarget": "elements:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "elements:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/elements-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "warpview-editor-ng": {
+      "projectType": "library",
+      "root": "projects/warpview-editor-ng",
+      "sourceRoot": "projects/warpview-editor-ng/src",
+      "prefix": "warpview-editor",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "verbose": true,
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/warpview-editor-ng/tsconfig.lib.json",
+            "project": "projects/warpview-editor-ng/ng-package.json"
+          },
+          "es5BrowserSupport": true
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/warpview-editor-ng/src/test.ts",
+            "tsConfig": "projects/warpview-editor-ng/tsconfig.spec.json",
+            "karmaConfig": "projects/warpview-editor-ng/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/warpview-editor-ng/tsconfig.lib.json",
+              "projects/warpview-editor-ng/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
-  "defaultProject": "warpview-editor"
+  "defaultProject": "warpview-editor",
+  "cli": {
+    "packageManager": "yarn"
+  }
 }
