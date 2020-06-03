@@ -19,10 +19,11 @@ const fs = require('fs-extra');
 const concat = require('concat');
 (async function build() {
   const files = [
+    './scripts/loader.js',
     './dist/warpview-editor/elements/0.js',
     './dist/warpview-editor/elements/1.js',
-    './dist/warpview-editor/elements/main.js',
-    './scripts/loader.js',
+    './dist/warpview-editor/elements/vendors~jsonMode-js.js',
+    './dist/warpview-editor/elements/main.js'
   ];
   const css = [
     './dist/warpview-editor/elements/warpview-editor-elements.css',

@@ -40,7 +40,16 @@ import {WarpViewResult} from './elements/warp-view-result/warp-view-result';
 })
 export class WarpViewEditorElementsModule {
   constructor(private injector: Injector) {
-
+    [
+      {name: 'warp-view-editor', component: WarpViewEditorComponent},
+      {name: 'warp-view-image-result', component: WarpViewImageResult},
+      {name: 'warp-view-raw-result', component: WarpViewRawResultComponent},
+      {name: 'warp-view-result', component: WarpViewResult},
+    ].forEach(wc => {
+      if (!customElements.get(wc.name)) {
+        customElements.define(wc.name, createCustomElement(wc.component, {injector: this.injector}));
+      }
+    });
   }
 
   ngDoBootstrap() {
