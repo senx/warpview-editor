@@ -20,6 +20,7 @@ const concat = require('concat');
 (async function build() {
   const files = [
     './scripts/loader.js',
+    './node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js',
     './dist/warpview-editor/elements/0.js',
     './dist/warpview-editor/elements/1.js',
     './dist/warpview-editor/elements/vendors~jsonMode-js.js',
