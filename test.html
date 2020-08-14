@@ -78,22 +78,11 @@
 
 <body class="d-flex flex-column vh-100 align-items-stretch">
 <main role="main" class="container flex-fill">
-  <div class="card " style="height: 500px; width: 100%;">
-    <div class="card-body" style="width: 100%; height: 100%">
-      <warp-view-tile
-        url="https://warp.senx.io/api/v0/exec"
-        responsive="true" debug="true"
-        type="plot">
-        NEWGTS 'g' STORE
-        0 100 <% 'ts' STORE $g $ts RAND RAND RAND RAND ADDVALUE DROP %> FOR
-        $g
-      </warp-view-tile>
-    </div>
-  </div>
   <h1>WarpView Editor</h1>
   <div class="card " style="height: 500px; width: 100%;">
     <div class="card-body" style="width: 100%; height: 100%">
       <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="false" show-dataviz="false"
+                        id="editor"
                         show-execute="true" show-result="true" config='{
 
                          "messageClass": "alert alert-info message",
@@ -143,6 +132,9 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
 <script>
+  document.getElementById('editor').addEventListener('warpViewEditorLoaded', function (e) {
+    console.log(e);
+  });
   $(document).ready(() => {
     $('#inject').click(function () {
       $('#editor').attr('warpscript', Math.random().toString(36));
@@ -150,20 +142,22 @@
     $('#abort').click(function () {
       document.getElementById('editor').abort();
     });
-    document.addEventListener('warpViewEditorSize', function (e) {
+    document.getElementById('editor').addEventListener('warpViewEditorSize', function (e) {
       $('#size').text(JSON.stringify(e.detail));
     });
-    document.addEventListener('warpViewEditorBreakPoint', function (e) {
+    document.getElementById('editor').addEventListener('warpViewEditorBreakPoint', function (e) {
       $('#breakpoints').text(JSON.stringify(e.detail));
     });
-    document.addEventListener('warpViewEditorCtrlClick', function (e) {
+    document.getElementById('editor').addEventListener('warpViewEditorCtrlClick', function (e) {
       $('#ctrlclick').text(JSON.stringify(e.detail));
+    });
+    document.getElementById('editor').addEventListener('warpViewEditorWarpscriptChanged', function (e) {
+      console.log(e.detail)
     });
   });
 
 </script>
 <script src="./dist/warpview-editor/elements/warpview-editor-elements.js" defer></script>
-<script src="../warp-view/dist/warpview/elements/warpview-elements.js" defer></script>
 </body>
 
 </html>

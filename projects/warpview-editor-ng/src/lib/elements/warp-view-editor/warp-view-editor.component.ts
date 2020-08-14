@@ -354,8 +354,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.ed) {
         this.warpViewEditorLoaded.emit('loaded');
         // angular events does not bubble up outside angular component.
-        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded');
-
+        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded', 'loaded');
+        this.LOG.debug(['ngAfterViewInit'], 'loaded');
         this.ed.getModel().onDidChangeContent((event) => {
           if (this.lastKnownWS !== this.ed.getValue()) {
             this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
@@ -637,7 +637,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
       if (initial) {
         this.warpViewEditorLoaded.emit();
-        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded');
+        BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded', 'loaded');
+        this.LOG.debug(['resize'], 'loaded');
       }
     }, initial ? 500 : 100);
   }
