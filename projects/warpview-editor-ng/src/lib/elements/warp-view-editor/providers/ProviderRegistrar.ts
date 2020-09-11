@@ -25,18 +25,30 @@ import getLanguages = languages.getLanguages;
 import register = languages.register;
 import setLanguageConfiguration = languages.setLanguageConfiguration;
 import registerHoverProvider = languages.registerHoverProvider;
+import {FLoWSCompletionItemProvider} from './FLoWSCompletionItemProvider';
+import {FLoWSHoverProvider} from './FLoWSHoverProvider';
+import {FLoWSLanguageConfiguration} from './FLoWSLanguageConfiguration';
 
 export class ProviderRegistrar {
   static WARPSCRIPT_LANGUAGE = 'warpscript';
+  static FLOWS_LANGUAGE = 'flows';
 
   static register() {
+    // WarpScript
     if (!getLanguages().find(l => l.id === ProviderRegistrar.WARPSCRIPT_LANGUAGE)) {
       register({id: ProviderRegistrar.WARPSCRIPT_LANGUAGE});
       setLanguageConfiguration(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSLanguageConfiguration().getConfiguration());
       setMonarchTokensProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, Monarch.rules);
-      registerCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE,
-        new WSCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
-      registerHoverProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSHoverProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE));
+      registerCompletionItemProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSCompletionItemProvider());
+      registerHoverProvider(ProviderRegistrar.WARPSCRIPT_LANGUAGE, new WSHoverProvider());
+    }
+    // Flows
+    if (!getLanguages().find(l => l.id === ProviderRegistrar.FLOWS_LANGUAGE)) {
+      register({id: ProviderRegistrar.FLOWS_LANGUAGE});
+      setLanguageConfiguration(ProviderRegistrar.FLOWS_LANGUAGE, new FLoWSLanguageConfiguration().getConfiguration());
+      setMonarchTokensProvider(ProviderRegistrar.FLOWS_LANGUAGE, Monarch.rules);
+      registerCompletionItemProvider(ProviderRegistrar.FLOWS_LANGUAGE, new FLoWSCompletionItemProvider());
+      registerHoverProvider(ProviderRegistrar.FLOWS_LANGUAGE, new FLoWSHoverProvider());
     }
   }
 }

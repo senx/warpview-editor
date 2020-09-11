@@ -24,13 +24,13 @@
   },
   "homepage": "https://www.warp10.io",
   "dependencies": {
-    "@giwisoft/wc-split": "1.0.4",
-    "@giwisoft/wc-tabs": "1.0.5",
+    "@giwisoft/wc-split": "1.0.5",
+    "@giwisoft/wc-tabs": "1.0.7",
     "angular2-uuid": "^1.1.1",
     "bignumber.js": "^9.0.0",
-    "highlight.js": "^9.15.10",
-    "marked": "^0.7.0",
-    "monaco-editor": "^0.18.1",
+    "highlight.js": "^10.2.0",
+    "marked": "^1.1.1",
+    "monaco-editor": "^0.20.0",
     "resize-observer-polyfill": "^1.5.1"
   },
   "peerDependencies": {

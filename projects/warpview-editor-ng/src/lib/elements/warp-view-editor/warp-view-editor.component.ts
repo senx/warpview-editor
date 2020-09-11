@@ -53,6 +53,7 @@ import IEditorOptions = editor.IEditorOptions;
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() url = '';
+  @Input() lang = 'warpscript';
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {

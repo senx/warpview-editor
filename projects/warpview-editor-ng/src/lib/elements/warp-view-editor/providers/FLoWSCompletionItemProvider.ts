@@ -15,25 +15,25 @@
  */
 
 import {CancellationToken, editor, languages, Position, Thenable} from 'monaco-editor';
-import {WarpScript} from '../../../model/ref';
+import {Flows} from '../../../model/refFLows';
 import {W10CompletionItemProvider} from './W10CompletionItemProvider';
 import CompletionList = languages.CompletionList;
 import IReadOnlyModel = editor.IReadOnlyModel;
 import CompletionContext = languages.CompletionContext;
 import {ProviderRegistrar} from './ProviderRegistrar';
 
-export class WSCompletionItemProvider extends W10CompletionItemProvider {
+export class FLoWSCompletionItemProvider extends W10CompletionItemProvider {
 
   constructor() {
-    super(ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+    super(ProviderRegistrar.FLOWS_LANGUAGE);
   }
 
   transformKeyWord(keyword: string): string {
-    return keyword;
+    return keyword + '()';
   }
 
   // noinspection JSUnusedLocalSymbols
   provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken): Thenable<CompletionList> {
-    return super._provideCompletionItems(model, position, _context, token, WarpScript.reference);
+    return super._provideCompletionItems(model, position, _context, token, Flows.reference);
   }
 }

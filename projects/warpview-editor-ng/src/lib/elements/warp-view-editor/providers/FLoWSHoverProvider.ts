@@ -15,19 +15,19 @@
  */
 
 import {CancellationToken, editor, languages, Position} from 'monaco-editor';
-import {globalfunctions as wsGlobals} from '../../../model/wsGlobals';
+import {globalfunctions as flowsGlobals} from '../../../model/flowsGlobals';
 import {W10HoverProvider} from './W10HoverProvider';
 import Hover = languages.Hover;
 import ProviderResult = languages.ProviderResult;
 import {ProviderRegistrar} from './ProviderRegistrar';
 
-export class WSHoverProvider extends W10HoverProvider {
+export class FLoWSHoverProvider extends W10HoverProvider {
 
   constructor() {
-    super(ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+    super(ProviderRegistrar.FLOWS_LANGUAGE);
   }
 
   provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): ProviderResult<Hover> {
-    return super._provideHover(model, position, token, wsGlobals);
+    return super._provideHover(model, position, token, flowsGlobals);
   }
 }
