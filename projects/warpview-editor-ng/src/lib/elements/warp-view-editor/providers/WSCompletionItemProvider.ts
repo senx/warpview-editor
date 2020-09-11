@@ -17,15 +17,15 @@
 import {CancellationToken, editor, languages, Position, Thenable} from 'monaco-editor';
 import {WarpScript} from '../../../model/ref';
 import {W10CompletionItemProvider} from './W10CompletionItemProvider';
+import {EditorUtils} from './editorUtils';
 import CompletionList = languages.CompletionList;
 import IReadOnlyModel = editor.IReadOnlyModel;
 import CompletionContext = languages.CompletionContext;
-import {ProviderRegistrar} from './ProviderRegistrar';
 
 export class WSCompletionItemProvider extends W10CompletionItemProvider {
 
   constructor() {
-    super(ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+    super(EditorUtils.WARPSCRIPT_LANGUAGE);
   }
 
   transformKeyWord(keyword: string): string {

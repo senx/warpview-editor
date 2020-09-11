@@ -15,6 +15,8 @@
  */
 
 export class EditorUtils {
+  static WARPSCRIPT_LANGUAGE = 'warpscript';
+  static FLOWS_LANGUAGE = 'flows';
 
   static formatElapsedTime(elapsed: number) {
     if (elapsed < 1000) {

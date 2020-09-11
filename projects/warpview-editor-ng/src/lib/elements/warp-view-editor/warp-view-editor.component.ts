@@ -53,7 +53,7 @@ import IEditorOptions = editor.IEditorOptions;
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() url = '';
-  @Input() lang = 'warpscript';
+  @Input() lang: 'warpscript' | 'flows' = 'warpscript';
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {
@@ -340,7 +340,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       this.ed.setValue(this.lastKnownWS);
-      editor.setModelLanguage(this.ed.getModel(), ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+      editor.setModelLanguage(this.ed.getModel(), EditorUtils.WARPSCRIPT_LANGUAGE);
 
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -432,7 +432,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           'Accept': 'application/json',
         })
           .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-          .subscribe(res => {
+          .subscribe((res: HttpResponse<string>) => {
 
             if (!!res) {
               this.LOG.debug(['abort'], 'response', res.body);
@@ -554,7 +554,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         headers
       })
         .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-        .subscribe(res => {
+        .subscribe((res: HttpResponse<string>) => {
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
             this.warpViewEditorWarpscriptResult.emit(res.body);

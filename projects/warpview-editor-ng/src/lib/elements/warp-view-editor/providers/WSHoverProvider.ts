@@ -17,14 +17,14 @@
 import {CancellationToken, editor, languages, Position} from 'monaco-editor';
 import {globalfunctions as wsGlobals} from '../../../model/wsGlobals';
 import {W10HoverProvider} from './W10HoverProvider';
+import {EditorUtils} from './editorUtils';
 import Hover = languages.Hover;
 import ProviderResult = languages.ProviderResult;
-import {ProviderRegistrar} from './ProviderRegistrar';
 
 export class WSHoverProvider extends W10HoverProvider {
 
   constructor() {
-    super(ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+    super(EditorUtils.WARPSCRIPT_LANGUAGE);
   }
 
   provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): ProviderResult<Hover> {
