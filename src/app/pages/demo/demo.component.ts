@@ -24,7 +24,7 @@ import {WarpViewEditorComponent} from '../../../../projects/warpview-editor-ng/s
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: WarpViewEditorComponent;
+  @ViewChild('editor') editor: WarpViewEditorComponent;
   visible = false;
   config = {
     messageClass: 'alert alert-info message',
