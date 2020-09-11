@@ -71,7 +71,7 @@
     }
   }
 
-  .wrapper-main {
+coee  .warp-view-editor.wrapper-main {
     width: calc(100% - 20px);
     position: relative;
     top: 0;
@@ -90,7 +90,6 @@
       bottom: 0;
 
       .spinner {
-        // border: 5px solid var(--warp-view-spinner-color,#f3f3f3) transparent transparent transparent;
         -webkit-animation: spin 1s linear infinite;
         animation: spin 1s linear infinite;
         border-color: var(--warp-view-spinner-color, #5899DA) transparent transparent transparent;
@@ -104,6 +103,8 @@
         margin: auto;
         top: calc(50% - 25px);
         left: calc(50% - 25px);
+        right: calc(50% - 25px);
+        bottom: calc(50% - 25px);
       }
     }
 
