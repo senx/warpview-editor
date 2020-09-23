@@ -1,0 +1,60 @@
+
+<!--
+  ~  Copyright 2020 SenX S.A.S.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<div class="card ">
+  <div class="card-body resizable" style="height: 500px; width: 100%;" *ngIf="visible">
+
+    <warpview-editor url="http://localhost:8080/api/v0/exec"
+                     #editor
+                     lang="flows"
+                     [theme]="'dark'" id="editor"
+                     [showDataviz]="false" [showExecute]="false"
+                     [heightLine]="20" [debug]="true"
+                     (warpViewEditorBreakPoint)="warpViewEditorBreakPoint($event)"
+                     (warpViewEditorCtrlClick)="warpViewEditorCtrlClick($event)"
+                     (warpViewEditorSize)="warpViewEditorSize($event)"
+                     (warpViewEditorLoaded)="warpViewEditorLoaded($event)"
+                     [warpscript]="warpscriptAttr"
+                     config='{
+  "messageClass": "alert alert-info message",
+  "errorClass": "alert alert-danger error",
+  "execButton" : { "class" : "btn btn-success" },
+  "datavizButton" : { "class" : "btn btn-success" },
+  "readOnly": false,
+  "hover": true,
+  "editor": {
+    "enableDebug": true,
+    "quickSuggestionsDelay": 3000,
+    "suggestOnTriggerCharacters": false,
+    "rawResultsReadOnly": false
+  }
+}'>{{warpscript}}</warpview-editor>
+
+
+  </div>
+  <div class="card-footer">
+    <div class="btn btn-primary" (click)="exec()">Exec</div>
+    <div class="btn btn-danger" (click)="abort()">Abort</div>
+    <div class="btn btn-warning" (click)="inject()">Inject Random WS</div>
+    <ul>
+    <li>Size: {{ size | json }}</li>
+    <li>Breakpoints: {{breakpoint | json }}</li>
+    <li>CtrlClick: {{ctrlClick | json}}</li>
+    <li>editorLoaded: {{editorLoaded | json}}</li>
+    </ul>
+  </div>
+</div>

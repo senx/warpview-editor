@@ -88,7 +88,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   @Input('warpscript')
   set warpscript(newValue: string) {
-    this.LOG.debug(['warpscriptHandler'], 'The new value of warpscript is: ', newValue);
+    this.LOG.debug(['warpscriptHandler'], 'The new value of ' + this.lang + ' is: ', newValue);
     if (this.ed) {
       this.ed.setValue(newValue);
     }
@@ -331,7 +331,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         firstIndex++;
       }
       this.innerCode = this.innerCode.substring(firstIndex);
-      this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
+      this.LOG.debug(['ngAfterViewInit'], this.lang, this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
       const edOpts: IEditorOptions = this.setOptions();
@@ -340,7 +340,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       this.ed.setValue(this.lastKnownWS);
-      editor.setModelLanguage(this.ed.getModel(), EditorUtils.WARPSCRIPT_LANGUAGE);
+      editor.setModelLanguage(this.ed.getModel(), this.lang);
 
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -444,7 +444,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
                 this.sendStatus({
-                  message: `WarpScript aborted.`,
+                  message: `${this.lang.toUpperCase()} aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -459,7 +459,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           });
       } else {
         this.sendStatus({
-          message: `WarpScript aborted.`,
+          message: `${this.lang.toUpperCase()} aborted.`,
           ops: 0,
           elapsed: 0,
           fetched: 0,
@@ -546,7 +546,15 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (!!session) {
         headers = {'X-Warp10-WarpScriptSession': session};
       }
-      this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
+      let code = this.ed.getValue();
+      if (EditorUtils.FLOWS_LANGUAGE === this.lang) {
+        code = `<'
+${code}
+'>
+FLOWS
+`;
+      }
+      this.request = this.http.post<HttpResponse<string>>(executionUrl, code, {
         // @ts-ignore
         observe: 'response',
         // @ts-ignore
@@ -564,7 +572,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
- ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
+ ${res.headers.get('x-warp10-ops')}  ${this.lang.toUpperCase()} operations.`,
               ops: parseInt(res.headers.get('x-warp10-ops'), 10),
               elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
               fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),

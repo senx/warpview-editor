@@ -28,6 +28,7 @@ import { Sample5Component } from './sample5/sample5.component';
 import { Sample6Component } from './sample6/sample6.component';
 import {Sample7Component} from './sample7/sample7.component';
 import {WarpViewEditorAngularModule} from '../../../projects/warpview-editor-ng/src/lib/warp-view-editor-angular.module';
+import {DemoFlowsComponent} from './demo-flows/demo-flows.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {WarpViewEditorAngularModule} from '../../../projects/warpview-editor-ng/
     Sample5Component,
     Sample6Component,
     Sample7Component,
+    DemoFlowsComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,8 @@ import {WarpViewEditorAngularModule} from '../../../projects/warpview-editor-ng/
     Sample4Component,
     Sample5Component,
     Sample6Component,
-    Sample7Component
+    Sample7Component,
+    DemoFlowsComponent
   ]
 })
 export class PagesModule {
