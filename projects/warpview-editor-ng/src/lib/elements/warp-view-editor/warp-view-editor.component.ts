@@ -259,9 +259,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
-		baseUrl: 'https://unpkg.com/monaco-editor@0.18.1/min/'
+		baseUrl: 'https://unpkg.com/monaco-editor@0.21.2/min/'
 	};
-	importScripts('https://unpkg.com/monaco-editor@0.18.1/min/vs/base/worker/workerMain.js');
+	importScripts('https://unpkg.com/monaco-editor@0.21.2/min/vs/base/worker/workerMain.js');
 `], {type: 'text/javascript'}))
     };
     ProviderRegistrar.register();
@@ -431,8 +431,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           'Accept': 'application/json',
         })
           .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-          .subscribe(res => {
-
+          .subscribe((res: HttpResponse<string>) => {
             if (!!res) {
               this.LOG.debug(['abort'], 'response', res.body);
               const r = JSON.parse(res.body);
@@ -553,7 +552,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         headers
       })
         .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
-        .subscribe(res => {
+        .subscribe((res: HttpResponse<string>) => {
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
             this.warpViewEditorWarpscriptResult.emit(res.body);

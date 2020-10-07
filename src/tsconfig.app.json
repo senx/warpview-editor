@@ -7,8 +7,8 @@
   "angularCompilerOptions": {
     "preserveWhitespaces": true
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "main.ts",
+    "polyfills.ts"
   ]
 }

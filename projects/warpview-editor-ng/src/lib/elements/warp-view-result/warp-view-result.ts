@@ -42,7 +42,6 @@ export class WarpViewResult {
     this._res = res;
     this._result = new JsonLib().parse(res || '[]', undefined);
     this._resultStr = (this._result || []).map(l => {
-      console.log(typeof l);
       const lstr = JSON.stringify(l);
       if (lstr.startsWith('[') || lstr.startsWith('{')) {
         return lstr;

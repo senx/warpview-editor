@@ -17,6 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "bignumber.js",
+              "zone.js/dist/zone",
+              "highlight.js"
+            ],
+            "aot": true,
             "outputPath": "dist/warpview-editor-elements",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -34,8 +40,7 @@
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
@@ -57,8 +62,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "20mb",
+                  "maximumError": "50mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -150,6 +159,11 @@
         "build": {
           "builder": "ngx-build-plus:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "bignumber.js",
+              "zone.js/dist/zone",
+              "highlight.js"
+            ],
             "outputPath": "dist/warpview-editor/elements",
             "index": "src/elements-index.html",
             "main": "src/elements.main.ts",
@@ -167,8 +181,7 @@
                 "bundleName": "polyfill-webcomp",
                 "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
@@ -190,7 +203,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "10mb",
+                  "maximumWarning": "20mb",
                   "maximumError": "50mb"
                 }
               ]
@@ -291,7 +304,12 @@
             "tsConfig": "projects/warpview-editor-ng/tsconfig.lib.json",
             "project": "projects/warpview-editor-ng/ng-package.json"
           },
-          "es5BrowserSupport": true
+          "es5BrowserSupport": true,
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/warpview-editor-ng/tsconfig.lib.prod.json"
+            }
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -329,6 +347,7 @@
   },
   "defaultProject": "warpview-editor",
   "cli": {
-    "packageManager": "yarn"
+    "packageManager": "yarn",
+    "analytics": false
   }
 }
