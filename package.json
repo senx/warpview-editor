@@ -68,7 +68,7 @@
     "core-js": "^2.5.4",
     "document-register-element": "^1.14.3",
     "dompurify": "^2.0.6",
-    "elements-zone-strategy": "^8.0.0",
+    "elements-zone-strategy": "^10.0.0",
     "highlight.js": "^9.15.10",
     "marked": "^0.7.0",
     "monaco-editor": "^0.18.1",
