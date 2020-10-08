@@ -35,7 +35,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
@@ -506,12 +506,16 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   private handleError<T>(result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: HttpErrorResponse): Observable<T> => {
       this.LOG.error(['handleError'], {e: error});
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
-        this.error = error.statusText;
+        if(error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
+          this.error =  'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
+        } else {
+          this.error = error.statusText;
+        }
       }
       this.warpViewEditorErrorEvent.emit(this.error);
       BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
