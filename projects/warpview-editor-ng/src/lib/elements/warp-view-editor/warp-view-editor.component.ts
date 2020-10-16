@@ -55,7 +55,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() url = '';
   @Input() set lang(lang: string) {
     this._lang = lang;
-    editor.setModelLanguage(this.ed.getModel(), this._lang);
+    if (editor) {
+      editor.setModelLanguage(this.ed.getModel(), this._lang);
+    }
   }
 
   get lang(): string {
