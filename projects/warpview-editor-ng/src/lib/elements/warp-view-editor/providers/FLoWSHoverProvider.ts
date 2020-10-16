@@ -14,20 +14,20 @@
  *  limitations under the License.
  */
 
-import {CancellationToken, editor, languages, Position} from 'monaco-editor';
-import {globalfunctions as wsGlobals} from '../../../model/wsGlobals';
+import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
+import {globalfunctions as flowsGlobals} from '../../../model/flowsGlobals';
 import {W10HoverProvider} from './W10HoverProvider';
 import {EditorUtils} from './editorUtils';
 import Hover = languages.Hover;
 import ProviderResult = languages.ProviderResult;
 
-export class WSHoverProvider extends W10HoverProvider {
+export class FLoWSHoverProvider extends W10HoverProvider {
 
   constructor() {
-    super(EditorUtils.WARPSCRIPT_LANGUAGE);
+    super(EditorUtils.FLOWS_LANGUAGE);
   }
 
   provideHover(model: editor.ITextModel, position: Position, token: CancellationToken): ProviderResult<Hover> {
-    return super._provideHover(model, position, token, wsGlobals);
+    return super._provideHover(model, position, token, flowsGlobals);
   }
 }

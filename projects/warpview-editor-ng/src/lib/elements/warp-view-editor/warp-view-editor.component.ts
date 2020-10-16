@@ -53,6 +53,7 @@ import IEditorOptions = editor.IEditorOptions;
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() url = '';
+  @Input() lang: 'warpscript' | 'flows' = 'warpscript';
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {
@@ -259,9 +260,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
-		baseUrl: 'https://unpkg.com/monaco-editor@0.21.2/min/'
+		baseUrl: 'https://unpkg.com/monaco-editor@0.18.1/min/'
 	};
-	importScripts('https://unpkg.com/monaco-editor@0.21.2/min/vs/base/worker/workerMain.js');
+	importScripts('https://unpkg.com/monaco-editor@0.18.1/min/vs/base/worker/workerMain.js');
 `], {type: 'text/javascript'}))
     };
     ProviderRegistrar.register();
@@ -339,7 +340,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       this.ed.setValue(this.lastKnownWS);
-      editor.setModelLanguage(this.ed.getModel(), ProviderRegistrar.WARPSCRIPT_LANGUAGE);
+      editor.setModelLanguage(this.ed.getModel(), this.lang);
 
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -442,7 +443,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
                 this.sendStatus({
-                  message: `WarpScript aborted.`,
+                  message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -457,7 +458,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           });
       } else {
         this.sendStatus({
-          message: `WarpScript aborted.`,
+          message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
           ops: 0,
           elapsed: 0,
           fetched: 0,
@@ -548,7 +549,15 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (!!session) {
         headers['X-Warp10-WarpScriptSession'] = session;
       }
-      this.request = this.http.post<HttpResponse<string>>(executionUrl, this.ed.getValue(), {
+      let code = this.ed.getValue().replace(/ /gi, ' ');
+      if (EditorUtils.FLOWS_LANGUAGE === this.lang) {
+        code = `<'
+${code}
+'>
+FLOWS
+`;
+      }
+      this.request = this.http.post<HttpResponse<string>>(executionUrl, code, {
         // @ts-ignore
         observe: 'response',
         // @ts-ignore
@@ -566,7 +575,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
- ${res.headers.get('x-warp10-ops')}  WarpScript operations.`,
+ ${res.headers.get('x-warp10-ops')}  ${WarpViewEditorComponent.getLabel(this.lang)} operations.`,
               ops: parseInt(res.headers.get('x-warp10-ops'), 10),
               elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
               fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -671,5 +680,12 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this.status = {...status};
     BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
     this.warpViewEditorStatusEvent.emit(this.status);
+  }
+
+  private static getLabel(lang: 'warpscript' | 'flows') {
+    switch (lang) {
+      case 'flows': return 'FLoWS';
+      case 'warpscript': return 'WarpScript';
+    }
   }
 }
