@@ -53,7 +53,14 @@ import IEditorOptions = editor.IEditorOptions;
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() url = '';
-  @Input() lang: 'warpscript' | 'flows' = 'warpscript';
+  @Input() set lang(lang: string) {
+    this._lang = lang;
+    editor.setModelLanguage(this.ed.getModel(), this._lang);
+  }
+
+  get lang(): string {
+    return this._lang
+  }
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {
@@ -228,6 +235,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   _debug = false;
   _displayMessages = true;
   _showDataviz = false;
+  _lang = 'warpscript';
   private _heightPx: number;
   private _heightLine: number;
   private _showResult = true;
@@ -340,7 +348,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       this.ed.setValue(this.lastKnownWS);
-      editor.setModelLanguage(this.ed.getModel(), this.lang);
+      editor.setModelLanguage(this.ed.getModel(), this._lang);
 
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -443,7 +451,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
                 this.sendStatus({
-                  message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
+                  message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -458,7 +466,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           });
       } else {
         this.sendStatus({
-          message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
+          message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
           ops: 0,
           elapsed: 0,
           fetched: 0,
@@ -682,10 +690,11 @@ FLOWS
     this.warpViewEditorStatusEvent.emit(this.status);
   }
 
-  private static getLabel(lang: 'warpscript' | 'flows') {
+  private static getLabel(lang: string) {
     switch (lang) {
       case 'flows': return 'FLoWS';
       case 'warpscript': return 'WarpScript';
+      default: return 'warpscript';
     }
   }
 }
