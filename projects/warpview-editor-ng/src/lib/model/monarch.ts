@@ -374,6 +374,7 @@ export class Monarch {
         "MIN",
         "MINLONG",
         "MINREV",
+        "MMAP",
         "MODE",
         "MONOTONIC",
         "MOTIONSPLIT",
@@ -493,6 +494,7 @@ export class Monarch {
         "PloadShape",
         "Pmag",
         "Pmap",
+        "Pmask",
         "PnoClip",
         "PnoFill",
         "PnoStroke",
@@ -590,6 +592,7 @@ export class Monarch {
         "RTFM",
         "RUN",
         "RUNNERNONCE",
+        "RUNR",
         "RVALUESORT",
         "SAVE",
         "SCALB",
@@ -789,6 +792,7 @@ export class Monarch {
         "mapper.finite",
         "mapper.geo.approximate",
         "mapper.geo.clear",
+        "mapper.geo.fence",
         "mapper.geo.outside",
         "mapper.geo.within",
         "mapper.hdist",
@@ -948,6 +952,7 @@ export class Monarch {
         "mapper.ge.tick",
         "mapper.geo.approximate",
         "mapper.geo.clear",
+        "mapper.geo.fence",
         "mapper.geo.outside",
         "mapper.geo.within",
         "mapper.gt",
@@ -1144,7 +1149,7 @@ export class Monarch {
                 "variable"
             ],
             [
-                "\\[A-Za-z0-9._\\/]+",
+                "\\$[A-Za-z0-9._\\/]+",
                 "variable"
             ],
             [
