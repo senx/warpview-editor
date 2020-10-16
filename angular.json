@@ -170,7 +170,7 @@
             "tsConfig": "src/tsconfig.elements.json",
             "scripts": [
               {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
+                "input": "node_modules/@ungap/custom-elements/index.js"
               },
               {
                 "bundleName": "polyfill-webcomp-es5",

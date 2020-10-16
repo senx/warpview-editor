@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.2.35",
+  "version": "2.3.0",
   "keywords": [
     "web",
     "dataviz",
@@ -44,10 +44,10 @@
     "@angular/platform-browser-dynamic": "~10.1.6",
     "@babel/compat-data": "7.11.0",
     "@types/node": "^14.11.8",
+    "@ungap/custom-elements": "^0.1.6",
     "@webcomponents/custom-elements": "^1.4.2",
     "@webcomponents/webcomponentsjs": "^2.4.4",
     "core-js": "^3.6.5",
-    "@ungap/custom-elements": "^0.1.6",
     "dompurify": "^2.1.1",
     "elements-zone-strategy": "^10.0.0",
     "fs-extra": "^9.0.1",
