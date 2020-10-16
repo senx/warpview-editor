@@ -21,42 +21,42 @@ import IndentAction = languages.IndentAction;
 export class FLoWSLanguageConfiguration {
   getConfiguration(): languages.LanguageConfiguration {
     return {
-      wordPattern: /[^\s\t]+/,
+      wordPattern: /[^\s\t\(]+/,
       comments: {
         lineComment: '//',
-        blockComment: ['/**', '*/'],
+        blockComment: ['/**', '*/']
       },
       brackets: [
         ['{', '}'],
         ['[', ']'],
         ['(', ')'],
-        ['<%', '%>'],
         ['<\'', '\'>'],
-        ['[[', ']]'],
+        ['[[', ']]']
       ],
       autoClosingPairs: [
         {open: '{', close: '}'},
         {open: '[', close: ']'},
         {open: '(', close: ')'},
-        {open: '<%', close: '%>'},
         {open: '[[', close: ']]'},
         {open: ' \'', close: '\'', notIn: ['string', 'comment']},
-        {open: '<\'', close: '\'>'},
         {open: '"', close: '"', notIn: ['string']},
         {open: '`', close: '`', notIn: ['string', 'comment']},
         {open: '/**', close: ' */', notIn: ['string']},
       ],
+      autoCloseBefore: ';:.,=}])> \n\t',
       surroundingPairs: [
         {open: '{', close: '}'},
         {open: '[', close: ']'},
         {open: '(', close: ')'},
         {open: '[[', close: ']]'},
-        {open: '<%', close: '%>'},
-        {open: '<\'', close: '\'>'},
         {open: '\'', close: '\''},
         {open: '"', close: '"'},
         {open: '`', close: '`'},
       ],
+      indentationRules: {
+        increaseIndentPattern: /^\s*(\[|{|\(|\[\[)\b.*$/,
+        decreaseIndentPattern: /^\s*(]|}|\)|]]|'>)\b.*$/
+      },
       onEnterRules: [
         {
           // e.g. /** | */

@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "bignumber.js",
+              "zone.js/dist/zone",
+              "highlight.js"
+            ],
             "aot": true,
             "outputPath": "dist/warpview-editor-elements",
             "index": "src/index.html",
@@ -28,7 +33,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/monaco-editor/min/vs/editor/editor.main.css",
               "projects/warpview-editor-ng/src/styles.scss"
             ],
             "scripts": [
@@ -57,8 +61,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "20mb",
+                  "maximumError": "50mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -154,6 +158,11 @@
         "build": {
           "builder": "ngx-build-plus:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "bignumber.js",
+              "zone.js/dist/zone",
+              "highlight.js"
+            ],
             "outputPath": "dist/warpview-editor/elements",
             "index": "src/elements-index.html",
             "main": "src/elements.main.ts",
@@ -171,8 +180,7 @@
                 "bundleName": "polyfill-webcomp",
                 "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
@@ -194,7 +202,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "10mb",
+                  "maximumWarning": "20mb",
                   "maximumError": "50mb"
                 }
               ]

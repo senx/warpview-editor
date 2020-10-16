@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {CancellationToken, editor, languages, Position} from 'monaco-editor';
+import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
 import {globalfunctions as flowsGlobals} from '../../../model/flowsGlobals';
 import {W10HoverProvider} from './W10HoverProvider';
 import {EditorUtils} from './editorUtils';

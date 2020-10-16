@@ -20,7 +20,7 @@
   <div class="loader" *ngIf="loading">
     <div class="spinner"></div>
   </div>
-  <wc-split [items]="getItems()">
+  <wc-split [items]="getItems()" style="height: 100%">
     <div slot="editor" class="editor-wrapper" style="height: 100%">
       <div #editor (keydown)="onKeyDown($event)" (keyup)="onKeyUp($event)"></div>
       <div [class]="'warpview-buttons ' + innerConfig.buttons.class" #buttons>

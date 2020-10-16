@@ -46,6 +46,8 @@ export class Monarch {
         "->V",
         "->VARINT",
         "->VEC",
+        "->WKB",
+        "->WKT",
         "->Z",
         "/",
         "<",
@@ -1142,7 +1144,7 @@ export class Monarch {
                 "variable"
             ],
             [
-                "\\$[A-Za-z0-9._\\/]+",
+                "\\[A-Za-z0-9._\\/]+",
                 "variable"
             ],
             [

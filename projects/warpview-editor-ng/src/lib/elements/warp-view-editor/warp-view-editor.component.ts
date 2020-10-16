@@ -35,7 +35,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
@@ -260,9 +260,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     (self as any).MonacoEnvironment = {
       getWorkerUrl: () => URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
-		baseUrl: 'https://unpkg.com/monaco-editor@0.18.1/min/'
+		baseUrl: 'https://unpkg.com/monaco-editor@0.21.2/min/'
 	};
-	importScripts('https://unpkg.com/monaco-editor@0.18.1/min/vs/base/worker/workerMain.js');
+	importScripts('https://unpkg.com/monaco-editor@0.21.2/min/vs/base/worker/workerMain.js');
 `], {type: 'text/javascript'}))
     };
     ProviderRegistrar.register();
@@ -331,7 +331,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         firstIndex++;
       }
       this.innerCode = this.innerCode.substring(firstIndex);
-      this.LOG.debug(['ngAfterViewInit'], this.lang, this._warpscript);
+      this.LOG.debug(['ngAfterViewInit'], 'warpscript', this._warpscript);
       this.LOG.debug(['ngAfterViewInit'], 'inner: ', this.innerCode.split('\n'));
       this.LOG.debug(['ngAfterViewInit'], 'innerConfig: ', this.innerConfig);
       const edOpts: IEditorOptions = this.setOptions();
@@ -433,7 +433,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         })
           .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
           .subscribe((res: HttpResponse<string>) => {
-
             if (!!res) {
               this.LOG.debug(['abort'], 'response', res.body);
               const r = JSON.parse(res.body);
@@ -508,12 +507,16 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   private handleError<T>(result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: HttpErrorResponse): Observable<T> => {
       this.LOG.error(['handleError'], {e: error});
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
-        this.error = error.statusText;
+        if(error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
+          this.error =  'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
+        } else {
+          this.error = error.statusText;
+        }
       }
       this.warpViewEditorErrorEvent.emit(this.error);
       BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
@@ -542,11 +545,11 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       // Get Warp10 version
       // @ts-ignore
 
-      let headers = {};
+      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
       if (!!session) {
-        headers = {'X-Warp10-WarpScriptSession': session};
+        headers['X-Warp10-WarpScriptSession'] = session;
       }
-      let code = this.ed.getValue();
+      let code = this.ed.getValue().replace(/ /gi, ' ');
       if (EditorUtils.FLOWS_LANGUAGE === this.lang) {
         code = `<'
 ${code}
@@ -572,7 +575,7 @@ FLOWS
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
- ${res.headers.get('x-warp10-ops')}  ${this.lang.toUpperCase()} operations.`,
+ ${res.headers.get('x-warp10-ops')}  ${WarpViewEditorComponent.getLabel(this.lang)} operations.`,
               ops: parseInt(res.headers.get('x-warp10-ops'), 10),
               elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
               fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -677,5 +680,12 @@ FLOWS
     this.status = {...status};
     BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
     this.warpViewEditorStatusEvent.emit(this.status);
+  }
+
+  private static getLabel(lang: 'warpscript' | 'flows') {
+    switch (lang) {
+      case 'flows': return 'FLoWS';
+      case 'warpscript': return 'WarpScript';
+    }
   }
 }

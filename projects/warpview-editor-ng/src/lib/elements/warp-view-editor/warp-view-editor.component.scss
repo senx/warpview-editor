@@ -63,15 +63,16 @@
 
   .messages {
     width: 100%;
-    font-size: 0.7em;
-    margin: 0 5px;
+    padding: 5px;
 
-    &>* {
+    & > * {
       margin: 0;
+      padding: 5px;
+      font-size: 12px;
     }
   }
 
-coee  .warp-view-editor.wrapper-main {
+  .warp-view-editor.wrapper-main {
     width: calc(100% - 20px);
     position: relative;
     top: 0;
@@ -148,6 +149,7 @@ coee  .warp-view-editor.wrapper-main {
       transform: rotate(360deg);
     }
   }
+
   wc-tabs {
     height: 100%;
   }

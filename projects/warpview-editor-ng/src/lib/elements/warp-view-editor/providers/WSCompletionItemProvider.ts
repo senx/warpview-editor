@@ -18,6 +18,7 @@ import {CancellationToken, editor, languages, Position, Thenable} from 'monaco-e
 import {WarpScript} from '../../../model/ref';
 import {W10CompletionItemProvider} from './W10CompletionItemProvider';
 import {EditorUtils} from './editorUtils';
+import {SnippetsWarpScript} from './SnippetsWarpScript';
 import CompletionList = languages.CompletionList;
 import IReadOnlyModel = editor.IReadOnlyModel;
 import CompletionContext = languages.CompletionContext;
@@ -34,6 +35,6 @@ export class WSCompletionItemProvider extends W10CompletionItemProvider {
 
   // noinspection JSUnusedLocalSymbols
   provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken): Thenable<CompletionList> {
-    return super._provideCompletionItems(model, position, _context, token, WarpScript.reference);
+    return super._provideCompletionItems(model, position, _context, token, WarpScript.reference, SnippetsWarpScript.snippets);
   }
 }

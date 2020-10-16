@@ -48,7 +48,7 @@ export abstract class W10HoverProvider implements HoverProvider {
     return undefined;
   }
 
-  private static toMarkedStringArray(contents: IMarkdownString[]): IMarkdownString[] {
+  protected static toMarkedStringArray(contents: IMarkdownString[]): IMarkdownString[] {
     if (!contents) {
       return void 0;
     }

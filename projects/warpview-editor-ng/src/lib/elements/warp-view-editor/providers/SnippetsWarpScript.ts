@@ -1,0 +1,272 @@
+/*
+ *  Copyright 2020 SenX S.A.S.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+export class SnippetsWarpScript {
+
+  static snippets = {
+    macro: {
+      prefix: 'macro (example)',
+      body: [
+        '{',
+        '  \'name\' \'${1:euclideanDivision}\'',
+        '  \'desc\' ',
+        '  <\'',
+        '${2:This macro returns the quotient and the remainder of a/b.}',
+        '  \'>',
+        '  \'sig\' [ [ [ ${3:\'a:LONG\' \'b:LONG\'} ] [ ${4:\'q:LONG\' \'r:LONG\'} ] ] ] // Signature',
+        '  \'params\' {',
+        '    // Signature params description',
+        '    ${5:\'b\' \'parameter b TOP of the stack\'',
+        '    \'a\' \'parameter a just below on the stack\'',
+        '    \'q\' \'the quotient of a/b, N-1 on the stack\'',
+        '    \'r\' \'the remainder of a/b, on the TOP of the stack\'}',
+        '  }',
+        '  \'examples\' [',
+        '    <\'',
+        '${6:10 3 @mymacros/euclideanDivision [ \'q\' \'r\' ] STORE',
+        '\'quotient is  :\' \\$q TOSTRING +',
+        '\'remainder is :\' \\$r TOSTRING +}',
+        '    \'>',
+        '  ]',
+        '} \'info\' STORE',
+        '',
+        '<%',
+        '  !\\$info INFO',
+        '  SAVE \'context\' STORE',
+        '  <%',
+        '    // Code of the actual macro',
+        '    ${7:[ \'a\' \'b\' ] STORE',
+        '    \\$a \\$b / TOLONG',
+        '    \\$a \\$b %}',
+        '      ',
+        '  %>',
+        '  <% // catch any exception',
+        '    RETHROW',
+        '  %>',
+        '  <% // finally, restore the context',
+        '    \\$context RESTORE',
+        '  %> TRY',
+        '%>',
+        '\'macro\' STORE',
+        '',
+        '// Unit tests',
+        '${8:10 3 @macro [ \'q\' \'r\' ] STORE',
+        '\\$q 3 == ASSERT',
+        '\\$r 1 == ASSERT',
+        '\\$q TYPEOF \'LONG\' == ASSERT',
+        '\\$r TYPEOF \'LONG\' == ASSERT}',
+        '',
+        '\\$macro'
+      ],
+      description: 'Macro'
+    },
+    'macro(empty)': {
+      prefix: 'macro (empty)',
+      body: [
+        '{',
+        '  \'name\' \'${1: }\'',
+        '  \'desc\' ',
+        '  <\'',
+        '${2: }',
+        '  \'>',
+        '  \'sig\' [ [ [   ] [   ] ] ] // Signature',
+        '  \'params\' {',
+        '    // Signature params description',
+        '  }',
+        '  \'examples\' [',
+        '    <\'',
+        '',
+        '    \'>',
+        '  ]',
+        '} \'info\' STORE',
+        '',
+        '<%',
+        '  !\\$info INFO',
+        '  SAVE \'context\' STORE',
+        '  <%',
+        '    // Code of the actual macro',
+        '    ${3:  }',
+        '  %>',
+        '  <% // catch any exception',
+        '    RETHROW',
+        '  %>',
+        '  <% // finally, restore the context',
+        '    \\$context RESTORE',
+        '  %> TRY',
+        '%>',
+        '\'macro\' STORE',
+        '',
+        '// Unit tests',
+        '',
+        '\\$macro'
+      ],
+      description: 'Macro'
+    },
+    fetch: {
+      prefix: 'fetch',
+      body: [
+        '[ \'TOKEN\' \'className\'  { \'label0\' \'=value0\'  \'label1\' \'~val.\' }  start timespan ] FETCH'
+      ]
+    },
+    bucketize: {
+      prefix: 'bucketize',
+      body: [
+        '[ ${1:gts} ${2|MACROBUCKETIZER,bucketizer.and,bucketizer.count,bucketizer.count.exclude-nulls,bucketizer.count.include-nulls,bucketizer.count.nonnull,bucketizer.first,bucketizer.join,bucketizer.join.forbid-nulls,bucketizer.last,bucketizer.max,bucketizer.max.forbid-nulls,bucketizer.mean,bucketizer.mean.circular,bucketizer.mean.circular.exclude-nulls,bucketizer.mean.exclude-nulls,bucketizer.median,bucketizer.min,bucketizer.min.forbid-nulls,bucketizer.or,bucketizer.sum,bucketizer.sum.forbid-nulls|} ${3:lastbucket} ${4:bucketspan} ${5:bucketcount} ] BUCKETIZE'
+      ]
+    },
+    filter: {
+      prefix: 'filter',
+      body: [
+        '[ ${1:gts} [${2:labels}] ${3|MACROFILTER,filter.byattr,filter.byclass,filter.bylabels,filter.bylabelsattr,filter.bymetadata,filter.last.eq,filter.last.ge,filter.last.gt,filter.last.le,filter.last.lt,filter.last.ne,filter.latencies|} ] FILTER'
+      ]
+    },
+    map: {
+      prefix: 'map',
+      body: [
+        '[ ${1:gts} ${2|MACROMAPPER,mapper.abs,mapper.add,mapper.and,mapper.ceil,mapper.count,mapper.count.exclude-nulls,mapper.count.include-nulls,mapper.count.nonnull,mapper.day,mapper.delta,mapper.dotproduct,mapper.dotproduct.positive,mapper.dotproduct.sigmoid,mapper.dotproduct.tanh,mapper.eq,mapper.exp,mapper.finite,mapper.first,mapper.floor,mapper.ge,mapper.geo.approximate,mapper.geo.clear,mapper.geo.outside,mapper.geo.within,mapper.gt,mapper.hdist,mapper.highest,mapper.hour,mapper.hspeed,mapper.join,mapper.join.forbid-nulls,mapper.kernel.cosine,mapper.kernel.epanechnikov,mapper.kernel.gaussian,mapper.kernel.logistic,mapper.kernel.quartic,mapper.kernel.silverman,mapper.kernel.triangular,mapper.kernel.tricube,mapper.kernel.triweight,mapper.kernel.uniform,mapper.last,mapper.le,mapper.log,mapper.lowest,mapper.lt,mapper.mad,mapper.max,mapper.max.forbid-nulls,mapper.max.x,mapper.mean,mapper.mean.circular,mapper.mean.circular.exclude-nulls,mapper.mean.exclude-nulls,mapper.median,mapper.min,mapper.min.forbid-nulls,mapper.min.x,mapper.minute,mapper.mod,mapper.month,mapper.mul,mapper.ne,mapper.npdf,mapper.or,mapper.parsedouble,mapper.percentile,mapper.pow,mapper.product,mapper.rate,mapper.replace,mapper.round,mapper.sd,mapper.sd.forbid-nulls,mapper.second,mapper.sigmoid,mapper.sqrt,mapper.sum,mapper.sum.forbid-nulls,mapper.tanh,mapper.tick,mapper.toboolean,mapper.todouble,mapper.tolong,mapper.tostring,mapper.truecourse,mapper.var,mapper.var.forbid-nulls,mapper.vdist,mapper.vspeed,mapper.weekday,mapper.year,max.tick.sliding.window,max.time.sliding.window|} ${3:pre} ${4:post} ${5:occurrences} ] MAP'
+      ]
+    },
+    reduce: {
+      prefix: 'reduce',
+      body: [
+        '[ ${1:gts} [${2:labels}] ${3|MACROREDUCER,reducer.and,reducer.and.exclude-nulls,reducer.argmax,reducer.argmin,reducer.count,reducer.count.exclude-nulls,reducer.count.include-nulls,reducer.count.nonnull,reducer.join,reducer.join.forbid-nulls,reducer.join.nonnull,reducer.join.urlencoded,reducer.max,reducer.max.forbid-nulls,reducer.max.nonnull,reducer.mean,reducer.mean.circular,reducer.mean.circular.exclude-nulls,reducer.mean.exclude-nulls,reducer.median,reducer.min,reducer.min.forbid-nulls,reducer.min.nonnull,reducer.or,reducer.or.exclude-nulls,reducer.sd,reducer.sd.forbid-nulls,reducer.shannonentropy.0,reducer.shannonentropy.1,reducer.sum,reducer.sum.forbid-nulls,reducer.sum.nonnull,reducer.var,reducer.var.forbid-nulls|} ] REDUCE'
+      ]
+    },
+    apply: {
+      prefix: 'apply',
+      body: [
+        '[ ${1:gts} [${2:labels}] ${3|OP,op.add,op.add.ignore-nulls,op.and,op.and.ignore-nulls,op.div,op.eq,op.ge,op.gt,op.le,op.lt,op.mask,op.mul,op.mul.ignore-nulls,op.ne,op.negmask,op.or,op.or.ignore-nulls,op.sub|} ] APPLY'
+      ],
+      description: 'Apply framework'
+    },
+    ift: {
+      prefix: 'ift',
+      body: [
+        '<% ${1:condition} %>',
+        '<% ${2:action_if_true} %>',
+        'IFT'
+      ],
+      description: 'If statement'
+    },
+    ifte: {
+      prefix: 'ifte',
+      body: [
+        '<% ${1:condition} %>',
+        '<% ${2:action_if_true} %>',
+        '<% ${3:action_if_false} %>',
+        'IFTE'
+      ],
+      description: 'If then else statement'
+    },
+    'switch': {
+      prefix: 'switch',
+      body: [
+        '<% ${1:case_1} %> <% ${2:action_1} %>',
+        '<% ${3:case_2} %> <% ${4:action_2} %>',
+        '<% ${5:case_3} %> <% ${6:action_3} %>',
+        '<% ${7:default} %>',
+        '${8:number_of_cases}',
+        'SWITCH'
+      ],
+      description: 'Switch statement'
+    },
+    'try': {
+      prefix: 'try',
+      body: [
+        '<% ${1:try} %>',
+        '<% ${2:catch} %>',
+        '<% ${3:finally} %>',
+        'TRY'
+      ],
+      description: 'Try/Catch statement'
+    },
+    'while': {
+      prefix: 'while',
+      body: [
+        '<% ${1:condition} %>',
+        '<% ${2:action_while_true} %>',
+        'WHILE'
+      ],
+      description: 'While loop'
+    },
+    until: {
+      prefix: 'until',
+      body: [
+        '<% ${1:action_until_true} %>',
+        '<% ${2:condition} %>',
+        'UNTIL'
+      ],
+      description: 'Until loop'
+    },
+    'for': {
+      prefix: 'for',
+      body: [
+        '${1:initial_value} ${2:final_value}',
+        '<% ${3:action} %>',
+        'FOR'
+      ],
+      description: 'For loop'
+    },
+    foreach: {
+      prefix: 'foreach',
+      body: [
+        '${1:object}',
+        '<% ',
+        '  //[ \'key\' \'value\' ] STORE // object is a map',
+        '  //[ \'value\' ] STORE // object is a list',
+        '  ${2:action}',
+        '%>',
+        'FOREACH'
+      ],
+      description: 'Foreach loop'
+    },
+    forstep: {
+      prefix: 'forstep',
+      body: [
+        '${1:initial_value} ${2:final_value} <% ${3:1 +} %>',
+        '<% ${4:action} %>',
+        'FORSTEP'
+      ],
+      description: 'Forstep loop'
+    },
+    shm: {
+      prefix: 'shm',
+      body: [
+        '<%',
+        '  <%',
+        '    //try to read data from SHared Memory',
+        '    \'gtsList\' SHMLOAD DROP',
+        '  %>',
+        '  <%',
+        '    //when not found, store data in SHM',
+        '    ${1:[ \\$token \'classname\' {\\} NOW 365 d ] FETCH} \'gtsList\' SHMSTORE',
+        '  %>',
+        '  <%',
+        '    //finally, load the reference from SHM and store it ',
+        '    \'gtsList\' SHMLOAD \'gtsList\' STORE',
+        '  %> TRY',
+        '',
+        '  //analytics on \\$gtsList',
+        '  ${2:\\$gtsList}',
+        '',
+        '',
+        '',
+        '%> \'myMutex\' MUTEX //prevent a concurrent execution on the same SHM data'
+      ],
+      description: 'Keep fetched data in RAM. You need to enable the SHM extension.'
+    }
+  };
+}

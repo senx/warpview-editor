@@ -1,5 +1,8 @@
 {
   "compileOnSave": false,
+  "angularCompilerOptions": {
+    "enableIvy": false
+  },
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist/out-tsc",

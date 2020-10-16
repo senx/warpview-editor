@@ -40,12 +40,11 @@ export class DemoFlowsComponent implements OnInit {
     }
   } as Config;
   warpscript2 = '-5372520086604731500';
-  warpscript = `now = NOW()
-token = 'TjqCCyLzGawOSVhB_.RPpB4yrOdcgY8Chybysyug8gyj5acOY7cQGLggkMxIyjusVEdL0qs5q1s6iI0exJAGgz1IoxdPr0ZPkad81SocrDVxg_xn3pErWEulz0dG7l2R0uPzPKamiEfMyLdLijt3r4e69MseBic3w86QP28uzb5EaBMiKc1TwV';
-gts = FETCH( [ token, 'sighting.ufo', { 'state': 'fl' }, now, 10 * d(365)] );
-buckets = BUCKETIZE([ gts, bucketizer.sum(), now, d(7), 0] );
-reduced = REDUCE([buckets, [], reducer.sum()]);
-return reduced`;
+  warpscript = `@training/dataset0()
+// warp.store.hbase.puts.committed is the number of datapoints committed to
+// HBase since the restart of the Store daemon
+data = FETCH([ TOKEN, '~warp.*committed', { 'cell': 'prod' }, NOW, d(9) ])
+return MAP([ data, mapper.rate(), 1, 0, 0 ])`;
   ctrlClick: any;
   breakpoint: any;
   size: any;

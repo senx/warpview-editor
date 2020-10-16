@@ -33,7 +33,7 @@ export abstract class W10CompletionItemProvider implements CompletionItemProvide
 
   abstract transformKeyWord(keyword: string): string;
 
-  protected _provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken, source: any): Thenable<CompletionList> {
+  protected _provideCompletionItems(model: editor.IReadOnlyModel, position: Position, _context: languages.CompletionContext, token: CancellationToken, source: any, snippets: any): Thenable<languages.CompletionList> {
     const defs: CompletionList = {
       suggestions: [],
     };
@@ -46,6 +46,17 @@ export abstract class W10CompletionItemProvider implements CompletionItemProvide
       };
       defs.suggestions.push(item);
     });
+    Object.keys(snippets).forEach(s => {
+      const snippet = snippets[s];
+      defs.suggestions.push({
+        label: s,
+        kind: languages.CompletionItemKind.Snippet,
+        insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        documentation: snippet.prefix,
+        insertText: snippet.body.join('\n')
+      } as CompletionItem);
+    });
+
     return Promise.resolve(defs);
   }
 

@@ -29,6 +29,7 @@ import getLanguages = languages.getLanguages;
 import register = languages.register;
 import setLanguageConfiguration = languages.setLanguageConfiguration;
 import registerHoverProvider = languages.registerHoverProvider;
+import {MonarchFlows} from '../../../model/monarchFlows';
 
 export class ProviderRegistrar {
 
@@ -45,7 +46,7 @@ export class ProviderRegistrar {
     if (!getLanguages().find(l => l.id === EditorUtils.FLOWS_LANGUAGE)) {
       register({id: EditorUtils.FLOWS_LANGUAGE});
       setLanguageConfiguration(EditorUtils.FLOWS_LANGUAGE, new FLoWSLanguageConfiguration().getConfiguration());
-      setMonarchTokensProvider(EditorUtils.FLOWS_LANGUAGE, Monarch.rules);
+      setMonarchTokensProvider(EditorUtils.FLOWS_LANGUAGE, MonarchFlows.rules);
       registerCompletionItemProvider(EditorUtils.FLOWS_LANGUAGE, new FLoWSCompletionItemProvider());
       registerHoverProvider(EditorUtils.FLOWS_LANGUAGE, new FLoWSHoverProvider());
     }
