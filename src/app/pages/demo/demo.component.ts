@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Config} from '../../../../projects/warpview-editor-ng/src/lib/model/config';
 import {WarpViewEditorComponent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';
 
@@ -34,9 +34,26 @@ export class DemoComponent implements OnInit {
     readOnly: false,
     hover: true,
     editor: {
-      enableDebug: true, quickSuggestionsDelay: 3000,
+      enableDebug: false, quickSuggestionsDelay: 3000,
       suggestOnTriggerCharacters: false,
       rawResultsReadOnly: false
+    },
+    codeReview: {
+      enabled: true,
+      cancelButton: {
+        label: 'Annuler',
+        class: 'btn btn-sm btn-danger mr-2'
+      },
+      addButton: {
+        label: 'Ajouter',
+        class: 'btn btn-sm btn-primary mr-2'
+      },
+      replyButton: {
+        class: 'btn btn-sm btn-primary mr-2'
+      },
+      removeButton: {
+        class: 'btn btn-sm btn-danger mr-2'
+      }
     }
   } as Config;
   warpscript2 = '-5372520086604731500';

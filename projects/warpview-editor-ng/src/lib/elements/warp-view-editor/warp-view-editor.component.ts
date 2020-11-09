@@ -43,6 +43,7 @@ import {EditorUtils} from './providers/editorUtils';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
+import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
 
 @Component({
   selector: 'warpview-editor',
@@ -51,8 +52,8 @@ import IEditorOptions = editor.IEditorOptions;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @Input() url = '';
+
   @Input() set lang(lang: string) {
     this._lang = lang;
     if (!!editor && !!this.ed) {
@@ -61,7 +62,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   get lang(): string {
-    return this._lang
+    return this._lang;
   }
 
   @Input() set debug(debug: boolean | string) {
@@ -144,6 +145,13 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.ed) {
       this.LOG.debug(['config'], this.innerConfig);
       this.ed.updateOptions(this.setOptions());
+      if(this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
+        this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
+        this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
+        this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
+        this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
+        this.reviewManager.updateConfig(this.reviewManagerConfig);
+      }
     }
   }
 
@@ -238,6 +246,14 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   _displayMessages = true;
   _showDataviz = false;
   _lang = 'warpscript';
+  reviewManagerConfig: ReviewManagerConfig = {};
+  existingComments: ReviewCommentEvent[] = [{
+    type: "create",
+    createdBy: 'Satan',
+    createdAt: "1666-21-25T00:00:00.000",
+    text: 'Evil is in details',
+    lineNumber: 3
+  } as ReviewCommentEvent];
   private _heightPx: number;
   private _heightLine: number;
   private _showResult = true;
@@ -255,6 +271,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentWidth = -1;
   private request: Subscription;
   private resizeWatcherInt: any;
+  private reviewManager: ReviewManager;
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);
@@ -312,9 +329,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       automaticLayout: !!this._heightPx,
       hover: {enabled: this.innerConfig.hover},
       readOnly: this.innerConfig.readOnly,
-      fixedOverflowWidgets: true,
+      contextmenu: true,
+    //  fixedOverflowWidgets: true,
       folding: true,
-      glyphMargin: this.innerConfig.editor.enableDebug
+      glyphMargin: true // this.innerConfig.editor.enableDebug,
     };
   }
 
@@ -405,6 +423,16 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorCtrlClick', docParams);
           }
         });
+        if(this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
+          this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
+          this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
+          this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
+          this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
+          this.reviewManager = createReviewManager(this.ed, "Jesus",
+            this.existingComments,
+            (updatedComments) => console.log(updatedComments),
+            this.reviewManagerConfig);
+        }
       }
     } catch (e) {
       this.LOG.error(['ngAfterViewInit'], 'componentDidLoad', e);
@@ -522,8 +550,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
-        if(error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
-          this.error =  'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
+        if (error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
+          this.error = 'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
         } else {
           this.error = error.statusText;
         }
@@ -694,9 +722,12 @@ FLOWS
 
   private static getLabel(lang: string) {
     switch (lang) {
-      case 'flows': return 'FLoWS';
-      case 'warpscript': return 'WarpScript';
-      default: return 'warpscript';
+      case 'flows':
+        return 'FLoWS';
+      case 'warpscript':
+        return 'WarpScript';
+      default:
+        return 'warpscript';
     }
   }
 }

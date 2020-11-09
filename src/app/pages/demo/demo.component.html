@@ -28,20 +28,7 @@
                      (warpViewEditorSize)="warpViewEditorSize($event)"
                      (warpViewEditorLoaded)="warpViewEditorLoaded($event)"
                      [warpscript]="warpscriptAttr"
-                     config='{
-  "messageClass": "alert alert-info message",
-  "errorClass": "alert alert-danger error",
-  "execButton" : { "class" : "btn btn-success" },
-  "datavizButton" : { "class" : "btn btn-success" },
-  "readOnly": false,
-  "hover": true,
-  "editor": {
-    "enableDebug": true,
-    "quickSuggestionsDelay": 3000,
-    "suggestOnTriggerCharacters": false,
-    "rawResultsReadOnly": false
-  }
-}'>{{warpscript}}</warpview-editor>
+                     [config]="config">{{warpscript}}</warpview-editor>
 
 
   </div>

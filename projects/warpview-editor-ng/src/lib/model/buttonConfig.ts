@@ -15,6 +15,6 @@
  */
 
 export class ButtonConfig {
-  class: string;
+  class?: string;
   label?: string;
 }

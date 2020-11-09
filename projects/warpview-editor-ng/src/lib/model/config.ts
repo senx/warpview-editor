@@ -41,4 +41,21 @@ export class Config {
     enableDebug: false,
     rawResultsReadOnly: true
   };
+  codeReview?: { enabled: boolean, cancelButton?: ButtonConfig, addButton?: ButtonConfig, replyButton?: ButtonConfig, removeButton?: ButtonConfig } = {
+    enabled: true,
+    cancelButton: {
+      class: '',
+      label: 'Cancel'
+    },
+    addButton: {
+      class: '',
+      label: 'Add comment'
+    },
+    replyButton: {
+      label: 'Reply'
+    },
+    removeButton: {
+      label: 'Remove'
+    }
+  };
 }
