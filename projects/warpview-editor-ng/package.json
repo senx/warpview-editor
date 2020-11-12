@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "keywords": [
     "web",
     "dataviz",
@@ -48,10 +48,10 @@
     "@webcomponents/custom-elements": "^1.4.2",
     "@webcomponents/webcomponentsjs": "^2.4.4",
     "core-js": "^3.6.5",
+    "dayjs": "^1.9.6",
     "dompurify": "^2.1.1",
     "elements-zone-strategy": "^10.0.0",
     "fs-extra": "^9.0.1",
-    "dayjs": "^1.9.6",
     "rxjs": "~6.6.3",
     "ts-node": "~9.0.0",
     "typescript": "~4.0.3",
