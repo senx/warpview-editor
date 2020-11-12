@@ -26,6 +26,7 @@ import {Sample5Component} from './pages/sample5/sample5.component';
 import {Sample6Component} from './pages/sample6/sample6.component';
 import {Sample7Component} from './pages/sample7/sample7.component';
 import {DemoFlowsComponent} from './pages/demo-flows/demo-flows.component';
+import {Sample8Component} from './pages/sample8/sample8.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: 'demo6', component: Sample5Component},
   {path: 'demo7', component: Sample6Component},
   {path: 'demo8', component: Sample7Component},
+  {path: 'demo9', component: Sample8Component},
 ];
 
 @NgModule({
@@ -47,8 +49,7 @@ const routes: Routes = [
       scrollPositionRestoration: 'enabled',
       onSameUrlNavigation: 'reload',
       anchorScrolling: 'enabled',
-      useHash: true,
-
+      useHash: true
     }
   ),],
   exports: [RouterModule]

@@ -14,19 +14,37 @@
  *  limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Config} from '../../../../projects/warpview-editor-ng/src/lib/model/config';
-import {WarpViewEditorComponent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';
+import {Component, OnInit} from '@angular/core';
 import {ReviewCommentEvent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/providers/events-comments-reducers';
+import {Config} from '../../../../projects/warpview-editor-ng/src/lib/model/config';
 
 @Component({
-  selector: 'warpview-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.scss']
+  selector: 'warpview-sample8',
+  templateUrl: './sample8.component.html',
+  styleUrls: ['./sample8.component.scss']
 })
-export class DemoComponent implements OnInit {
-  @ViewChild('editor') editor: WarpViewEditorComponent;
+export class Sample8Component implements OnInit {
   visible = false;
+  reviews: any[];
+  reviewComments: ReviewCommentEvent[] = [{
+    type: 'create',
+    lineNumber: 6,
+    createdBy: 'John',
+    createdAt: '2019-01-01T00:00:00.000',
+    text: 'Near the start',
+    selection: {
+      startColumn: 5,
+      startLineNumber: 5,
+      endColumn: 10,
+      endLineNumber: 6,
+    },
+  }, {
+    type: 'create',
+    createdBy: 'John',
+    createdAt: '2018-12-25T00:00:00.000',
+    text: 'What did you mean?',
+    lineNumber: 4
+  } as ReviewCommentEvent];
   config = {
     messageClass: 'alert alert-info message',
     errorClass: 'alert alert-danger error',
@@ -38,6 +56,27 @@ export class DemoComponent implements OnInit {
       enableDebug: false, quickSuggestionsDelay: 3000,
       suggestOnTriggerCharacters: false,
       rawResultsReadOnly: false
+    },
+    codeReview: {
+      enabled: true,
+      currentUser: 'Bob',
+      cancelButton: {
+        label: 'Annuler',
+        class: 'btn btn-sm btn-danger mr-2'
+      },
+      addButton: {
+        label: 'Ajouter',
+        class: 'btn btn-sm btn-primary mr-2'
+      },
+      replyButton: {
+        class: 'btn btn-sm btn-primary mr-2'
+      },
+      removeButton: {
+        class: 'btn btn-sm btn-danger mr-2'
+      },
+      editButton: {
+        class: 'btn btn-sm btn-warning mr-2'
+      }
     }
   } as Config;
   warpscript = `@training/dataset0
@@ -46,44 +85,16 @@ export class DemoComponent implements OnInit {
 [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 9 d ] FETCH
 [ SWAP mapper.rate 1 0 0 ] MAP
 MINLONG MAXLONG`;
-  ctrlClick: any;
-  breakpoint: any;
-  size: any;
-  warpscriptAttr: string;
-  editorLoaded: any;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.reviews = [...this.reviewComments];
     this.visible = true;
   }
 
-  abort() {
-    this.editor.abort();
-  }
-
-  exec() {
-    this.editor.execute();
-  }
-
-  warpViewEditorCtrlClick(event) {
-    this.ctrlClick = event.detail;
-  }
-
-  warpViewEditorBreakPoint(event) {
-    this.breakpoint = event.detail;
-  }
-
-  warpViewEditorSize(event) {
-    this.size = event.detail;
-  }
-
-  inject() {
-    this.warpscriptAttr = Math.random().toString(36);
-  }
-
-  warpViewEditorLoaded($event: any) {
-    this.editorLoaded = {'editorLoaded': $event};
+  warpViewEditorCodeReview($event: any) {
+    this.reviews= $event;
   }
 }

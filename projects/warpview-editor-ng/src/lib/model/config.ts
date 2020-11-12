@@ -41,8 +41,16 @@ export class Config {
     enableDebug: false,
     rawResultsReadOnly: true
   };
-  codeReview?: { enabled: boolean, cancelButton?: ButtonConfig, addButton?: ButtonConfig, replyButton?: ButtonConfig, removeButton?: ButtonConfig } = {
-    enabled: true,
+  codeReview?: {
+    enabled: boolean,
+    currentUser?: string,
+    cancelButton?: ButtonConfig,
+    addButton?: ButtonConfig,
+    replyButton?: ButtonConfig,
+    removeButton?: ButtonConfig,
+    editButton?: ButtonConfig
+  } = {
+    enabled: false,
     cancelButton: {
       class: '',
       label: 'Cancel'
@@ -56,6 +64,9 @@ export class Config {
     },
     removeButton: {
       label: 'Remove'
+    },
+    editButton: {
+      label: 'Edit'
     }
   };
 }

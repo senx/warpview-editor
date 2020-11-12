@@ -44,6 +44,7 @@ import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
 import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'warpview-editor',
@@ -53,6 +54,7 @@ import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerCon
 })
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() url = '';
+  @Input() existingComments: ReviewCommentEvent[];
 
   @Input() set lang(lang: string) {
     this._lang = lang;
@@ -150,6 +152,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
         this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
         this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
+        this.reviewManager.currentUser = this.innerConfig.codeReview.currentUser;
+        this.reviewManagerConfig.editButton = this.innerConfig.codeReview.editButton as any;
         this.reviewManager.updateConfig(this.reviewManagerConfig);
       }
     }
@@ -222,6 +226,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Output('warpViewEditorBreakPoint') warpViewEditorBreakPoint = new EventEmitter<any>();
   @Output('warpViewEditorCtrlClick') warpViewEditorCtrlClick = new EventEmitter<any>();
   @Output('warpViewEditorDatavizRequested') warpViewEditorDatavizRequested = new EventEmitter<any>();
+  @Output('warpViewEditorCodeReview') warpViewEditorCodeReview = new EventEmitter<any>();
 
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
@@ -246,14 +251,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   _displayMessages = true;
   _showDataviz = false;
   _lang = 'warpscript';
-  reviewManagerConfig: ReviewManagerConfig = {};
-  existingComments: ReviewCommentEvent[] = [{
-    type: "create",
-    createdBy: 'Satan',
-    createdAt: "1666-21-25T00:00:00.000",
-    text: 'Evil is in details',
-    lineNumber: 3
-  } as ReviewCommentEvent];
+  reviewManagerConfig: ReviewManagerConfig = {
+    formatDate: (createdAt) => dayjs(createdAt).format("YYYY-MM-DD HH:mm"),
+  };
   private _heightPx: number;
   private _heightLine: number;
   private _showResult = true;
@@ -332,7 +332,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       contextmenu: true,
     //  fixedOverflowWidgets: true,
       folding: true,
-      glyphMargin: true // this.innerConfig.editor.enableDebug,
+      glyphMargin: this.innerConfig.editor.enableDebug || this.innerConfig.codeReview.enabled,
     };
   }
 
@@ -428,9 +428,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
           this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
           this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
-          this.reviewManager = createReviewManager(this.ed, "Jesus",
+          this.reviewManagerConfig.editButton = this.innerConfig.codeReview.editButton as any;
+          this.reviewManager = createReviewManager(this.ed, this.innerConfig.codeReview.currentUser,
             this.existingComments,
-            (updatedComments) => console.log(updatedComments),
+            (updatedComments) => this.warpViewEditorCodeReview.emit(updatedComments),
             this.reviewManagerConfig);
         }
       }
