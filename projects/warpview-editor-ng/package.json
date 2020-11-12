@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.3.5",
+  "version": "2.3.6",
   "keywords": [
     "web",
     "dataviz",
@@ -28,11 +28,11 @@
     "@giwisoft/wc-tabs": "1.0.10",
     "angular2-uuid": "^1.1.1",
     "bignumber.js": "^9.0.1",
+    "dayjs": "^1.9.6",
     "highlight.js": "^10.2.1",
     "marked": "^1.2.0",
     "monaco-editor": "^0.21.2",
     "resize-observer-polyfill": "^1.5.1",
-    "dayjs": "^1.9.6",
     "tslib": "^2.0.3"
   },
   "peerDependencies": {
