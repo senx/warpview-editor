@@ -20,7 +20,8 @@
             "allowedCommonJsDependencies": [
               "bignumber.js",
               "zone.js/dist/zone",
-              "highlight.js"
+              "highlight.js",
+              "uuid"
             ],
             "aot": true,
             "outputPath": "dist/warpview-editor-elements",
@@ -161,7 +162,8 @@
             "allowedCommonJsDependencies": [
               "bignumber.js",
               "zone.js/dist/zone",
-              "highlight.js"
+              "highlight.js",
+              "uuid"
             ],
             "outputPath": "dist/warpview-editor/elements",
             "index": "src/elements-index.html",

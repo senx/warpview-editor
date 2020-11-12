@@ -9,6 +9,7 @@
     "angular2-uuid",
     "bignumber.js",
     "highlight.js",
+    "uuid",
     "resize-observer-polyfill"
   ],
   "lib": {
