@@ -10,6 +10,7 @@
     "bignumber.js",
     "highlight.js",
     "uuid",
+    "dayjs",
     "resize-observer-polyfill"
   ],
   "lib": {
