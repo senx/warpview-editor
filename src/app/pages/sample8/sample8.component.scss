@@ -1,4 +1,4 @@
-/*
+/*!
  *  Copyright 2020 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,13 @@
  *  limitations under the License.
  */
 
-export class ButtonConfig {
-  class?: string;
-  label?: string;
+:host {
+
+  --warpview-editor-breakpoint-color: deeppink;
+
+  .resizable {
+    resize: both;
+    overflow: hidden;
+  }
+
 }

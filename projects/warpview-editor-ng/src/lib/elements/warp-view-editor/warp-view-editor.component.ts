@@ -43,6 +43,8 @@ import {EditorUtils} from './providers/editorUtils';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
+import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'warpview-editor',
@@ -51,9 +53,19 @@ import IEditorOptions = editor.IEditorOptions;
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @Input() url = '';
-  @Input() lang: 'warpscript' | 'flows' = 'warpscript';
+  @Input() existingComments: ReviewCommentEvent[];
+
+  @Input() set lang(lang: string) {
+    this._lang = lang;
+    if (!!editor && !!this.ed) {
+      editor.setModelLanguage(this.ed.getModel(), this._lang);
+    }
+  }
+
+  get lang(): string {
+    return this._lang;
+  }
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {
@@ -135,6 +147,15 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.ed) {
       this.LOG.debug(['config'], this.innerConfig);
       this.ed.updateOptions(this.setOptions());
+      if(this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
+        this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
+        this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
+        this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
+        this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
+        this.reviewManager.currentUser = this.innerConfig.codeReview.currentUser;
+        this.reviewManagerConfig.editButton = this.innerConfig.codeReview.editButton as any;
+        this.reviewManager.updateConfig(this.reviewManagerConfig);
+      }
     }
   }
 
@@ -205,6 +226,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Output('warpViewEditorBreakPoint') warpViewEditorBreakPoint = new EventEmitter<any>();
   @Output('warpViewEditorCtrlClick') warpViewEditorCtrlClick = new EventEmitter<any>();
   @Output('warpViewEditorDatavizRequested') warpViewEditorDatavizRequested = new EventEmitter<any>();
+  @Output('warpViewEditorCodeReview') warpViewEditorCodeReview = new EventEmitter<any>();
 
   @ViewChild('wrapper', {static: true}) wrapper: ElementRef<HTMLDivElement>;
   @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement>;
@@ -228,6 +250,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   _debug = false;
   _displayMessages = true;
   _showDataviz = false;
+  _lang = 'warpscript';
+  reviewManagerConfig: ReviewManagerConfig = {
+    formatDate: (createdAt) => dayjs(createdAt).format("YYYY-MM-DD HH:mm"),
+  };
   private _heightPx: number;
   private _heightLine: number;
   private _showResult = true;
@@ -245,6 +271,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   private previousParentWidth = -1;
   private request: Subscription;
   private resizeWatcherInt: any;
+  private reviewManager: ReviewManager;
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);
@@ -302,9 +329,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       automaticLayout: !!this._heightPx,
       hover: {enabled: this.innerConfig.hover},
       readOnly: this.innerConfig.readOnly,
-      fixedOverflowWidgets: true,
+      contextmenu: true,
+    //  fixedOverflowWidgets: true,
       folding: true,
-      glyphMargin: this.innerConfig.editor.enableDebug
+      glyphMargin: this.innerConfig.editor.enableDebug || this.innerConfig.codeReview.enabled,
     };
   }
 
@@ -340,7 +368,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.LOG.debug(['ngAfterViewInit'], 'edOpts: ', edOpts);
       this.ed = create(this.editor.nativeElement, edOpts);
       this.ed.setValue(this.lastKnownWS);
-      editor.setModelLanguage(this.ed.getModel(), this.lang);
+      editor.setModelLanguage(this.ed.getModel(), this._lang);
 
       if (this.innerConfig.editor.enableDebug) {
         this.ed.onMouseDown(e => {
@@ -395,6 +423,17 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorCtrlClick', docParams);
           }
         });
+        if(this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
+          this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
+          this.reviewManagerConfig.cancelButton = this.innerConfig.codeReview.cancelButton as any;
+          this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
+          this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
+          this.reviewManagerConfig.editButton = this.innerConfig.codeReview.editButton as any;
+          this.reviewManager = createReviewManager(this.ed, this.innerConfig.codeReview.currentUser,
+            this.existingComments,
+            (updatedComments) => this.warpViewEditorCodeReview.emit(updatedComments),
+            this.reviewManagerConfig);
+        }
       }
     } catch (e) {
       this.LOG.error(['ngAfterViewInit'], 'componentDidLoad', e);
@@ -443,7 +482,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
                 this.sendStatus({
-                  message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
+                  message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
@@ -458,7 +497,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           });
       } else {
         this.sendStatus({
-          message: `${WarpViewEditorComponent.getLabel(this.lang)} aborted.`,
+          message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
           ops: 0,
           elapsed: 0,
           fetched: 0,
@@ -512,8 +551,8 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
-        if(error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
-          this.error =  'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
+        if (error.headers.get('X-Warp10-Error-Message') && error.headers.get('X-Warp10-Error-Line')) {
+          this.error = 'line #' + error.headers.get('X-Warp10-Error-Line') + ': ' + error.headers.get('X-Warp10-Error-Message');
         } else {
           this.error = error.statusText;
         }
@@ -682,10 +721,14 @@ FLOWS
     this.warpViewEditorStatusEvent.emit(this.status);
   }
 
-  private static getLabel(lang: 'warpscript' | 'flows') {
+  private static getLabel(lang: string) {
     switch (lang) {
-      case 'flows': return 'FLoWS';
-      case 'warpscript': return 'WarpScript';
+      case 'flows':
+        return 'FLoWS';
+      case 'warpscript':
+        return 'WarpScript';
+      default:
+        return 'warpscript';
     }
   }
 }
