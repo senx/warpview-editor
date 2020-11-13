@@ -153,6 +153,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.reviewManagerConfig.replyButton = this.innerConfig.codeReview.replyButton as any;
         this.reviewManagerConfig.removeButton = this.innerConfig.codeReview.removeButton as any;
         this.reviewManager.currentUser = this.innerConfig.codeReview.currentUser;
+        this.reviewManager.setReadOnlyMode(this.innerConfig.codeReview.readonly);
         this.reviewManagerConfig.editButton = this.innerConfig.codeReview.editButton as any;
         this.reviewManager.updateConfig(this.reviewManagerConfig);
       }
@@ -433,6 +434,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             this.existingComments,
             (updatedComments) => this.warpViewEditorCodeReview.emit(updatedComments),
             this.reviewManagerConfig);
+          this.reviewManager.setReadOnlyMode(this.innerConfig.codeReview.readonly);
         }
       }
     } catch (e) {

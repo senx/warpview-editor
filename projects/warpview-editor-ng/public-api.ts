@@ -18,9 +18,6 @@
 /*
  * Public API Surface of warpview-editor-ng
  */
-import {ButtonConfig} from './src/lib/model/buttonConfig';
-import {EditorConfig} from './src/lib/model/editorConfig';
-
 export {WarpViewEditorComponent} from './src/lib/elements/warp-view-editor/warp-view-editor.component';
 export {WarpViewImageResult} from './src/lib/elements/warp-view-image-result/warp-view-image-result';
 export {WarpViewResult} from './src/lib/elements/warp-view-result/warp-view-result';
@@ -30,4 +27,5 @@ export * from './src/lib/warp-view-editor-angular.module';
 export {Config} from './src/lib/model/config';
 export {ButtonConfig} from './src/lib/model/buttonConfig';
 export {EditorConfig} from './src/lib/model/editorConfig';
+export {ReviewCommentEvent} from './src/lib/elements/warp-view-editor/providers/events-comments-reducers';
 

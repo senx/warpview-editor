@@ -43,6 +43,7 @@ export class Config {
   };
   codeReview?: {
     enabled: boolean,
+    readonly? : boolean,
     currentUser?: string,
     cancelButton?: ButtonConfig,
     addButton?: ButtonConfig,
@@ -51,6 +52,7 @@ export class Config {
     editButton?: ButtonConfig
   } = {
     enabled: false,
+    readonly: false,
     cancelButton: {
       class: '',
       label: 'Cancel'

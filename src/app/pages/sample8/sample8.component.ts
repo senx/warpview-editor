@@ -60,6 +60,7 @@ export class Sample8Component implements OnInit {
     codeReview: {
       enabled: true,
       currentUser: 'Bob',
+      readonly: false,
       cancelButton: {
         label: 'Annuler',
         class: 'btn btn-sm btn-danger mr-2'
