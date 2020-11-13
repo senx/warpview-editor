@@ -46,11 +46,12 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(
     routes,
     {
-      scrollPositionRestoration: 'enabled',
-      onSameUrlNavigation: 'reload',
-      anchorScrolling: 'enabled',
-      useHash: true
-    }
+    scrollPositionRestoration: 'enabled',
+    onSameUrlNavigation: 'reload',
+    anchorScrolling: 'enabled',
+    useHash: true,
+    relativeLinkResolution: 'legacy'
+}
   ),],
   exports: [RouterModule]
 })

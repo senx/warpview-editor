@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-const sass = require('node-sass');
+const sass = require('sass');
 const fs = require('fs-extra');
 const concat = require('concat');
 (async function build() {
