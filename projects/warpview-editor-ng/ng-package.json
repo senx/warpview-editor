@@ -21,6 +21,8 @@
     "umdModuleIds": {
       "monaco-editor": "monaco-editor",
       "marked": "marked",
+      "uuid": "uuid",
+      "dayjs": "dayjs",
       "@giwisoft/wc-split": "@giwisoft/wc-split",
       "@giwisoft/wc-tabs": "@giwisoft/wc-tabs",
       "angular2-uuid": "angular2-uuid",

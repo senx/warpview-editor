@@ -176,7 +176,8 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
       readOnly: !!this._config.editor.rawResultsReadOnly,
       fixedOverflowWidgets: true,
       lineNumbers: 'on',
-      wordWrap: 'on'
+      wordWrap: 'on',
+      folding: false
     } as IEditorOptions;
   }
 }
