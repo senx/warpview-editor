@@ -716,7 +716,7 @@ FLOWS
 
   private sendError(error: string, executionUrl: string) {
     this.error = error;
-    BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
+    BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', {error: this.error, endpoint: executionUrl});
     this.warpViewEditorErrorEvent.emit({error: this.error, endpoint: executionUrl});
   }
 
