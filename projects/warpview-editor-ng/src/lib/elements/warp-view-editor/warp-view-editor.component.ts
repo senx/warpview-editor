@@ -40,11 +40,11 @@ import {catchError} from 'rxjs/operators';
 import {Observable, of, Subscription} from 'rxjs';
 import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
+import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
+import dayjs from 'dayjs';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
-import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'warpview-editor',
@@ -461,10 +461,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input()
   public abort(session?: string) {
     if (this.request) {
+      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
+      const executionUrl = specialHeaders.endpoint || this.url;
       // BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
       if (!!session) {
-        const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
-        const executionUrl = specialHeaders.endpoint || this.url;
         this.http.post<HttpResponse<string>>(executionUrl, `<% '${session}' 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`, {
           // @ts-ignore
           observe: 'response',
@@ -484,6 +484,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
                 }
                 this.sendStatus({
+                  endpoint: executionUrl,
                   message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
                   ops: parseInt(res.headers.get('x-warp10-ops'), 10),
                   elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
@@ -499,6 +500,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
           });
       } else {
         this.sendStatus({
+          endpoint: executionUrl,
           message: `${WarpViewEditorComponent.getLabel(this._lang)} aborted.`,
           ops: 0,
           elapsed: 0,
@@ -572,24 +574,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       this.result = undefined;
       this.status = undefined;
       this.error = undefined;
-      this.LOG.debug(['execute'], 'this.ed.getValue()', session, this.ed.getValue());
-      this.loading = true;
-      // parse comments to look for inline url or preview modifiers
-      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
-      const previewType = specialHeaders.displayPreviewOpt || 'none';
-      if (previewType === 'I') {
-        this.selectedResultTab = 2; // select image tab.
-      } else if (this.selectedResultTab === 2) {
-        this.selectedResultTab = 0; // on next execution, select results tab.
-      }
-      const executionUrl = specialHeaders.endpoint || this.url;
-      // Get Warp10 version
-      // @ts-ignore
-
-      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
-      if (!!session) {
-        headers['X-Warp10-WarpScriptSession'] = session;
-      }
       let code = this.ed.getValue().replace(/ /gi, ' ');
       if (EditorUtils.FLOWS_LANGUAGE === this.lang) {
         code = `<'
@@ -597,6 +581,24 @@ ${code}
 '>
 FLOWS
 `;
+      }
+      this.LOG.debug(['execute'], 'this.ed.getValue()', session, code);
+      this.loading = true;
+      // parse comments to look for inline url or preview modifiers
+      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(code);
+      const previewType = specialHeaders.displayPreviewOpt || 'none';
+      if (previewType === 'I') {
+        this.selectedResultTab = 2; // select image tab.
+      } else if (this.selectedResultTab === 2) {
+        this.selectedResultTab = 0; // on next execution, select results tab.
+      }
+      const executionUrl = specialHeaders.endpoint || this.url;
+      this.LOG.debug(['execute'], 'specialHeaders', specialHeaders);
+      // Get Warp10 version
+      // @ts-ignore
+      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
+      if (!!session) {
+        headers['X-Warp10-WarpScriptSession'] = session;
       }
       this.request = this.http.post<HttpResponse<string>>(executionUrl, code, {
         // @ts-ignore
@@ -612,6 +614,7 @@ FLOWS
             this.warpViewEditorWarpscriptResult.emit(res.body);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
             this.sendStatus({
+              endpoint: executionUrl,
               message: `Your script execution took
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
@@ -717,7 +720,7 @@ FLOWS
     this.warpViewEditorErrorEvent.emit(this.error);
   }
 
-  private sendStatus(status: { elapsed: number; ops: number; message: string; fetched: number }) {
+  private sendStatus(status: { elapsed: number; ops: number; message: string; fetched: number, endpoint: string }) {
     this.status = {...status};
     BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorStatusEvent', this.status);
     this.warpViewEditorStatusEvent.emit(this.status);
