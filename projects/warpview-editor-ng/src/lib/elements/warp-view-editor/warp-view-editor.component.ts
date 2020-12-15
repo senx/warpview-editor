@@ -479,9 +479,9 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               const r = JSON.parse(res.body);
               if (!!r[0]) {
                 if (r[0] === 0) {
-                  this.sendError('It appears that your Warp 10 is running on multiple backend');
+                  this.sendError('It appears that your Warp 10 is running on multiple backend', executionUrl);
                 } else if (r[0] === -1) {
-                  this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`);
+                  this.sendError(`Unable to WSABORT on ${executionUrl}. Did you activate StackPSWarpScriptExtension?`, executionUrl);
                 }
                 this.sendStatus({
                   endpoint: executionUrl,
@@ -491,7 +491,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                   fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
                 });
               } else {
-                this.sendError(`An error occurs for session: ${session}`);
+                this.sendError(`An error occurs for session: ${session}`, executionUrl);
               }
             }
             this.request.unsubscribe();
@@ -634,7 +634,7 @@ FLOWS
               }
               this.result = res.body;
               this.LOG.error(['execute 1'], this.error);
-              this.sendError(this.error);
+              this.sendError(this.error, executionUrl);
             }
           }
           this.loading = false;
@@ -714,10 +714,10 @@ FLOWS
     return {height: '100%', width: '100%', overflow: 'hidden'};
   }
 
-  private sendError(error: string) {
+  private sendError(error: string, executionUrl: string) {
     this.error = error;
     BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
-    this.warpViewEditorErrorEvent.emit(this.error);
+    this.warpViewEditorErrorEvent.emit({error: this.error, endpoint: executionUrl});
   }
 
   private sendStatus(status: { elapsed: number; ops: number; message: string; fetched: number, endpoint: string }) {
