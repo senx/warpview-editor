@@ -21,7 +21,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../model/config';
 import {Logger} from '../../model/logger';
 import {BubblingEvents} from '../../model/bubblingEvent';
-import WarpScriptParser, {DocGenerationParams, SpecialCommentCommands} from '../../model/warpScriptParser';
+import {WarpScriptParser, DocGenerationParams, SpecialCommentCommands} from '../../model/warpScriptParser';
 import {
   AfterViewInit,
   Component,
