@@ -35,7 +35,7 @@ export interface DocGenerationParams {
  * This is a simplified warpScriptParser, from the one used is VSCode WarpScript extension.
  *
  */
-export default class WarpScriptParser {
+export class WarpScriptParser {
 
 
   /**
