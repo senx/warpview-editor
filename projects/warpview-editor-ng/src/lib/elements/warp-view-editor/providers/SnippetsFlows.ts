@@ -43,17 +43,17 @@ export class SnippetsFlows {
         '  ]',
         '};',
         '',
-        'macro =  ${7:(a, b) => {',
+        'macro =  ${7:(a, b) -> {',
         '  INFO(!info);',
         '  context = SAVE();',
-        '  TRY(() => {',
+        '  TRY(() -> {',
         '    // Code of the actual macro',
         '    return ( TOLONG(a / b), a % b);',
         '  },',
-        '  () => { // catch any exception',
+        '  () -> { // catch any exception',
         '    RETHROW()',
         '  },',
-        '  () => { // finally, restore the context',
+        '  () -> { // finally, restore the context',
         '    RESTORE(context)',
         '  })',
         '};',
@@ -86,17 +86,17 @@ export class SnippetsFlows {
         '    " ]',
         '}',
         '',
-        'macro = () => {',
+        'macro = () -> {',
         '  !info INFO;',
         '  context = SAVE();',
-        '  TRY(() => {',
+        '  TRY(() -> {',
         '    // Code of the actual macro',
         '    ${3:  }',
         '  },',
-        '  () => { // catch any exception',
+        '  () -> { // catch any exception',
         '    RETHROW()',
         '  },',
-        '  () => { // finally, restore the context',
+        '  () -> { // finally, restore the context',
         '    RESTORE(context)',
         '  });',
         '}',
@@ -116,25 +116,25 @@ export class SnippetsFlows {
     bucketize: {
       prefix: 'bucketize',
       body: [
-        'bucketizedGts = BUCKETIZE([ ${1:gts}, ${2|MACROBUCKETIZER((data) => { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),bucketizer.and(),bucketizer.count(),bucketizer.count().exclude-nulls(),bucketizer.count.include-nulls(),bucketizer.count.nonnull(),bucketizer.first(),bucketizer.join(\',\'),bucketizer.join.forbid-nulls(),bucketizer.last(),bucketizer.max(),bucketizer.max.forbid-nulls(),bucketizer.mean(),bucketizer.mean.circular(),bucketizer.mean.circular.exclude-nulls(),bucketizer.mean.exclude-nulls(),bucketizer.median(),bucketizer.min(),bucketizer.min.forbid-nulls(),bucketizer.or(),bucketizer.sum(),bucketizer.sum.forbid-nulls()|}, ${3:lastbucket}, ${4:bucketspan}, ${5:bucketcount} ])'
+        'bucketizedGts = BUCKETIZE([ ${1:gts}, ${2|MACROBUCKETIZER((data) -> { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),bucketizer.and(),bucketizer.count(),bucketizer.count().exclude-nulls(),bucketizer.count.include-nulls(),bucketizer.count.nonnull(),bucketizer.first(),bucketizer.join(\',\'),bucketizer.join.forbid-nulls(),bucketizer.last(),bucketizer.max(),bucketizer.max.forbid-nulls(),bucketizer.mean(),bucketizer.mean.circular(),bucketizer.mean.circular.exclude-nulls(),bucketizer.mean.exclude-nulls(),bucketizer.median(),bucketizer.min(),bucketizer.min.forbid-nulls(),bucketizer.or(),bucketizer.sum(),bucketizer.sum.forbid-nulls()|}, ${3:lastbucket}, ${4:bucketspan}, ${5:bucketcount} ])'
       ]
     },
     filter: {
       prefix: 'filter',
       body: [
-        'filtredGts = FILTER([ ${1:gts}, [${2:labels}], ${3|MACROFILTER((data) => { return gtslist\\, labels_equivalence_class_map; }),filter.byattr({}),filter.byclass(\'\'),filter.bylabels({}),filter.bylabelsattr({}),filter.bymetadata([]),filter.last.eq(filterValue),filter.last.ge(filterValue),filter.last.gt(filterValue),filter.last.le(filterValue),filter.last.lt(filterValue),filter.last.ne(filterValue),filter.latencies(minLatency\\, maxLatency\\, [])|} ]'
+        'filtredGts = FILTER([ ${1:gts}, [${2:labels}], ${3|MACROFILTER((data) -> { return gtslist\\, labels_equivalence_class_map; }),filter.byattr({}),filter.byclass(\'\'),filter.bylabels({}),filter.bylabelsattr({}),filter.bymetadata([]),filter.last.eq(filterValue),filter.last.ge(filterValue),filter.last.gt(filterValue),filter.last.le(filterValue),filter.last.lt(filterValue),filter.last.ne(filterValue),filter.latencies(minLatency\\, maxLatency\\, [])|} ]'
       ]
     },
     map: {
       prefix: 'map',
       body: [
-        'mappedGts = MAP([ ${1:gts}, ${2|MACROMAPPER((data) => { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),mapper.abs(),mapper.add(constant),mapper.and(),mapper.ceil(),mapper.count(),mapper.count.exclude-nulls(),mapper.count.include-nulls(),mapper.count.nonnull(),mapper.day(timezone\\|offset),mapper.delta(),mapper.dotproduct([]),mapper.dotproduct.positive([]),mapper.dotproduct.sigmoid([]),mapper.dotproduct.tanh([]),mapper.eq(constant),mapper.exp(constant),mapper.finite(),mapper.first(),mapper.floor(),mapper.ge(threshold),mapper.geo.approximate(resolution),mapper.geo.clear(),mapper.geo.outside(geoZone),mapper.geo.within(geoZone),mapper.gt(threshold),mapper.hdist(),mapper.highest(),mapper.hour(timezone\\|offset),mapper.hspeed(),mapper.join(\',\'),mapper.join.forbid-nulls(\',\'),mapper.kernel.cosine(bandwidth\\, step),mapper.kernel.epanechnikov(bandwidth\\, step),mapper.kernel.gaussian(bandwidth\\, step),mapper.kernel.logistic(bandwidth\\, step),mapper.kernel.quartic(bandwidth\\, step),mapper.kernel.silverman(bandwidth\\, step),mapper.kernel.triangular(bandwidth\\, step),mapper.kernel.tricube(bandwidth\\, step),mapper.kernel.triweight(bandwidth\\, step),mapper.kernel.uniform(bandwidth\\, step),mapper.last(),mapper.le(threshold),mapper.log(constant),mapper.lowest(),mapper.lt(threshold),mapper.mad(),mapper.max(),mapper.max.forbid-nulls(),mapper.max.x(),mapper.mean(),mapper.mean.circular(),mapper.mean.circular.exclude-nulls(),mapper.mean.exclude-nulls(),mapper.median(),mapper.min(),mapper.min.forbid-nulls(),mapper.min.x(),mapper.minute(timezone\\|offset),mapper.mod(modulus),mapper.month(timezone\\|offset),mapper.mul(constant),mapper.ne(constant),mapper.npdf(mu\\, sigma),mapper.or(),mapper.parsedouble(),mapper.percentile(percentile),mapper.pow(constant),mapper.product(),mapper.rate(),mapper.replace(constant),mapper.round(),mapper.sd(bessel),mapper.sd.forbid-nulls(bessel),mapper.second(timezone\\|offset),mapper.sigmoid(),mapper.sqrt(),mapper.sum(),mapper.sum.forbid-nulls(),mapper.tanh(),mapper.tick(),mapper.toboolean(),mapper.todouble(),mapper.tolong(),mapper.tostring(),mapper.truecourse(),mapper.var(bessel),mapper.var.forbid-nulls(bessel),mapper.vdist(),mapper.vspeed(),mapper.weekday(timezone\\|offset),mapper.year(timezone\\|offset),max.tick.sliding.window(),max.time.sliding.window()|}, ${3:pre}, ${4:post}, ${5:occurrences} ])'
+        'mappedGts = MAP([ ${1:gts}, ${2|MACROMAPPER((data) -> { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),mapper.abs(),mapper.add(constant),mapper.and(),mapper.ceil(),mapper.count(),mapper.count.exclude-nulls(),mapper.count.include-nulls(),mapper.count.nonnull(),mapper.day(timezone\\|offset),mapper.delta(),mapper.dotproduct([]),mapper.dotproduct.positive([]),mapper.dotproduct.sigmoid([]),mapper.dotproduct.tanh([]),mapper.eq(constant),mapper.exp(constant),mapper.finite(),mapper.first(),mapper.floor(),mapper.ge(threshold),mapper.geo.approximate(resolution),mapper.geo.clear(),mapper.geo.outside(geoZone),mapper.geo.within(geoZone),mapper.gt(threshold),mapper.hdist(),mapper.highest(),mapper.hour(timezone\\|offset),mapper.hspeed(),mapper.join(\',\'),mapper.join.forbid-nulls(\',\'),mapper.kernel.cosine(bandwidth\\, step),mapper.kernel.epanechnikov(bandwidth\\, step),mapper.kernel.gaussian(bandwidth\\, step),mapper.kernel.logistic(bandwidth\\, step),mapper.kernel.quartic(bandwidth\\, step),mapper.kernel.silverman(bandwidth\\, step),mapper.kernel.triangular(bandwidth\\, step),mapper.kernel.tricube(bandwidth\\, step),mapper.kernel.triweight(bandwidth\\, step),mapper.kernel.uniform(bandwidth\\, step),mapper.last(),mapper.le(threshold),mapper.log(constant),mapper.lowest(),mapper.lt(threshold),mapper.mad(),mapper.max(),mapper.max.forbid-nulls(),mapper.max.x(),mapper.mean(),mapper.mean.circular(),mapper.mean.circular.exclude-nulls(),mapper.mean.exclude-nulls(),mapper.median(),mapper.min(),mapper.min.forbid-nulls(),mapper.min.x(),mapper.minute(timezone\\|offset),mapper.mod(modulus),mapper.month(timezone\\|offset),mapper.mul(constant),mapper.ne(constant),mapper.npdf(mu\\, sigma),mapper.or(),mapper.parsedouble(),mapper.percentile(percentile),mapper.pow(constant),mapper.product(),mapper.rate(),mapper.replace(constant),mapper.round(),mapper.sd(bessel),mapper.sd.forbid-nulls(bessel),mapper.second(timezone\\|offset),mapper.sigmoid(),mapper.sqrt(),mapper.sum(),mapper.sum.forbid-nulls(),mapper.tanh(),mapper.tick(),mapper.toboolean(),mapper.todouble(),mapper.tolong(),mapper.tostring(),mapper.truecourse(),mapper.var(bessel),mapper.var.forbid-nulls(bessel),mapper.vdist(),mapper.vspeed(),mapper.weekday(timezone\\|offset),mapper.year(timezone\\|offset),max.tick.sliding.window(),max.time.sliding.window()|}, ${3:pre}, ${4:post}, ${5:occurrences} ])'
       ]
     },
     reduce: {
       prefix: 'reduce',
       body: [
-        'reducedGts = REDUCE([ ${1:gts}, [${2:labels}], ${3|MACROREDUCER((data) => { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),reducer.and(),reducer.and.exclude-nulls(),reducer.argmax(),reducer.argmin(),reducer.count(),reducer.count.exclude-nulls(),reducer.count.include-nulls(),reducer.count.nonnull(),reducer.join(),reducer.join.forbid-nulls(),reducer.join.nonnull(),reducer.join.urlencoded(),reducer.max(),reducer.max.forbid-nulls(),reducer.max.nonnull(),reducer.mean(),reducer.mean.circular(),reducer.mean.circular.exclude-nulls(),reducer.mean.exclude-nulls(),reducer.median(),reducer.min(),reducer.min.forbid-nulls(),reducer.min.nonnull(),reducer.or(),reducer.or.exclude-nulls(),reducer.sd(),reducer.sd.forbid-nulls(),reducer.shannonentropy.0(),reducer.shannonentropy.1(),reducer.sum(),reducer.sum.forbid-nulls(),reducer.sum.nonnull(),reducer.var(),reducer.var.forbid-nulls()|} ]'
+        'reducedGts = REDUCE([ ${1:gts}, [${2:labels}], ${3|MACROREDUCER((data) -> { return [tick\\, latitude\\, longitude\\, elevation\\, value]; }),reducer.and(),reducer.and.exclude-nulls(),reducer.argmax(),reducer.argmin(),reducer.count(),reducer.count.exclude-nulls(),reducer.count.include-nulls(),reducer.count.nonnull(),reducer.join(),reducer.join.forbid-nulls(),reducer.join.nonnull(),reducer.join.urlencoded(),reducer.max(),reducer.max.forbid-nulls(),reducer.max.nonnull(),reducer.mean(),reducer.mean.circular(),reducer.mean.circular.exclude-nulls(),reducer.mean.exclude-nulls(),reducer.median(),reducer.min(),reducer.min.forbid-nulls(),reducer.min.nonnull(),reducer.or(),reducer.or.exclude-nulls(),reducer.sd(),reducer.sd.forbid-nulls(),reducer.shannonentropy.0(),reducer.shannonentropy.1(),reducer.sum(),reducer.sum.forbid-nulls(),reducer.sum.nonnull(),reducer.var(),reducer.var.forbid-nulls()|} ]'
       ]
     },
     apply: {
@@ -148,8 +148,8 @@ export class SnippetsFlows {
       prefix: 'ift',
       body: [
         'IFT(',
-        '  () => { return ${1:condition}; }, ',
-        '  () => { return ${2:action_if_true} }',
+        '  () -> { return ${1:condition}; }, ',
+        '  () -> { return ${2:action_if_true} }',
         ');'
       ],
       description: 'If statement'
@@ -158,9 +158,9 @@ export class SnippetsFlows {
       prefix: 'ifte',
       body: [
         'IFTE(',
-        '  () => { return ${1:condition}; }, ',
-        '  () => { return ${2:action_if_true} },',
-        '  () => { return ${2:action_if_false} }',
+        '  () -> { return ${1:condition}; }, ',
+        '  () -> { return ${2:action_if_true} },',
+        '  () -> { return ${2:action_if_false} }',
         ');'
       ],
       description: 'If then else statement'
@@ -169,10 +169,10 @@ export class SnippetsFlows {
       prefix: 'switch',
       body: [
         'SWITCH(',
-        '  () => { return ${1:case_1}; }, { return ${2:action_1}; },',
-        '  () => { return ${3:case_2}; }, { return ${4:action_2}; },',
-        '  () => { return ${5:case_3}; }, { return ${6:action_3}; },',
-        '  () => { return ${7:default}; },',
+        '  () -> { return ${1:case_1}; }, { return ${2:action_1}; },',
+        '  () -> { return ${3:case_2}; }, { return ${4:action_2}; },',
+        '  () -> { return ${5:case_3}; }, { return ${6:action_3}; },',
+        '  () -> { return ${7:default}; },',
         '  ${8:number_of_cases}',
         ');'
       ],
@@ -182,9 +182,9 @@ export class SnippetsFlows {
       prefix: 'try',
       body: [
         'TRY(',
-        '  () => { ${1:try} },',
-        '  () => { ${2:catch} },',
-        '  () => { ${3:finally} }',
+        '  () -> { ${1:try} },',
+        '  () -> { ${2:catch} },',
+        '  () -> { ${3:finally} }',
         ');'
       ],
       description: 'Try/Catch statement'
@@ -193,8 +193,8 @@ export class SnippetsFlows {
       prefix: 'while',
       body: [
         'WHILE(',
-        '  () => { return ${1:condition}; },',
-        '  () => { ${2:action_while_true} }',
+        '  () -> { return ${1:condition}; },',
+        '  () -> { ${2:action_while_true} }',
         ');'
       ],
       description: 'While loop'
@@ -203,8 +203,8 @@ export class SnippetsFlows {
       prefix: 'until',
       body: [
         'UNTIL(',
-        '  () => { ${1:action_until_true} },',
-        '  () => { return ${2:condition}; }',
+        '  () -> { ${1:action_until_true} },',
+        '  () -> { return ${2:condition}; }',
         ');'
       ],
       description: 'Until loop'
@@ -213,7 +213,7 @@ export class SnippetsFlows {
       prefix: 'for',
       body: [
         'FOR(${1:initial_value}, ${2:final_value},',
-        '  () => { ${3:action} }',
+        '  () -> { ${3:action} }',
         ');'
       ],
       description: 'For loop'
@@ -222,8 +222,8 @@ export class SnippetsFlows {
       prefix: 'foreach',
       body: [
         'FOREACH(${1:object}, ',
-        '  (key, value) => { // object is a map',
-        '  (value) => {      // object is a list',
+        '  (key, value) -> { // object is a map',
+        '  (value) -> {      // object is a list',
         '    ${2:action}',
         '  }',
         ');'
@@ -233,8 +233,8 @@ export class SnippetsFlows {
     forstep: {
       prefix: 'forstep',
       body: [
-        'FORSTEP(${1:initial_value}, ${2:final_value}, () => { return ${3: + 1}; },',
-        '  () => { ${4:action} }',
+        'FORSTEP(${1:initial_value}, ${2:final_value}, () -> { return ${3: + 1}; },',
+        '  () -> { ${4:action} }',
         ');'
       ],
       description: 'Forstep loop'
@@ -242,16 +242,16 @@ export class SnippetsFlows {
     shm: {
       prefix: 'shm',
       body: [
-        'MUTEX(() => { // prevent a concurrent execution on the same SHM data',
-        '  TRY(() => {',
+        'MUTEX(() -> { // prevent a concurrent execution on the same SHM data',
+        '  TRY(() -> {',
         '    // try to read data from SHared Memory',
         '    SHMLOAD(\'gtsList\')',
         '  },',
-        '  () => {',
+        '  () -> {',
         '    // when not found, store data in SHM',
         '    SHMSTORE(\'gtsList\', ${1:FETCH([ token \'classname\' {\\} NOW() d(365) ]))}',
         '  },',
-        '  () => {',
+        '  () -> {',
         '    // finally, load the reference from SHM and store it ',
         '    gtsList = SHMLOAD(\'gtsList\')',
         '  });',
