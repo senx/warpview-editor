@@ -47,7 +47,19 @@ export class DemoComponent implements OnInit {
 // HBase since the restart of the Store daemon
 [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 9 d ] FETCH
 [ SWAP mapper.rate 1 0 0 ] MAP
-MINLONG MAXLONG`;
+MINLONG MAXLONG
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+FILLVALUE
+`;
   ctrlClick: any;
   breakpoint: any;
   size: any;

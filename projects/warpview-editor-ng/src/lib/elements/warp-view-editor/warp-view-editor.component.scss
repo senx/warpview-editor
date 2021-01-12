@@ -33,8 +33,16 @@
   }
 
   .editor-wrapper {
-    overflow: auto;
+    overflow: visible;
     height: 100%;
+
+    ::ng-deep .monaco-hover {
+      z-index: 9999;
+    }
+
+    & > div {
+      overflow: visible !important;
+    }
   }
 
   .wctabs {

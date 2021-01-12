@@ -397,7 +397,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.ed.onMouseDown(e => {
           if ((!this.isMac() && !!e.event.ctrlKey) || (this.isMac() && !!e.event.metaKey)) {
             // ctrl click on which word ?
-            const name: string = (this.ed.getModel().getWordAtPosition(e.target.range.getStartPosition()) || {word: undefined}).word;
+            const name: string = (this.ed.getModel().getWordAtPosition(e.target.range?.getStartPosition()) || {word: undefined}).word;
             // parse the warpscript
             const ws: string = this.ed.getValue();
             const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
