@@ -37,7 +37,7 @@ export class MainComponent implements OnInit {
 
 This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a WarpScript editor dedicated to [Warp 10™](https://www.warp10.io).
 
-![Warp 10](https://blog.senx.io/wp-content/uploads/2018/10/warp10bySenx.png)
+![Warp 10](https://blog.senx.io/wp-content/uploads/2021/03/warp10_bySenx-1.png)
 
 - [licence Apache 2](./LICENSE.md)
 - [Contribute](./CONTRIBUTING.md)
