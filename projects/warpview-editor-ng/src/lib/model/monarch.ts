@@ -304,6 +304,7 @@ export class Monarch {
         "HHCODE.WEST",
         "HIDE",
         "HLOCATE",
+        "HTTP",
         "HULLSHAPE",
         "HUMANDURATION",
         "HYBRIDTEST",

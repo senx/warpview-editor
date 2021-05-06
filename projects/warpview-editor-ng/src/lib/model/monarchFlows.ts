@@ -304,6 +304,7 @@ export class MonarchFlows {
         "HHCODE.WEST",
         "HIDE",
         "HLOCATE",
+        "HTTP",
         "HULLSHAPE",
         "HUMANDURATION",
         "HYBRIDTEST",
