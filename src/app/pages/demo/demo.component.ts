@@ -17,7 +17,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Config} from '../../../../projects/warpview-editor-ng/src/lib/model/config';
 import {WarpViewEditorComponent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/warp-view-editor.component';
-import {ReviewCommentEvent} from '../../../../projects/warpview-editor-ng/src/lib/elements/warp-view-editor/providers/events-comments-reducers';
 
 @Component({
   selector: 'warpview-demo',
@@ -35,31 +34,12 @@ export class DemoComponent implements OnInit {
     readOnly: false,
     hover: true,
     editor: {
-      enableDebug: false, quickSuggestionsDelay: 3000,
-      suggestOnTriggerCharacters: false,
+      enableDebug: false, quickSuggestionsDelay: 1,
+      suggestOnTriggerCharacters: true,
       rawResultsReadOnly: false
     }
   } as Config;
-  warpscript = `
- // @endpoint https://warp.senx.io/api/v0/exec
- @training/dataset0
-// warp.store.hbase.puts.committed is the number of datapoints committed to
-// HBase since the restart of the Store daemon
-[ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 9 d ] FETCH
-[ SWAP mapper.rate 1 0 0 ] MAP
-MINLONG MAXLONG
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-FILLVALUE
-`;
+  warpscript = ``;
   ctrlClick: any;
   breakpoint: any;
   size: any;
