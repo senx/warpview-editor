@@ -20,7 +20,7 @@ import {environment} from './environments/environment';
 import {WarpViewEditorElementsModule} from '../projects/warpview-editor-ng/src/lib/warp-view-editor-elements.module';
 import * as wcSplit from '@giwisoft/wc-split/loader';
 import * as wcTabs from '@giwisoft/wc-tabs/loader';
-import 'zone.js/dist/zone';
+import 'zone.js';
 
 if (environment.production) {
   enableProdMode();
