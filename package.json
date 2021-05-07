@@ -63,7 +63,7 @@
     "@angular/platform-browser": "~11.2.13",
     "@angular/platform-browser-dynamic": "~11.2.13",
     "@angular/router": "~11.2.13",
-    "@giwisoft/wc-split": "1.0.7",
+    "@giwisoft/wc-split": "1.0.9",
     "@giwisoft/wc-tabs": "1.0.10",
     "@ungap/custom-elements": "^1.0.0",
     "@webcomponents/custom-elements": "^1.4.3",

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { DemoComponent } from './demo/demo.component';
 import { MainComponent } from './main/main.component';
 import { DemoImageComponent } from './demo-image/demo-image.component';
@@ -53,6 +53,7 @@ import {Sample8Component} from './sample8/sample8.component';
   ],
   providers: [],
   bootstrap: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [
     DemoComponent,
     DemoImageComponent,

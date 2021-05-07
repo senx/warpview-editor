@@ -24,7 +24,7 @@
   },
   "homepage": "https://www.warp10.io",
   "dependencies": {
-    "@giwisoft/wc-split": "1.0.7",
+    "@giwisoft/wc-split": "1.0.9",
     "@giwisoft/wc-tabs": "1.0.10",
     "angular2-uuid": "^1.1.1",
     "bignumber.js": "^9.0.1",
