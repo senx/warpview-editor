@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/warpview-editor",
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "monaco-editor",
     "marked",
     "@giwisoft/wc-split",
