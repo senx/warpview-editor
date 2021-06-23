@@ -241,7 +241,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   lastKnownWS: string;
   headers = this.getItems();
   innerConfig = new Config();
-  ro: ResizeObserver;
   // tslint:disable-next-line:variable-name
   _theme = 'light';
   // tslint:disable-next-line:variable-name
@@ -448,9 +447,6 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     }
     if (this.ed) {
       this.ed.dispose();
-    }
-    if (this.ro) {
-      this.ro.disconnect();
     }
     if (this.request) {
       this.request.unsubscribe();
