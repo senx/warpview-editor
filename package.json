@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.3.22",
+  "version": "2.3.23",
   "description": "WarpScript editor",
   "repository": {
     "type": "git",
@@ -47,7 +47,7 @@
     "build:lib2": "ngc -p src/tsconfig.elements-ng.json &&  ./node_modules/node-sass/bin/node-sass projects/warpview-editor-ng/src/styles.scss ./dist/warpview-editor-ng/style.css",
     "clean": "rm -fr ./elements && rm -fr ./dist",
     "prepublishOnly": "yarn clean && yarn build",
-    "build:lib": "ng build --project=warpview-editor-ng",
+    "build:lib": "ng build --project=warpview-editor-ng --prod",
     "copy": "cp -r node_modules/monaco-editor/dev/vs src/assets/.",
     "nvm": "nvm install 10.18.0",
     "build:pack": "(cd dist/warpview-editor && yarn pack)",
