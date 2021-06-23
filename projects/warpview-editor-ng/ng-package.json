@@ -26,8 +26,7 @@
       "@giwisoft/wc-split": "@giwisoft/wc-split",
       "@giwisoft/wc-tabs": "@giwisoft/wc-tabs",
       "angular2-uuid": "angular2-uuid",
-      "bignumber.js": "bignumber.js",
-      "resize-observer-polyfill": "resize-observer-polyfill"
+      "bignumber.js": "bignumber.js"
     },
     "styleIncludePaths": [
     ]

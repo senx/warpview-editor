@@ -1,19 +1,4 @@
-/*!
- *  Copyright 2020 SenX S.A.S.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-@import "~monaco-editor/min/vs/editor/editor.main.css";
+@import "~monaco-editor/min/vs/editor/editor.main";
 
 span.mouseOver {
   cursor: pointer;
@@ -106,34 +91,6 @@ warp-view-editor {
     cursor: pointer;
   }
 }
-
-
-/*
-  .editButton.add {
-  }
-
-  .editButton.remove {
-  }
-  */
-
-/*
-  TODO - Work icons and theming - this creates the style below
-
-  svg = `
-  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-   <g>
-    <title>Layer 1</title>
-    <g id="svg_2">
-     <path fill="#re d="m12.40135,15.21479l-9.26822,0q-1.15575,0 -1.96699,-0.7272t-0.81125,-1.76321l0,-9.96165q0,-1.03601 0.81125,-1.76321t1.96699,-0.7272l9.26822,0q1.15574,0 1.96699,0.7272t0.81125,1.76321l0,9.96165q0,1.03601 -0.81125,1.76321t-1.96699,0.7272zm-9.26822,-13.28883q-0.37784,0 -0.65566,0.24904t-0.27783,0.58773l0,9.96165q0,0.3387 0.27783,0.58774t0.65566,0.24904l9.26822,0q0.37784,0 0.64455,-0.24904t0.26671,-0.58774l0,-9.96165q0,-0.33869 -0.26671,-0.58773t-0.64455,-0.24904l-9.26822,0zm8.33473,4.98082l-7.40124,0q-0.46674,0 -0.46674,-0.39847q0,-0.17931 0.13335,-0.29885t0.33339,-0.11954l7.40124,0q0.20003,0 0.33339,0.11954t0.13335,0.29885q0,0.39847 -0.46674,0.39847zm0,-2.49041l-7.40124,0q-0.20003,0 -0.33339,-0.11954t-0.13335,-0.29885q0,-0.39847 0.46674,-0.39847l7.40124,0q0.46674,0 0.46674,0.39847q0,0.17931 -0.13335,0.29885t-0.33339,0.11954zm0,4.98082l-7.40124,0q-0.20003,0 -0.33339,-0.11954t-0.13335,-0.29885q0,-0.39846 0.46674,-0.39846l7.40124,0q0.46674,0 0.46674,0.39846q0,0.17931 -0.13335,0.29885t-0.33339,0.11954zm0,2.49041l-7.40124,0q-0.46674,0 -0.46674,-0.39846q0,-0.17931 0.13335,-0.29885t0.33339,-0.11954l7.40124,0q0.20003,0 0.33339,0.11954t0.13335,0.29885q0,0.39846 -0.46674,0.39846z" id="svg_1" stroke="null"/>
-    </g>
-   </g>
-  </svg>`
-
-  console.log(`.activeLineMarginClass{
-    background-image: url("data:image/svg+xml;base64,${btoa(svg)}");
-  }`);
-
-  */
 
 .activeLineMarginClass {
   margin-left: 5px;

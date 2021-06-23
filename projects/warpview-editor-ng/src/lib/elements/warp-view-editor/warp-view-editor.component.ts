@@ -17,11 +17,10 @@
 /* tslint:disable:no-string-literal */
 import {editor, Range} from 'monaco-editor';
 import {Utils} from '../../model/utils';
-import ResizeObserver from 'resize-observer-polyfill';
 import {Config} from '../../model/config';
 import {Logger} from '../../model/logger';
 import {BubblingEvents} from '../../model/bubblingEvent';
-import {WarpScriptParser, DocGenerationParams, SpecialCommentCommands} from '../../model/warpScriptParser';
+import {DocGenerationParams, SpecialCommentCommands, WarpScriptParser} from '../../model/warpScriptParser';
 import {
   AfterViewInit,
   Component,
@@ -45,6 +44,7 @@ import dayjs from 'dayjs';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
+import ResizeObserver from 'resize-observer-polyfill';
 
 @Component({
   selector: 'warpview-editor',
