@@ -44,7 +44,6 @@ import dayjs from 'dayjs';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
-import ResizeObserver from 'resize-observer-polyfill';
 
 @Component({
   selector: 'warpview-editor',
