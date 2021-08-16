@@ -604,8 +604,8 @@ FLOWS
         .subscribe((res: HttpResponse<string>) => {
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
-            this.warpViewEditorWarpscriptResult.emit(res.body);
-            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
+            this.warpViewEditorWarpscriptResult.emit(res.body || (res as any));
+            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body || (res as any));
             if(!!res.headers) {
               this.sendStatus({
                 endpoint: executionUrl,
