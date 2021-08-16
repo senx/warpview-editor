@@ -39,7 +39,11 @@ export class DemoComponent implements OnInit {
       rawResultsReadOnly: false
     }
   } as Config;
-  warpscript = ``;
+  warpscript = `DEBUGON
+
+1
+FAIL
+`;
   ctrlClick: any;
   breakpoint: any;
   size: any;
@@ -78,6 +82,6 @@ export class DemoComponent implements OnInit {
   }
 
   warpViewEditorLoaded($event: any) {
-    this.editorLoaded = {'editorLoaded': $event};
+    setTimeout(() => this.editorLoaded = {'editorLoaded': $event});
   }
 }

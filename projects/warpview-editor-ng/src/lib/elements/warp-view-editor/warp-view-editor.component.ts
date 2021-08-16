@@ -331,7 +331,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       contextmenu: true,
       //  fixedOverflowWidgets: true,
       folding: true,
-      glyphMargin: this.innerConfig.editor.enableDebug || this.innerConfig.codeReview.enabled,
+      glyphMargin: this.innerConfig.editor.enableDebug || this.innerConfig.codeReview.enabled
     };
   }
 
@@ -546,7 +546,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   private handleError<T>(result?: T) {
     return (error: HttpErrorResponse): Observable<T> => {
-      this.LOG.error(['handleError'], {e: error});
+    this.LOG.error(['handleError'], {e: error});
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
@@ -558,7 +558,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       }
       this.sendError(this.error, error.url);
       this.loading = false;
-      return of(result as T);
+      return of(error.error);
     };
   }
 
@@ -595,7 +595,6 @@ FLOWS
         headers['X-Warp10-WarpScriptSession'] = session;
       }
       this.request = this.http.post<HttpResponse<string>>(executionUrl, code, {
-        // @ts-ignore
         observe: 'response',
         // @ts-ignore
         responseType: 'text',
@@ -607,19 +606,22 @@ FLOWS
             this.LOG.debug(['execute'], 'response', res.body);
             this.warpViewEditorWarpscriptResult.emit(res.body);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body);
-            this.sendStatus({
-              endpoint: executionUrl,
-              message: `Your script execution took
+            if(!!res.headers) {
+              this.sendStatus({
+                endpoint: executionUrl,
+                message: `Your script execution took
  ${EditorUtils.formatElapsedTime(parseInt(res.headers.get('x-warp10-elapsed'), 10))}
  serverside, fetched
  ${res.headers.get('x-warp10-fetched')} datapoints and performed
  ${res.headers.get('x-warp10-ops')}  ${WarpViewEditorComponent.getLabel(this.lang)} operations.`,
-              ops: parseInt(res.headers.get('x-warp10-ops'), 10),
-              elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
-              fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
-            });
+                ops: parseInt(res.headers.get('x-warp10-ops'), 10),
+                elapsed: parseInt(res.headers.get('x-warp10-elapsed'), 10),
+                fetched: parseInt(res.headers.get('x-warp10-fetched'), 10),
+              });
+            }
             try {
-              this.result = res.body;
+              this.LOG.debug(['execute'], 'res', res);
+              this.result = res.body || (res as any);
             } catch (e) {
               if (e.name && e.message && e.at && e.text) {
                 this.error = `${e.name}: ${e.message} at char ${e.at} => ${e.text}`;
