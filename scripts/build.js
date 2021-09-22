@@ -15,17 +15,19 @@
  *
  */
 const sass = require('sass');
-const fs = require('fs-extra');
+const fs = require('fs');
 const concat = require('concat');
 (async function build() {
   const files = [
     './scripts/loader.js',
     './node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js',
-    './dist/warpview-editor/elements/0.js',
-    './dist/warpview-editor/elements/1.js',
-    './dist/warpview-editor/elements/vendors~jsonMode-js.js',
     './dist/warpview-editor/elements/main.js'
-  ];
+  ].concat(
+    fs.readdirSync('./dist/warpview-editor/elements/')
+      .filter(f => f.startsWith('projects') || f.startsWith('vendors'))
+      .map(f => './dist/warpview-editor/elements/' +f)
+  );
+  console.log(files)
   const css = [
     './dist/warpview-editor/elements/warpview-editor-elements.css',
     './node_modules/monaco-editor/min/vs/editor/editor.main.css'
