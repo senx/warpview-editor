@@ -546,7 +546,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   private handleError<T>(result?: T) {
     return (error: HttpErrorResponse): Observable<T> => {
-    this.LOG.error(['handleError'], {e: error});
+      this.LOG.error(['handleError'], {e: error});
       if (error.status === 0) {
         this.error = `Unable to reach ${error.url}`;
       } else {
@@ -563,7 +563,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session?) {
+  public execute(session?, addLocalHeader = false) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
@@ -590,7 +590,10 @@ FLOWS
       this.LOG.debug(['execute'], 'specialHeaders', specialHeaders);
       // Get Warp10 version
       // @ts-ignore
-      let headers = {'Content-Type': 'text/plain;charset=UTF-8', 'Access-Control-Request-Private-Network' : 'true'};
+      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
+      if (addLocalHeader) {
+        headers['Access-Control-Request-Private-Network'] = 'true';
+      }
       if (!!session) {
         headers['X-Warp10-WarpScriptSession'] = session;
       }
@@ -606,7 +609,7 @@ FLOWS
             this.LOG.debug(['execute'], 'response', res.body);
             this.warpViewEditorWarpscriptResult.emit(res.body || (res as any));
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body || (res as any));
-            if(!!res.headers) {
+            if (!!res.headers) {
               this.sendStatus({
                 endpoint: executionUrl,
                 message: `Your script execution took
