@@ -39,11 +39,7 @@ export class DemoComponent implements OnInit {
       rawResultsReadOnly: false
     }
   } as Config;
-  warpscript = `DEBUGON
-
-1
-FAIL
-`;
+  warpscript = `2 2 +`;
   ctrlClick: any;
   breakpoint: any;
   size: any;

@@ -590,7 +590,7 @@ FLOWS
       this.LOG.debug(['execute'], 'specialHeaders', specialHeaders);
       // Get Warp10 version
       // @ts-ignore
-      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
+      let headers = {'Content-Type': 'text/plain;charset=UTF-8', 'Access-Control-Request-Private-Network' : 'true'};
       if (!!session) {
         headers['X-Warp10-WarpScriptSession'] = session;
       }
