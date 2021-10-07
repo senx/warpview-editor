@@ -563,7 +563,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session) {
+  public execute(session?) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
