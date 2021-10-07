@@ -33,6 +33,7 @@ export class Config {
   readOnly? = false;
   messageClass? = '';
   errorClass? = '';
+  addLocalHeader? = false;
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,

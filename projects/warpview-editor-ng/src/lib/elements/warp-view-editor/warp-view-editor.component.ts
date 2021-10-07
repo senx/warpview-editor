@@ -563,7 +563,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session?, addLocalHeader = false) {
+  public execute(session) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
@@ -587,11 +587,11 @@ FLOWS
         this.selectedResultTab = 0; // on next execution, select results tab.
       }
       const executionUrl = specialHeaders.endpoint || this.url;
-      this.LOG.debug(['execute'], 'specialHeaders', specialHeaders);
+      this.LOG.debug(['execute'], 'specialHeaders', this.innerConfig.addLocalHeader);
       // Get Warp10 version
       // @ts-ignore
       let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
-      if (addLocalHeader) {
+      if (this.innerConfig.addLocalHeader) {
         headers['Access-Control-Request-Private-Network'] = 'true';
       }
       if (!!session) {
