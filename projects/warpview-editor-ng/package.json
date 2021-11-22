@@ -1,6 +1,6 @@
 {
   "name": "@senx/warpview-editor",
-  "version": "2.3.29",
+  "version": "2.3.30",
   "keywords": [
     "web",
     "dataviz",
@@ -30,9 +30,9 @@
     "dayjs": "^1.10.7",
     "highlight.js": "^11.3.1",
     "marked": "^3.0.0",
-    "uuid": "^8.3.2",
     "monaco-editor": "^0.30.1",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "uuid": "^8.3.2"
   },
   "peerDependencies": {
     "@angular/animations": "~13.0.2",
