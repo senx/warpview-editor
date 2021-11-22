@@ -15,19 +15,7 @@
   ],
   "lib": {
     "flatModuleFile": "warpview-editor",
-    "umdId": "warpview-editor",
-    "amdId": "warpview-editor",
     "entryFile": "./public-api.ts",
-    "umdModuleIds": {
-      "monaco-editor": "monaco-editor",
-      "marked": "marked",
-      "uuid": "uuid",
-      "dayjs": "dayjs",
-      "@giwisoft/wc-split": "@giwisoft/wc-split",
-      "@giwisoft/wc-tabs": "@giwisoft/wc-tabs",
-      "angular2-uuid": "angular2-uuid",
-      "bignumber.js": "bignumber.js"
-    },
     "styleIncludePaths": [
     ]
   }
