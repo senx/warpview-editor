@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import {v4} from 'uuid';
 
 export type CommonFields = {
   id?: string;
@@ -143,7 +143,7 @@ export function reduceComments(
 
   for (const a of actions) {
     if (!a.id) {
-      a.id = uuid.v4();
+      a.id = v4();
     }
     state = commentReducer(a, state);
   }
