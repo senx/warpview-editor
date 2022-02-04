@@ -34,6 +34,7 @@ export class Config {
   messageClass? = '';
   errorClass? = '';
   addLocalHeader? = false;
+  httpHeaders?: { [key: string]: string; };
   editor: EditorConfig = {
     quickSuggestionsDelay: 10,
     quickSuggestions: true,

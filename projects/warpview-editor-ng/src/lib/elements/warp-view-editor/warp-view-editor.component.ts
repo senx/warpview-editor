@@ -460,13 +460,18 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
       const executionUrl = specialHeaders.endpoint || this.url;
       // BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
       if (!!session) {
-        this.http.post<HttpResponse<string>>(executionUrl, `<% '${session}' 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`, {
-          // @ts-ignore
-          observe: 'response',
-          // @ts-ignore
-          responseType: 'text',
-          'Accept': 'application/json',
-        })
+        this.http.post<HttpResponse<string>>(executionUrl,
+          `<% '${session}' 'WSKILLSESSION' EVAL %> <% -1 %> <% %> TRY`,
+          {
+            // @ts-ignore
+            observe: 'response',
+            // @ts-ignore
+            responseType: 'text',
+            headers: {
+              ...this.innerConfig.httpHeaders || {},
+              'Accept': 'application/json',
+            }
+          })
           .pipe(catchError(this.handleError<HttpResponse<string>>(undefined)))
           .subscribe((res: HttpResponse<string>) => {
             if (!!res) {
@@ -590,7 +595,10 @@ FLOWS
       this.LOG.debug(['execute'], 'specialHeaders', this.innerConfig.addLocalHeader);
       // Get Warp10 version
       // @ts-ignore
-      let headers = {'Content-Type': 'text/plain;charset=UTF-8'};
+      let headers = {
+        ...this.innerConfig.httpHeaders || {},
+        'Content-Type': 'text/plain;charset=UTF-8'
+      };
       if (this.innerConfig.addLocalHeader) {
         headers['Access-Control-Request-Private-Network'] = 'true';
       }
