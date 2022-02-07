@@ -968,7 +968,7 @@ export class ReviewManager {
       id: 'my-unique-id-add',
       label: this.config.addButton.label || 'Add Comment',
       keybindings: [
-        monacoWindow.monaco.KeyMod.CtrlCmd | monacoWindow.monaco.KeyCode.F10,
+        monacoWindow.monaco?.KeyMod.CtrlCmd | monacoWindow.monaco?.KeyCode.F10,
       ],
       precondition: 'add-context-key',
       keybindingContext: null,
@@ -984,7 +984,7 @@ export class ReviewManager {
       id: 'my-unique-id-next',
       label: 'Next Comment',
       keybindings: [
-        monacoWindow.monaco.KeyMod.CtrlCmd | monacoWindow.monaco.KeyCode.F12,
+        monacoWindow.monaco?.KeyMod.CtrlCmd | monacoWindow.monaco?.KeyCode.F12,
       ],
       precondition: null,
       keybindingContext: null,
@@ -1000,7 +1000,7 @@ export class ReviewManager {
       id: 'my-unique-id-prev',
       label: 'Prev Comment',
       keybindings: [
-        monacoWindow.monaco.KeyMod.CtrlCmd | monacoWindow.monaco.KeyCode.F11,
+        monacoWindow.monaco?.KeyMod.CtrlCmd | monacoWindow.monaco?.KeyCode.F11,
       ],
       precondition: null,
       keybindingContext: null,
