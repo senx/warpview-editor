@@ -39,7 +39,14 @@ export class DemoComponent implements OnInit {
       rawResultsReadOnly: false
     }
   } as Config;
-  warpscript = `2 2 +`;
+  warpscript = `NEWGTS 'v' STORE
+      NEWGTS 'a' STORE
+0 100 <%
+  'ts' STORE
+  $v NOW $ts STU * - NaN NaN NaN RAND ADDVALUE DROP
+  $a NOW $ts STU * - NaN NaN NaN    T ADDVALUE DROP
+%> FOR
+[ $v $a $a $a ]`;
   ctrlClick: any;
   breakpoint: any;
   size: any;
