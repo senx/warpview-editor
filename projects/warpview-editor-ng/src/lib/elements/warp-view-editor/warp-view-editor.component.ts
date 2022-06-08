@@ -393,7 +393,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
         this.ed.onMouseDown(e => {
-          if ((!this.isMac() && !!e.event.ctrlKey) || (this.isMac() && !!e.event.metaKey)) {
+          if (e.target.range && ((!this.isMac() && !!e.event.ctrlKey) || (this.isMac() && !!e.event.metaKey))) {
             // ctrl click on which word ?
             const name: string = (this.ed.getModel().getWordAtPosition(e.target.range?.getStartPosition()) || {word: undefined}).word;
             // parse the warpscript

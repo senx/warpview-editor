@@ -41,7 +41,7 @@ export class Config {
     tabSize: 2,
     minLineNumber: 10,
     enableDebug: false,
-    rawResultsReadOnly: true
+    rawResultsReadOnly: false
   };
   codeReview?: {
     enabled: boolean,

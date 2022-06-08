@@ -27,10 +27,9 @@ const concat = require('concat');
       .filter(f => f.startsWith('projects') || f.startsWith('vendors'))
       .map(f => './dist/warpview-editor/elements/' +f)
   );
-  console.log(files)
   const css = [
     './dist/warpview-editor/elements/warpview-editor-elements.css',
-    './node_modules/monaco-editor/min/vs/editor/editor.main.css'
+    './projects/warpview-editor-ng/node_modules/monaco-editor/dev/vs/editor/editor.main.css'
   ];
 
   await concat(files, './dist/warpview-editor/elements/warpview-editor-elements.js');
@@ -38,7 +37,7 @@ const concat = require('concat');
     file: './projects/warpview-editor-ng/src/styles.scss',
     outFile: './dist/warpview-editor/elements/warpview-editor-elements.css',
     outputStyle: 'compressed'
-  }, function (err, result) {
+  },  (err, result) => {
     if (!err) {
       let compiledScssCode = result.css.toString();
       // remove comments from the css output

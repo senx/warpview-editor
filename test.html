@@ -81,38 +81,18 @@
   <h1>WarpView Editor</h1>
   <div class="card " style="width: 100%;">
     <div class="card-body" style="width: 100%; min-height: calc(100vh - 280px);overflow: hidden;">
-      <warp-view-editor url="https://warp.senx.io/api/v0/exec" debug="false" show-dataviz="false"
+      <warp-view-editor url="https://sandbox.senx.io/api/v0/exec"
+                        debug="true" show-dataviz="false"
                         id="editor"
-                        show-execute="true" show-result="true" config='{
-
-                         "messageClass": "alert alert-info message",
-                         "errorClass": "alert alert-danger error",
-                         "execButton" : { "class" : "btn btn-success" },
-                         "datavizButton" : { "class" : "btn btn-success" },
-                          "readOnly": false,
-                          "hover": true, "editor": {"enableDebug": true,   "quickSuggestionsDelay":3000,
-                          "suggestOnTriggerCharacters": false}
-                          }' display-messages="false" initial-size="400">
-        @training/dataset0
-        // warp.store.hbase.puts.committed is the number of datapoints committed to
-        // HBase since the restart of the Store daemon
-        [ $TOKEN '~warp.*committed' { 'cell' 'prod' } $NOW 10 d ] FETCH
-        [ SWAP mapper.rate 1 0 0 ] MAP
-
-        // Keep only 1000 datapoints per GTS
-        1000 LTTB
-        DUP
-        // Detect 5 anomalies per GTS using an ESD (Extreme Studentized Deviate) Test
-        5 false ESDTEST
-        // Convert the ticks identified by ESDTEST into an annotation GTS
-        <%
-        DROP // excude element index
-        NEWGTS // create a new GTS
-        SWAP // get timestamp list
-        <% NaN NaN NaN 'anomaly' ADDVALUE %> FOREACH // for each timestamp
-        %> LMAP
-        2 ->LIST // Put our GTS in a list
-        ZIP // merge into a list of GTS
+                        show-execute="true"
+                        show-result="true" config='{}'
+                        display-messages="true" initial-size="400">
+NEWGTS 'v' STORE
+0 10 <%
+  'ts' STORE
+  $v NOW $ts STU * - NaN NaN NaN RAND ADDVALUE DROP
+%> FOR
+$v
       </warp-view-editor>
 
 
@@ -120,6 +100,7 @@
     <div class="card-footer">
       <div class="btn btn-danger" id="abort">Abort</div>
       <div class="btn btn-warning" id="inject">Inject Random WS</div>
+      <div class="btn btn-warning" id="conf">Modify conf</div>
       <span id="size"></span>
       <span id="breakpoints"></span>
       <span id="ctrlclick"></span>
@@ -132,28 +113,32 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
 <script>
-  document.getElementById('editor').addEventListener('warpViewEditorLoaded', function (e) {
-    console.log(e);
-  });
+  const ed = document.getElementById('editor');
+  ed.addEventListener('warpViewEditorLoaded', e => console.log(e));
   $(document).ready(() => {
-    $('#inject').click(function () {
-      $('#editor').attr('warpscript', Math.random().toString(36));
-    });
-    $('#abort').click(function () {
-      document.getElementById('editor').abort();
-    });
-    document.getElementById('editor').addEventListener('warpViewEditorSize', function (e) {
-      $('#size').text(JSON.stringify(e.detail));
-    });
-    document.getElementById('editor').addEventListener('warpViewEditorBreakPoint', function (e) {
-      $('#breakpoints').text(JSON.stringify(e.detail));
-    });
-    document.getElementById('editor').addEventListener('warpViewEditorCtrlClick', function (e) {
-      $('#ctrlclick').text(JSON.stringify(e.detail));
-    });
-    document.getElementById('editor').addEventListener('warpViewEditorWarpscriptChanged', function (e) {
-      console.log(e.detail)
-    });
+    $('#inject').click(() => $('#editor').attr('warpscript', Math.random().toString(36)));
+    $('#conf').click(() => $('#editor').attr('config', JSON.stringify({
+
+      "messageClass": "alert alert-info message",
+      "errorClass": "alert alert-danger error",
+      "execButton": {"class": "btn btn-success"},
+      "datavizButton": {"class": "btn btn-success"},
+      "readOnly": false,
+      "hover": true,
+      "editor": {
+        "enableDebug": true,
+        "quickSuggestionsDelay": 3000,
+        "rawResultsReadOnly": false,
+        "suggestOnTriggerCharacters": false
+      }
+    })));
+    $('#abort').click(() => ed.abort());
+    ed.addEventListener('warpViewEditorSize', e => $('#size').text(JSON.stringify(e.detail)));
+    ed.addEventListener('warpViewEditorBreakPoint', e => $('#breakpoints').text(JSON.stringify(e.detail)));
+    ed.addEventListener('warpViewEditorCtrlClick', e => $('#ctrlclick').text(JSON.stringify(e.detail)));
+    ed.addEventListener('warpViewEditorWarpscriptChanged', e => console.log(e.detail));
+    ed.addEventListener('warpViewEditorErrorEvent', e => console.log('warpViewEditorErrorEvent', e.detail));
+    ed.addEventListener('warpViewEditorStatusEvent', e => console.log('warpViewEditorStatusEvent', e.detail));
   });
 
 </script>

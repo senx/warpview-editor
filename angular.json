@@ -269,13 +269,11 @@
       },
       "architect": {
         "build": {
-          "verbose": true,
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/warpview-editor-ng/tsconfig.lib.json",
             "project": "projects/warpview-editor-ng/ng-package.json"
           },
-          "es5BrowserSupport": true,
           "configurations": {
             "production": {
               "tsConfig": "projects/warpview-editor-ng/tsconfig.lib.prod.json"
