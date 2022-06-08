@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 SenX S.A.S.
+ *  Copyright 2020-2022 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,13 +40,12 @@ export class DemoComponent implements OnInit {
     }
   } as Config;
   warpscript = `NEWGTS 'v' STORE
-      NEWGTS 'a' STORE
-0 100 <%
+0 10 <%
   'ts' STORE
   $v NOW $ts STU * - NaN NaN NaN RAND ADDVALUE DROP
-  $a NOW $ts STU * - NaN NaN NaN    T ADDVALUE DROP
 %> FOR
-[ $v $a $a $a ]`;
+
+$v`;
   ctrlClick: any;
   breakpoint: any;
   size: any;

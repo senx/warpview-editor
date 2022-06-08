@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 SenX S.A.S.
+ *  Copyright 2020-2022 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import IEditorOptions = editor.IEditorOptions;
 })
 export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
   @ViewChild('editor', {static: true}) editor: ElementRef;
+  json: string;
 
   @Input() set debug(debug: boolean | string) {
     if (typeof debug === 'string') {
@@ -126,13 +127,15 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
 
   buildEditor(json: string) {
     this.LOG.debug(['buildEditor'], 'buildEditor', json, this._config);
+    this.json = json;
     if (!this.resEd && json) {
       this.resEd = create(this.editor.nativeElement, this.setOptions());
     }
-    if(!!this.resEd) {
+    if (!!this.resEd) {
       this.resEd.setValue(json || '');
     }
     this.loading = false;
+
   }
 
   adjustHeight() {
@@ -165,11 +168,13 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     this.loading = false;
   }
 
-  private setOptions(): IEditorOptions {
+  setOptions(): IEditorOptions {
     return {
       value: '',
       language: 'json',
+      bracketPairColorization: true,
       minimap: {enabled: true},
+      lineHeight: this.LINE_HEIGHT,
       automaticLayout: true,
       scrollBeyondLastLine: false,
       theme: this.monacoTheme,

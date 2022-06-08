@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 SenX S.A.S.
+ *  Copyright 2020-2022 SenX S.A.S.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {CancellationToken, editor, IMarkdownString, languages, Position, Range} from 'monaco-editor';
+import {CancellationToken, editor, languages, Position} from 'monaco-editor';
 import {globalfunctions as flowsGlobals} from '../../../model/flowsGlobals';
 import {W10HoverProvider} from './W10HoverProvider';
 import {EditorUtils} from './editorUtils';
