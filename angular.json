@@ -33,7 +33,8 @@
               "src/assets"
             ],
             "styles": [
-              "projects/warpview-editor-ng/src/styles.scss"
+              "projects/warpview-editor-ng/src/styles.scss",
+              "projects/warpview-editor-ng/node_modules/monaco-editor/dev/vs/editor/editor.main.css"
             ],
             "scripts": [
               {
