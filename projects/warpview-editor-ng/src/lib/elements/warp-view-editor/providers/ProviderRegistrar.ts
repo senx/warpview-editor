@@ -30,16 +30,17 @@ import register = languages.register;
 import setLanguageConfiguration = languages.setLanguageConfiguration;
 import registerHoverProvider = languages.registerHoverProvider;
 import {MonarchFlows} from '../../../model/monarchFlows';
+import {Config} from '../../../model/config';
 
 export class ProviderRegistrar {
 
-  static register() {
+  static register(config: Config) {
     // WarpScript
     if (!getLanguages().find(l => l.id === EditorUtils.WARPSCRIPT_LANGUAGE)) {
       register({id: EditorUtils.WARPSCRIPT_LANGUAGE});
       setLanguageConfiguration(EditorUtils.WARPSCRIPT_LANGUAGE, new WSLanguageConfiguration().getConfiguration());
       setMonarchTokensProvider(EditorUtils.WARPSCRIPT_LANGUAGE, Monarch.rules);
-      registerCompletionItemProvider(EditorUtils.WARPSCRIPT_LANGUAGE, new WSCompletionItemProvider());
+      registerCompletionItemProvider(EditorUtils.WARPSCRIPT_LANGUAGE, new WSCompletionItemProvider(config));
       registerHoverProvider(EditorUtils.WARPSCRIPT_LANGUAGE, new WSHoverProvider());
     }
     // Flows
@@ -47,7 +48,7 @@ export class ProviderRegistrar {
       register({id: EditorUtils.FLOWS_LANGUAGE});
       setLanguageConfiguration(EditorUtils.FLOWS_LANGUAGE, new FLoWSLanguageConfiguration().getConfiguration());
       setMonarchTokensProvider(EditorUtils.FLOWS_LANGUAGE, MonarchFlows.rules);
-      registerCompletionItemProvider(EditorUtils.FLOWS_LANGUAGE, new FLoWSCompletionItemProvider());
+      registerCompletionItemProvider(EditorUtils.FLOWS_LANGUAGE, new FLoWSCompletionItemProvider(config));
       registerHoverProvider(EditorUtils.FLOWS_LANGUAGE, new FLoWSHoverProvider());
     }
   }

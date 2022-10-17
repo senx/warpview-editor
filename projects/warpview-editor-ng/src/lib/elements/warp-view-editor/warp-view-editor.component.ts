@@ -291,7 +291,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 	importScripts('https://unpkg.com/monaco-editor@0.18.1/min/vs/base/worker/workerMain.js');
 `], {type: 'text/javascript'}))
     };
-    ProviderRegistrar.register();
+    ProviderRegistrar.register(this.innerConfig);
   }
 
   resizeWatcher() {

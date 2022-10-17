@@ -27,10 +27,12 @@ import {Sample6Component} from './pages/sample6/sample6.component';
 import {Sample7Component} from './pages/sample7/sample7.component';
 import {DemoFlowsComponent} from './pages/demo-flows/demo-flows.component';
 import {Sample8Component} from './pages/sample8/sample8.component';
+import {DemoSnippetsComponent} from './pages/demo-snippets/demo-snippets.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'demo1', component: DemoComponent},
+  {path: 'snippets', component: DemoSnippetsComponent},
   {path: 'demoflows', component: DemoFlowsComponent},
   {path: 'demo2', component: DemoImageComponent},
   {path: 'demo3', component: DocComponent},

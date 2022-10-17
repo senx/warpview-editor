@@ -30,6 +30,7 @@ import {Sample7Component} from './sample7/sample7.component';
 import {WarpViewEditorAngularModule} from '../../../projects/warpview-editor-ng/src/lib/warp-view-editor-angular.module';
 import {DemoFlowsComponent} from './demo-flows/demo-flows.component';
 import {Sample8Component} from './sample8/sample8.component';
+import { DemoSnippetsComponent } from './demo-snippets/demo-snippets.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import {Sample8Component} from './sample8/sample8.component';
         Sample6Component,
         Sample7Component,
         Sample8Component,
-        DemoFlowsComponent
+        DemoFlowsComponent,
+        DemoSnippetsComponent
     ],
     imports: [
         BrowserModule,

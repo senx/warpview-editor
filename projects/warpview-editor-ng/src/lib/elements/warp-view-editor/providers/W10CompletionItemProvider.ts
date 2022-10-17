@@ -21,12 +21,15 @@ import CompletionItemProvider = languages.CompletionItemProvider;
 import IReadOnlyModel = editor.IReadOnlyModel;
 import CompletionContext = languages.CompletionContext;
 import CompletionItem = languages.CompletionItem;
+import {Config} from '../../../model/config';
 
 export abstract class W10CompletionItemProvider implements CompletionItemProvider {
   languageId: string;
+  config: Config ;
 
-  protected constructor(languageId: string) {
+  protected constructor(languageId: string, config: Config) {
     this.languageId = languageId;
+    this.config = config;
   }
 
   abstract provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken): Thenable<CompletionList>;

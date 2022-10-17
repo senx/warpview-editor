@@ -19,7 +19,7 @@ import {
   DomSanitizer, SafeHtml
 } from '@angular/platform-browser';
 
-import marked, {Renderer} from 'marked';
+import {Renderer, setOptions} from 'marked';
 import highlightjs from 'highlight.js';
 import DOMPurify from 'dompurify';
 
@@ -169,7 +169,7 @@ Json of the the WarpScript execution result triggered by a click on the dataViz 
     const renderer = new Renderer();
     renderer.code = MainComponent.highlightCode;
 
-    this.mdRenderer = marked.setOptions({renderer,breaks: true, gfm: true });
+    this.mdRenderer = setOptions({renderer,breaks: true, gfm: true });
   }
 
   ngOnInit() {

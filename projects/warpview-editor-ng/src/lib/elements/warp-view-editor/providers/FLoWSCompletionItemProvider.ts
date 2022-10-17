@@ -18,15 +18,16 @@ import {CancellationToken, editor, languages, Position, Thenable} from 'monaco-e
 import {Flows} from '../../../model/refFLows';
 import {W10CompletionItemProvider} from './W10CompletionItemProvider';
 import {EditorUtils} from './editorUtils';
-import {SnippetsFlows} from './SnippetsFlows';
+import snippets from '../../../model/snippets/snippets-flows.json';
+import {Config} from '../../../model/config';
 import CompletionList = languages.CompletionList;
 import IReadOnlyModel = editor.IReadOnlyModel;
 import CompletionContext = languages.CompletionContext;
 
 export class FLoWSCompletionItemProvider extends W10CompletionItemProvider {
 
-  constructor() {
-    super(EditorUtils.FLOWS_LANGUAGE);
+  constructor(config: Config) {
+    super(EditorUtils.FLOWS_LANGUAGE, config);
   }
 
   transformKeyWord(keyword: string): string {
@@ -35,6 +36,6 @@ export class FLoWSCompletionItemProvider extends W10CompletionItemProvider {
 
   // noinspection JSUnusedLocalSymbols
   provideCompletionItems(model: IReadOnlyModel, position: Position, _context: CompletionContext, token: CancellationToken): Thenable<CompletionList> {
-    return super._provideCompletionItems(model, position, _context, token, Flows.reference, SnippetsFlows.snippets);
+    return super._provideCompletionItems(model, position, _context, token, Flows.reference, {...snippets, ...(this.config.snippets || {})});
   }
 }

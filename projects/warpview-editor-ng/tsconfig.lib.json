@@ -11,6 +11,7 @@
     "inlineSources": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "importHelpers": true,
     "types": [
       "node"
@@ -34,6 +35,7 @@
     "enableResourceInlining": true
   },
   "exclude": [
+    "node_modules",
     "src/test.ts",
     "**/*.spec.ts"
   ]

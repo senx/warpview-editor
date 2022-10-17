@@ -41,11 +41,12 @@ export class Config {
     tabSize: 2,
     minLineNumber: 10,
     enableDebug: false,
-    rawResultsReadOnly: false
+    rawResultsReadOnly: false,
   };
+  snippets?: { [key: string]: any; };
   codeReview?: {
     enabled: boolean,
-    readonly? : boolean,
+    readonly?: boolean,
     currentUser?: string,
     cancelButton?: ButtonConfig,
     addButton?: ButtonConfig,
