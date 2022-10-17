@@ -17,6 +17,7 @@
     "flatModuleFile": "warpview-editor",
     "entryFile": "./public-api.ts",
     "styleIncludePaths": [
+
     ]
   }
 }
