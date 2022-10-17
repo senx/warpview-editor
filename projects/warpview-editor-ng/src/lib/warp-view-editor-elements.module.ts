@@ -24,18 +24,18 @@ import {WarpViewRawResultComponent} from './elements/warp-view-raw-result/warp-v
 import {WarpViewResult} from './elements/warp-view-result/warp-view-result';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    WarpViewEditorAngularModule,
-    BrowserModule,
-  ],
-  exports: [
-    WarpViewEditorComponent,
-    WarpViewImageResult,
-    WarpViewResult,
-    WarpViewRawResultComponent],
-  providers: [],
-  entryComponents: []
+    declarations: [],
+    imports: [
+        WarpViewEditorAngularModule,
+        BrowserModule,
+    ],
+    exports: [
+        WarpViewEditorComponent,
+        WarpViewImageResult,
+        WarpViewResult,
+        WarpViewRawResultComponent
+    ],
+    providers: []
 })
 export class WarpViewEditorElementsModule {
   constructor(private injector: Injector) {

@@ -32,41 +32,28 @@ import {DemoFlowsComponent} from './demo-flows/demo-flows.component';
 import {Sample8Component} from './sample8/sample8.component';
 
 @NgModule({
-  declarations: [
-    DemoComponent,
-    DemoImageComponent,
-    MainComponent,
-    DocComponent,
-    Sample3Component,
-    Sample4Component,
-    Sample5Component,
-    Sample6Component,
-    Sample7Component,
-    Sample8Component,
-    DemoFlowsComponent
-  ],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    WarpViewEditorAngularModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [
-    DemoComponent,
-    DemoImageComponent,
-    MainComponent,
-    DocComponent,
-    Sample3Component,
-    Sample4Component,
-    Sample5Component,
-    Sample6Component,
-    Sample7Component,
-    Sample8Component,
-    DemoFlowsComponent
-  ]
+    declarations: [
+        DemoComponent,
+        DemoImageComponent,
+        MainComponent,
+        DocComponent,
+        Sample3Component,
+        Sample4Component,
+        Sample5Component,
+        Sample6Component,
+        Sample7Component,
+        Sample8Component,
+        DemoFlowsComponent
+    ],
+    imports: [
+        BrowserModule,
+        CommonModule,
+        WarpViewEditorAngularModule,
+        AppRoutingModule
+    ],
+    providers: [],
+    bootstrap: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class PagesModule {
 }

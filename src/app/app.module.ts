@@ -24,18 +24,17 @@ import {PagesModule} from './pages/pages.module';
 import {WarpViewEditorAngularModule} from '../../projects/warpview-editor-ng/src/lib/warp-view-editor-angular.module';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    WarpViewEditorAngularModule,
-    AppRoutingModule,
-    PagesModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        CommonModule,
+        WarpViewEditorAngularModule,
+        AppRoutingModule,
+        PagesModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
 }

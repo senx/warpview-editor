@@ -26,32 +26,26 @@ import {BrowserModule} from '@angular/platform-browser';
 import {GTSLib} from './model/gts.lib';
 
 @NgModule({
-  declarations: [
-    WarpViewEditorComponent,
-    WarpViewImageResult,
-    WarpViewResult,
-    WarpViewRawResultComponent
-  ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpClientModule,
-    FormsModule
-  ],
-  exports: [
-    WarpViewEditorComponent,
-    WarpViewImageResult,
-    WarpViewResult,
-    WarpViewRawResultComponent
-  ],
-  providers: [GTSLib],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [
-    WarpViewEditorComponent,
-    WarpViewImageResult,
-    WarpViewResult,
-    WarpViewRawResultComponent
-  ],
+    declarations: [
+        WarpViewEditorComponent,
+        WarpViewImageResult,
+        WarpViewResult,
+        WarpViewRawResultComponent
+    ],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        HttpClientModule,
+        FormsModule
+    ],
+    exports: [
+        WarpViewEditorComponent,
+        WarpViewImageResult,
+        WarpViewResult,
+        WarpViewRawResultComponent
+    ],
+    providers: [GTSLib],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WarpViewEditorAngularModule {
 }

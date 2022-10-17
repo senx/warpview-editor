@@ -303,7 +303,6 @@
       }
     }
   },
-  "defaultProject": "warpview-editor",
   "cli": {
     "packageManager": "yarn",
     "analytics": false
