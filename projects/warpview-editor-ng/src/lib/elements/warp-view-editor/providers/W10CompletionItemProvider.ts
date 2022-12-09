@@ -52,7 +52,7 @@ export abstract class W10CompletionItemProvider implements CompletionItemProvide
     Object.keys(snippets).forEach(s => {
       const snippet = snippets[s];
       defs.suggestions.push({
-        label: s,
+        label: snippet.prefix,
         kind: languages.CompletionItemKind.Snippet,
         insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
         documentation: snippet.prefix,
