@@ -209,7 +209,7 @@
     "prefix": "foreach",
     "body": [
       "FOREACH(${1:object}, ",
-      "  (key, value) -> { // object is a map", 
+      "  (key, value) -> { // object is a map",
       "  (value) -> {      // object is a list",
       "    ${2:action}",
       "  }",
