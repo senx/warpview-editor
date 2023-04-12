@@ -28,5 +28,5 @@ export {Config} from './src/lib/model/config';
 export {ButtonConfig} from './src/lib/model/buttonConfig';
 export {EditorConfig} from './src/lib/model/editorConfig';
 export {ReviewCommentEvent} from './src/lib/elements/warp-view-editor/providers/events-comments-reducers';
-export * from './src/lib/model/warpScriptParser';
+export {WarpScriptParser} from './src/lib/model/warpScriptParser';
 

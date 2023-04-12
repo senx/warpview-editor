@@ -41,7 +41,7 @@ export class wsStatement {
   }
 }
 
-export default class WarpScriptParser {
+export class WarpScriptParser {
 
   /**
    * Look for a statement position in the recursive tree of macros markers.
