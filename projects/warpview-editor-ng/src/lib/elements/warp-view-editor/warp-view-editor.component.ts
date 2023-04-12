@@ -15,12 +15,11 @@
  */
 
 /* tslint:disable:no-string-literal */
-import {editor, Range} from 'monaco-editor';
+import {editor, MarkerSeverity, Range} from 'monaco-editor';
 import {Utils} from '../../model/utils';
 import {Config} from '../../model/config';
 import {Logger} from '../../model/logger';
 import {BubblingEvents} from '../../model/bubblingEvent';
-import {DocGenerationParams, SpecialCommentCommands, WarpScriptParser} from '../../model/warpScriptParser';
 import {
   AfterViewInit,
   Component,
@@ -41,9 +40,11 @@ import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
 import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
 import dayjs from 'dayjs';
+import WarpScriptParser from '../../model/warpScriptParser';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
+import IMarkerData = editor.IMarkerData;
 
 @Component({
   selector: 'warpview-editor',
@@ -385,10 +386,16 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorLoaded', 'loaded');
         this.LOG.debug(['ngAfterViewInit'], 'loaded');
         this.ed.getModel().onDidChangeContent((event) => {
+
           if (this.lastKnownWS !== this.ed.getValue()) {
-            this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
-            this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
-            BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
+            console.log('ws changed');
+            this.debounce(() => {
+              console.log('ws changed debounce');
+              this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
+              this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
+              BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
+              this.wsAudit(this.ed.getValue());
+            }, 200)();
           }
         });
         // manage the ctrl click, create an event with the statement, the endpoint, the warpfleet repos.
@@ -398,7 +405,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             const name: string = (this.ed.getModel().getWordAtPosition(e.target.range?.getStartPosition()) || {word: undefined}).word;
             // parse the warpscript
             const ws: string = this.ed.getValue();
-            const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(ws);
+            const specialHeaders = WarpScriptParser.extractSpecialComments(ws);
             const repos: string[] = [];
             const statements: string[] = WarpScriptParser.parseWarpScriptStatements(ws);
             statements.forEach((st, i) => {
@@ -413,7 +420,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
                 }
               }
             });
-            const docParams: DocGenerationParams = {
+            const docParams = {
               endpoint: specialHeaders.endpoint || this.url,
               macroName: name,
               wfRepos: repos
@@ -421,6 +428,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             this.warpViewEditorCtrlClick.emit(docParams);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorCtrlClick', docParams);
           }
+          this.wsAudit(this.ed.getValue());
         });
         if (this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
           this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
@@ -456,7 +464,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   @Input()
   public abort(session?: string) {
     if (this.request) {
-      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(this.ed.getValue());
+      const specialHeaders = WarpScriptParser.extractSpecialComments(this.ed.getValue());
       const executionUrl = specialHeaders.endpoint || this.url;
       // BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorErrorEvent', this.error);
       if (!!session) {
@@ -531,6 +539,18 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
     this.decoration = this.ed.deltaDecorations(this.decoration, Utils.toArray(this.breakpoints));
   }
 
+  private debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        timeout = null;
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
   private toggleBreakPoint(line: number) {
     const currentKey = 'bp-' + line;
     if (this.breakpoints[currentKey]) {
@@ -584,7 +604,7 @@ FLOWS
       this.LOG.debug(['execute'], 'this.ed.getValue()', session, code);
       this.loading = true;
       // parse comments to look for inline url or preview modifiers
-      const specialHeaders: SpecialCommentCommands = WarpScriptParser.extractSpecialComments(code);
+      const specialHeaders = WarpScriptParser.extractSpecialComments(code);
       const previewType = specialHeaders.displayPreviewOpt || 'none';
       if (previewType === 'I') {
         this.selectedResultTab = 2; // select image tab.
@@ -743,5 +763,63 @@ FLOWS
       default:
         return 'warpscript';
     }
+  }
+
+  private wsAudit(ws: string) {
+    console.log('wsaudit', ws);
+    const specialHeaders = WarpScriptParser.extractSpecialComments(ws);
+    const executionUrl = specialHeaders.endpoint || this.url;
+    let headers = {
+      ...this.innerConfig.httpHeaders || {},
+      'Content-Type': 'text/plain;charset=UTF-8'
+    };
+    if (this.innerConfig.addLocalHeader) {
+      headers['Access-Control-Request-Private-Network'] = 'true';
+    }
+    this.request = this.http.post<any>(executionUrl,
+      `<% 'WSAUDITMODE' EVAL %> <% STOP %> <% %> TRY <% ${ws} %> 'WSAUDIT' EVAL SWAP DROP`,
+      {headers})
+      .subscribe(res => {
+        if (!!res) {
+          const tokenizedWS = ws.split('\n').map(l => l.split(' '));
+          const parsed = WarpScriptParser.parseWarpScriptStatements(ws, true);
+          console.log({parsed});
+          let markers = res[0].map(err => {
+            console.log({err});
+            const l = err.line;
+
+            let j = 0;
+            let firstChar = tokenizedWS[l - 1][j];
+            let c = firstChar === '' ? 0 : 1;
+            while (firstChar === '') {
+              c += 1;
+              firstChar = tokenizedWS[l - 1][j++];
+            }
+            for (let i = 0; i < err.position; i++) {
+              c += tokenizedWS[l - 1][i].length + 1;
+            }
+            return {
+              startLineNumber: l,
+              endLineNumber: l,
+              startColumn: c,
+              endColumn: c + err.statement.length,
+              message: this.getMessage(err.type),
+              severity: MarkerSeverity.Error
+            } as IMarkerData;
+          });
+          console.log({markers});
+          editor.setModelMarkers(this.ed.getModel(), 'owner', markers);
+        }
+      });
+  }
+
+  private getMessage(type: string) {
+    switch (type) {
+      case 'UNKNOWN':
+        return 'Unknown function';
+      case 'WS_EXCEPTION':
+        return 'WarpScript Exception';
+    }
+    return '';
   }
 }

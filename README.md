@@ -4,7 +4,7 @@
 
 This [web components](https://fr.wikipedia.org/wiki/Composants_web) embed a WarpScript editor dedicated to [Warp 10™](https://www.warp10.io).
 
-![Warp 10](https://blog.senx.io/wp-content/uploads/2021/03/warp10_bySenx-1.png)
+![Warp 10](https://warp10.io/assets/img/warp10_bySenx_dark.png)
 
 - [licence Apache 2](./LICENSE.md)
 - [Contribute](./CONTRIBUTING.md)
@@ -38,20 +38,20 @@ Demo: https://senx.github.io/warpview-editor
 
 ## Attributes
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| url | `string` | | Warp 10 url, eg: `https://warp.senx.io/api/v0/exec` |
-| theme | `string` | 'light' | Editor theme (`light` or `dark`) |
-| warpscript | `string` | '' | WarpScript to edit (optional, could be inside HTML tag) |
-| showDataviz | `boolean` | false | Display the "Show dataviz" button  |
-| showExecute | `boolean` | true | Display the "Execute" button  |
-| horizontalLayout | `boolean` | false | Horizontal or vertical layout  |
-| config | `object` | default config | Configuration |
-| displayMessages | `boolean` | true | Displays messages from WarpScript execution |
-| widthPx | `number` | | Fixed width |
-| heightPx | `number` | | Fixed height |
-| heightLine | `number` | | Fixed number of lines |
-| imageTab | boolean | false | Display the tab for image results |
+| Name             | Type      | Default        | Description                                             |
+|------------------|-----------|----------------|---------------------------------------------------------|
+| url              | `string`  |                | Warp 10 url, eg: `https://warp.senx.io/api/v0/exec`     |
+| theme            | `string`  | 'light'        | Editor theme (`light` or `dark`)                        |
+| warpscript       | `string`  | ''             | WarpScript to edit (optional, could be inside HTML tag) |
+| showDataviz      | `boolean` | false          | Display the "Show dataviz" button                       |
+| showExecute      | `boolean` | true           | Display the "Execute" button                            |
+| horizontalLayout | `boolean` | false          | Horizontal or vertical layout                           |
+| config           | `object`  | default config | Configuration                                           |
+| displayMessages  | `boolean` | true           | Displays messages from WarpScript execution             |
+| widthPx          | `number`  |                | Fixed width                                             |
+| heightPx         | `number`  |                | Fixed height                                            |
+| heightLine       | `number`  |                | Fixed number of lines                                   |
+| imageTab         | boolean   | false          | Display the tab for image results                       |
 
 ## Data format
 

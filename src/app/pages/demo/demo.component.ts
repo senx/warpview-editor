@@ -45,7 +45,18 @@ export class DemoComponent implements OnInit {
   $v NOW $ts STU * - NaN NaN NaN RAND ADDVALUE DROP
 %> FOR
 
-$v`;
+$v
+
+
+sdfsdfsd sdfsdf    dsfsdf    DEF 'aaa' "  ee " STORE dfsdf
+    sdfsdf
+
+    sdfsdf
+
+
+DROP /* truc */ machin
+
+`;
   ctrlClick: any;
   breakpoint: any;
   size: any;
