@@ -40,7 +40,7 @@ import {ProviderRegistrar} from './providers/ProviderRegistrar';
 import {EditorUtils} from './providers/editorUtils';
 import {createReviewManager, ReviewCommentEvent, ReviewManager, ReviewManagerConfig} from './providers/CodeReview';
 import dayjs from 'dayjs';
-import WarpScriptParser from '../../model/warpScriptParser';
+import {WarpScriptParser} from '../../model/warpScriptParser';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import create = editor.create;
 import IEditorOptions = editor.IEditorOptions;
