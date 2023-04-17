@@ -783,9 +783,7 @@ FLOWS
         if (!!res) {
           const tokenizedWS = ws.split('\n').map(l => l.split(' '));
           const parsed = WarpScriptParser.parseWarpScriptStatements(ws, true);
-          console.log({parsed});
           let markers = (res[0] || []).map(err => {
-            console.log({err});
             const l = err.line;
 
             let j = 0;
@@ -807,7 +805,6 @@ FLOWS
               severity: MarkerSeverity.Error
             } as IMarkerData;
           });
-          console.log({markers});
           editor.setModelMarkers(this.ed.getModel(), 'owner', markers);
         }
       });
