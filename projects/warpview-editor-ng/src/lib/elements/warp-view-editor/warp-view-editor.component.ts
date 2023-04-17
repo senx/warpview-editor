@@ -784,7 +784,7 @@ FLOWS
           const tokenizedWS = ws.split('\n').map(l => l.split(' '));
           const parsed = WarpScriptParser.parseWarpScriptStatements(ws, true);
           console.log({parsed});
-          let markers = res[0].map(err => {
+          let markers = (res[0] || []).map(err => {
             console.log({err});
             const l = err.line;
 
