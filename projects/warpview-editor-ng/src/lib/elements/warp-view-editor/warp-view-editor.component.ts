@@ -394,7 +394,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
               this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
               BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
-              this.wsAudit(this.ed.getValue());
+           //   this.wsAudit(this.ed.getValue());
             }, 200)();
           }
         });
@@ -428,7 +428,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             this.warpViewEditorCtrlClick.emit(docParams);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorCtrlClick', docParams);
           }
-          this.wsAudit(this.ed.getValue());
+     //     this.wsAudit(this.ed.getValue());
         });
         if (this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
           this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
@@ -766,7 +766,6 @@ FLOWS
   }
 
   private wsAudit(ws: string) {
-    console.log('wsaudit', ws);
     const specialHeaders = WarpScriptParser.extractSpecialComments(ws);
     const executionUrl = specialHeaders.endpoint || this.url;
     let headers = {
@@ -777,7 +776,9 @@ FLOWS
       headers['Access-Control-Request-Private-Network'] = 'true';
     }
     this.request = this.http.post<any>(executionUrl,
-      `<% 'WSAUDITMODE' EVAL %> <% STOP %> <% %> TRY <% ${ws} %> 'WSAUDIT' EVAL SWAP DROP`,
+      `<% 'WSAUDITMODE' EVAL %> <% %> <% %> TRY
+<% ${ws} %>
+<% 'WSAUDIT' EVAL SWAP DROP %> <% DROP [] %> <% %> TRY`,
       {headers})
       .subscribe(res => {
         if (!!res) {
