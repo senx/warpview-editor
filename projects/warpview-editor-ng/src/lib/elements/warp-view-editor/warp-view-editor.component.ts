@@ -275,6 +275,10 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
 
   constructor(private el: ElementRef, private http: HttpClient) {
     this.LOG = new Logger(WarpViewEditorComponent, this._debug);
+    (el.nativeElement as any).execute = this.execute.bind(this);
+    (el.nativeElement as any).abort = this.abort.bind(this);
+    (el.nativeElement as any).highlight = this.highlight.bind(this);
+    (el.nativeElement as any).resize = this.resize.bind(this);
   }
 
   // noinspection JSUnusedGlobalSymbols
@@ -388,9 +392,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
         this.ed.getModel().onDidChangeContent((event) => {
 
           if (this.lastKnownWS !== this.ed.getValue()) {
-            console.log('ws changed');
             this.debounce(() => {
-              console.log('ws changed debounce');
               this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
               this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
               BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());

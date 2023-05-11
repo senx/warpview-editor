@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import {Range} from 'monaco-editor';
 
 /**
  * Parsing result of // @command parameter  in the beginning of the WarpScript
@@ -24,7 +23,7 @@ export interface specialCommentCommands {
   localmacrosubstitution?: boolean;
   displayPreviewOpt?: string;
   listOfMacroInclusion?: string[];
-  listOfMacroInclusionRange?: Range[];
+  listOfMacroInclusionRange?: any[];
   theme?: string;
 }
 
@@ -231,7 +230,7 @@ export class WarpScriptParser {
               if (p.startsWith('macro:')) {
                 p = p.substring(6).trim();
                 result.listOfMacroInclusion.push(p);
-                let r = new Range(l, 3, l, currentline.trim().length);
+                let r = {startLineNumber: l, startColumn: 3, endLineNumber: l, endColumn: currentline.trim().length};
                 result.listOfMacroInclusionRange.push(r);
               }
               break;

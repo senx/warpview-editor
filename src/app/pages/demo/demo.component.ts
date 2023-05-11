@@ -47,15 +47,6 @@ export class DemoComponent implements OnInit {
 
 $v
 
-
-sdfsdfsd sdfsdf    dsfsdf    DEF 'aaa' "  ee " STORE dfsdf
-    sdfsdf
-
-    sdfsdf
-
-
-DROP /* truc */ machin
-
 `;
   ctrlClick: any;
   breakpoint: any;

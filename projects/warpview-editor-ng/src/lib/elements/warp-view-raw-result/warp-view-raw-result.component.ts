@@ -172,7 +172,7 @@ export class WarpViewRawResultComponent implements OnInit, AfterViewInit {
     return {
       value: '',
       language: 'json',
-      bracketPairColorization: true,
+      bracketPairColorization: {enable: true},
       minimap: {enabled: true},
       lineHeight: this.LINE_HEIGHT,
       automaticLayout: true,
