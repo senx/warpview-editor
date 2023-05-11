@@ -98,6 +98,7 @@ $v
 
     </div>
     <div class="card-footer">
+      <div class="btn btn-primary" id="exec">Execute</div>
       <div class="btn btn-danger" id="abort">Abort</div>
       <div class="btn btn-warning" id="inject">Inject Random WS</div>
       <div class="btn btn-warning" id="conf">Modify conf</div>
@@ -133,6 +134,7 @@ $v
       }
     })));
     $('#abort').click(() => ed.abort());
+    $('#exec').click(() => ed.execute());
     ed.addEventListener('warpViewEditorSize', e => $('#size').text(JSON.stringify(e.detail)));
     ed.addEventListener('warpViewEditorBreakPoint', e => $('#breakpoints').text(JSON.stringify(e.detail)));
     ed.addEventListener('warpViewEditorCtrlClick', e => $('#ctrlclick').text(JSON.stringify(e.detail)));
