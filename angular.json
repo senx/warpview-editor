@@ -168,12 +168,9 @@
                 "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
             ],
+            "styles": [
+            ],
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "node_modules/monaco-editor",
-                "output": "assets/monaco-editor"
-              }
             ]
           },
           "configurations": {

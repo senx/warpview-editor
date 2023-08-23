@@ -396,7 +396,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
               this.LOG.debug(['ngAfterViewInit'], 'ws changed', event);
               this.warpViewEditorWarpscriptChanged.emit(this.ed.getValue());
               BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptChanged', this.ed.getValue());
-           //   this.wsAudit(this.ed.getValue());
+              //   this.wsAudit(this.ed.getValue());
             }, 200)();
           }
         });
@@ -430,7 +430,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
             this.warpViewEditorCtrlClick.emit(docParams);
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorCtrlClick', docParams);
           }
-     //     this.wsAudit(this.ed.getValue());
+          //     this.wsAudit(this.ed.getValue());
         });
         if (this.innerConfig.codeReview && !!this.innerConfig.codeReview.enabled) {
           this.reviewManagerConfig.addButton = this.innerConfig.codeReview.addButton as any;
@@ -590,7 +590,7 @@ export class WarpViewEditorComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   @Input()
-  public execute(session?) {
+  public execute(session?, bootstrap?) {
     if (this.ed) {
       this.result = undefined;
       this.status = undefined;
@@ -627,7 +627,7 @@ FLOWS
       if (!!session) {
         headers['X-Warp10-WarpScriptSession'] = session;
       }
-      this.request = this.http.post<HttpResponse<string>>(executionUrl, code, {
+      this.request = this.http.post<HttpResponse<string>>(executionUrl, (bootstrap ? bootstrap + ' ' : '') + code, {
         observe: 'response',
         // @ts-ignore
         responseType: 'text',
