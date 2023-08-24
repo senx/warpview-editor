@@ -607,13 +607,13 @@ FLOWS
       this.loading = true;
       // parse comments to look for inline url or preview modifiers
       const specialHeaders = WarpScriptParser.extractSpecialComments(code);
-      const previewType = specialHeaders.displayPreviewOpt || 'none';
+      const previewType = specialHeaders.displayPreviewOpt ?? 'none';
       if (previewType === 'I') {
         this.selectedResultTab = 2; // select image tab.
       } else if (this.selectedResultTab === 2) {
         this.selectedResultTab = 0; // on next execution, select results tab.
       }
-      const executionUrl = specialHeaders.endpoint || this.url;
+      const executionUrl = specialHeaders.endpoint ?? this.url;
       this.LOG.debug(['execute'], 'specialHeaders', this.innerConfig.addLocalHeader);
       // Get Warp10 version
       // @ts-ignore
@@ -627,7 +627,7 @@ FLOWS
       if (!!session) {
         headers['X-Warp10-WarpScriptSession'] = session;
       }
-      this.request = this.http.post<HttpResponse<string>>(executionUrl, (bootstrap ? bootstrap + ' ' : '') + code, {
+      this.request = this.http.post<HttpResponse<string>>(executionUrl, (!specialHeaders.endpoint && bootstrap ? bootstrap + ' ' : '') + code, {
         observe: 'response',
         // @ts-ignore
         responseType: 'text',
@@ -637,7 +637,7 @@ FLOWS
         .subscribe((res: HttpResponse<string>) => {
           if (!!res) {
             this.LOG.debug(['execute'], 'response', res.body);
-            this.warpViewEditorWarpscriptResult.emit(res.body || (res as any));
+            this.warpViewEditorWarpscriptResult.emit(res.body ?? (res as any));
             BubblingEvents.emitBubblingEvent(this.el, 'warpViewEditorWarpscriptResult', res.body || (res as any));
             if (!!res.headers) {
               this.sendStatus({
